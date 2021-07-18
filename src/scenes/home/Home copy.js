@@ -1,7 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import {
-  StyleSheet, Text, View, StatusBar,TouchableOpacity
+  StyleSheet,
+  Text,
+  View,
+  StatusBar,
+  TouchableOpacity,
 } from 'react-native'
 import Button from 'components/Button'
 import { colors } from 'theme'
@@ -32,7 +36,7 @@ const Home = ({ navigation }) => (
         navigation.navigate('Details', { from: 'Home' })
       }}
     />
-    <TouchableOpacity onPress={()=>console.log("press")}>
+    <TouchableOpacity onPress={() => console.log('press')}>
       <Text>Touch</Text>
     </TouchableOpacity>
   </View>

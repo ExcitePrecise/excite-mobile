@@ -4,6 +4,8 @@ import { colors } from 'theme'
 import Home from 'scenes/home'
 import Profile from 'scenes/profile'
 import Details from 'scenes/details'
+import Market from 'scenes/market'
+import Business from 'scenes/business'
 import HeaderLeft from './HeaderLeft'
 import HeaderTitle from './HeaderTitle'
 
@@ -43,6 +45,24 @@ export const HomeNavigator = () => (
       component={Details}
       options={({ navigation }) => ({
         title: 'Home',
+        headerLeft: () => <HeaderLeft navigation={navigation} />,
+        headerTitle: () => <HeaderTitle />,
+      })}
+    />
+    <Stack.Screen
+      name="Market"
+      component={Market}
+      options={({ navigation }) => ({
+        title: 'Market',
+        headerLeft: () => <HeaderLeft navigation={navigation} />,
+        headerTitle: () => <HeaderTitle />,
+      })}
+    />
+    <Stack.Screen
+      name="Business"
+      component={Business}
+      options={({ navigation }) => ({
+        title: 'Business',
         headerLeft: () => <HeaderLeft navigation={navigation} />,
         headerTitle: () => <HeaderTitle />,
       })}

@@ -87,8 +87,8 @@ const Home = ({ navigation }) => {
           style={styles.image}
         >
           <Text style={{ color: 'white', ...text.h1 }}>Business</Text>
-          <Text style={{ color: 'white', ...text.p }}>
-            Manage, organise & structure your business
+          <Text style={{ color: 'white', textAlign: 'center', ...text.p }}>
+            Manage, organise & structure your <br /> business
           </Text>
           <Button
             title="Proceed"
@@ -108,18 +108,6 @@ const Home = ({ navigation }) => {
       <StatusBar barStyle="light-content" />
       <WelcomeText />
       <Categories />
-      {/* <Text style={styles.title}>Home</Text>
-      <Button
-        title="Go to Details"
-        color="white"
-        backgroundColor={colors.lightPurple}
-        onPress={() => {
-          navigation.navigate('Details', { from: 'Home' })
-        }}
-      />
-      <TouchableOpacity onPress={() => console.log("press")}>
-        <Text>Touch</Text>
-      </TouchableOpacity> */}
     </ScrollView>
   )
 }

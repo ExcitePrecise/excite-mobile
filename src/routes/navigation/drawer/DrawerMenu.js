@@ -1,10 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { View, SafeAreaView, Text } from 'react-native'
+import Button from 'components/Button'
 
 import { DrawerActions } from '@react-navigation/native'
 import FontIcon from 'react-native-vector-icons/FontAwesome5'
 import { colors } from 'theme'
+// import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5'
 
 const styles = {
   root: {
@@ -22,6 +24,14 @@ const styles = {
     justifyContent: 'center',
     alignItems: 'center',
   },
+  items: {
+    flex: 1,
+    paddingVertical: 50,
+    paddingHorizontal: 10,
+    alignItems: 'start',
+    justifyContent: 'center',
+    fontColor: 'black',
+  },
 }
 
 const DrawerMenu = (props) => (
@@ -38,7 +48,26 @@ const DrawerMenu = (props) => (
       />
     </View>
     <View style={styles.main}>
-      <Text>Drawer Menu</Text>
+      <Text> Menu</Text>
+    </View>
+    <View style={styles.items}>
+      <Button
+        color="black"
+        backgroundColor="transparent"
+        title="Market"
+        onPress={() => {
+          props.navigation.navigate('Market')
+        }}
+      />
+      <Button
+        color="black"
+        backgroundColor="transparent"
+        title="Business"
+        onPress={() => {
+          props.navigation.navigate('Business')
+        }}
+      />
+      <Button color="black" backgroundColor="transparent" title="Login" />
     </View>
   </SafeAreaView>
 )

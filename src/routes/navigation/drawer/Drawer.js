@@ -5,8 +5,10 @@ import {
   DrawerItemList,
 } from '@react-navigation/drawer'
 import DrawerMenu from './DrawerMenu'
-import TabNavigator from '../tabs'
+import TabNavigator from '../tabs' 
 
+
+// 
 const Drawer = createDrawerNavigator()
 
 const DrawerMenuContainer = (props) => {
@@ -22,7 +24,7 @@ const DrawerMenuContainer = (props) => {
 }
 
 const DrawerNavigator = () => (
-  <Drawer.Navigator initialRouteName="Home" drawerContent={DrawerMenuContainer}>
+  <Drawer.Navigator initialRouteName="Home" drawerContent={DrawerMenuContainer} >
     <Drawer.Screen name="Home" component={TabNavigator} />
   </Drawer.Navigator>
 )

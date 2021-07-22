@@ -5,9 +5,11 @@ import {
 } from '@reduxjs/toolkit'
 import logger from 'redux-logger'
 import appReducer from 'slices/app.slice'
+import marketplaceReducer from '../slices/marketplace.slice'
 
 const rootReducer = combineReducers({
   app: appReducer,
+  marketplace:marketplaceReducer
   // add more reducers
 })
 

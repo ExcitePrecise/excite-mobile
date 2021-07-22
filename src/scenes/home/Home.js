@@ -44,11 +44,6 @@ const styles = StyleSheet.create({
 const Home = ({ navigation }) => {
   function WelcomeText() {
     return (
-      // <View style={styles.welcome}>
-      //   <ImageBackground source={images.market_bg} resizeMode="cover" style={styles.image}>
-      //   <Text style={fonts.h1}>Welcome !</Text>
-      //   </ImageBackground>
-      // </View>
       <View style={styles.welcome}>
         <Text style={{ color: colors.exciteDrak, ...text.h1 }}>Welcome !</Text>
         <Text style={{ color: colors.lightGrayDark, ...text.p }}>
@@ -76,11 +71,10 @@ const Home = ({ navigation }) => {
             backgroundColor={colors.exciteGreen}
             style={styles.btn}
             onPress={() => {
-              navigation.navigate('Details', { from: 'Home' })
+              navigation.navigate('MarketArea', { from: 'Home' })
             }}
           />
         </ImageBackground>
-
         <ImageBackground
           source={images.business_bg}
           resizeMode="cover"
@@ -96,7 +90,10 @@ const Home = ({ navigation }) => {
             backgroundColor={colors.exciteGreen}
             style={styles.btn}
             onPress={() => {
-              navigation.navigate('Details', { from: 'Home' })
+              // navigation.navigate('Details', { from: 'Home' })
+              navigation.navigate('BusinessHome', { from: 'Home' })
+
+              // navigation.navigate('Details', { from: 'Home' })
             }}
           />
         </ImageBackground>
@@ -108,18 +105,6 @@ const Home = ({ navigation }) => {
       <StatusBar barStyle="light-content" />
       <WelcomeText />
       <Categories />
-      {/* <Text style={styles.title}>Home</Text>
-      <Button
-        title="Go to Details"
-        color="white"
-        backgroundColor={colors.lightPurple}
-        onPress={() => {
-          navigation.navigate('Details', { from: 'Home' })
-        }}
-      />
-      <TouchableOpacity onPress={() => console.log("press")}>
-        <Text>Touch</Text>
-      </TouchableOpacity> */}
     </ScrollView>
   )
 }

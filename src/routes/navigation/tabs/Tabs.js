@@ -9,7 +9,10 @@ import { HomeNavigator, ProfileNavigator } from '../stacks'
 
 const Tab = createBottomTabNavigator()
 
-const TabNavigator = () => (
+const TabNavigator = () => {
+
+  const show = true;
+  return(
   <Tab.Navigator
     screenOptions={({ route }) => ({
       // eslint-disable-next-line react/prop-types
@@ -52,9 +55,9 @@ const TabNavigator = () => (
     initialRouteName="Home"
     swipeEnabled={false}
   >
-    <Tab.Screen name="Home" component={HomeNavigator} />
+   <Tab.Screen name="Home" component={HomeNavigator} />
     <Tab.Screen name="Profile" component={ProfileNavigator} />
   </Tab.Navigator>
-)
+)}
 
 export default TabNavigator

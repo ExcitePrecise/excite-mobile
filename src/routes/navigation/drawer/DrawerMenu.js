@@ -67,6 +67,7 @@ const DrawerMenu = (props) => (
           props.navigation.navigate('Business')
         }}
       />
+      <Button color="black" backgroundColor="transparent" title="Login" />
     </View>
   </SafeAreaView>
 )

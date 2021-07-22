@@ -52,6 +52,7 @@ const Displays = ({ products, display }) => {
         keyExtractor={(item) => item._id}
         numColumns={2}
       /> */}
+      
     </SafeAreaView>
   )
 }

@@ -8,7 +8,6 @@ import DrawerMenu from './DrawerMenu'
 import TabNavigator from '../tabs' 
 
 
-// 
 const Drawer = createDrawerNavigator()
 
 const DrawerMenuContainer = (props) => {

@@ -67,11 +67,6 @@
     "singleQuote": true,
     "bracketSpacing": true
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
   "jest": {
     "preset": "jest-expo",
     "transformIgnorePatterns": [

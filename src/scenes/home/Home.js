@@ -82,7 +82,7 @@ const Home = ({ navigation }) => {
         >
           <Text style={{ color: 'white', ...text.h1 }}>Business</Text>
           <Text style={{ color: 'white', textAlign: 'center', ...text.p }}>
-            Manage, organise & structure your <br /> business
+            Manage, organise & structure your  business
           </Text>
           <Button
             title="Proceed"

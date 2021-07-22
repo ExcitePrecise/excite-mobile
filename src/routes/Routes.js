@@ -21,7 +21,7 @@ const Routes = () => {
   // rendering
   if (!checked) return <Welcome />
   // <Text>Loading...</Text>
-  return <Welcome />
+  return <Main />
 }
 
 export default Routes

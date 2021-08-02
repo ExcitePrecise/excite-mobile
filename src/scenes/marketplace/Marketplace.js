@@ -5,18 +5,25 @@ import ExciteBanner from './landingchunks/ExciteBanner'
 import PopularCategorySwitch from './landingchunks/PopularCategorySwitch'
 import { landingProduct } from '../../slices/marketplace.slice'
 import { useDispatch } from 'react-redux'
-import Displays from './landingchunks/Displays'
+import {isLoading} from './../../slices/app.slice'
+import axios from 'axios'
+import useAxios from './../../utils/axios/init'
+import ActivityLoading from './../../utils/axios/Loading'
 // 
 export default function Marketplace({navigation}) {
     const dispatch = useDispatch()
     const getData = async ()=>{
         try {
-            const response =await fetch('https://mongo-db-backend.herokuapp.com/marketplace/landing/products/banners/offers/get');
-            // const response =await fetch('http://localhost:7000/marketplace/landing/products/banners/offers/get');
-            const data = await response.json();
-            console.log(data)
+            dispatch(isLoading(true))
+            const response =await useAxios.get('/marketplace/landing/products/banners/offers/get');
+            const data = response.data;
+            // console.log(response)
+            dispatch(isLoading(false))
+
             dispatch(landingProduct(data))
         } catch (error) {
+            dispatch(isLoading(false))
+
             console.log('err',error)
         }
       
@@ -31,9 +38,11 @@ export default function Marketplace({navigation}) {
     return (
         <ScrollView style={{flex:1}}>
             <ExciteBanner />
-            <PopularCategorySwitch />
-            <Displays />
-                {/* <Button title="Drawer" onPress={()=>navigation.toggleDrawer()}></Button> */}
+            <ActivityLoading />
+            {/* <ActivityIndicator animating={true} color={Colors.red800} hidesWhenStopped={true}/> */}
+            <PopularCategorySwitch navigation={navigation}/>
+            {/* <Displays /> */}
+                {/* <Button title="Drawer" onPress={()=>navigation.navigate('Category')}></Button> */}
         </ScrollView>
     )
 }

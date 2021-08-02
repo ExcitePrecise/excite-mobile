@@ -3,10 +3,11 @@ import { View } from 'react-native'
 import { Provider } from 'react-redux'
 import store from 'utils/store'
 import 'utils/ignore'
-
+import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
 // assets
 import { imageAssets } from 'theme/images'
 import { fontAssets } from 'theme/fonts'
+import { COLORS } from './theme/theme'
 import Router from './routes'
 
 const App = () => {
@@ -27,9 +28,21 @@ const App = () => {
 
   // rendering
   if (!didLoad) return <View />
+
+  const theme = {
+    ...DefaultTheme,
+    colors: {
+      ...DefaultTheme.colors,
+      primary: COLORS.exciteGreen,
+      accent: 'yellow',
+    },
+  };
+
   return (
     <Provider store={store}>
+      <PaperProvider theme={theme}>
       <Router />
+      </PaperProvider>
     </Provider>
   )
 }

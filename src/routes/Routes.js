@@ -8,20 +8,7 @@ import Welcome from './welcome'
 
 // 
 const Routes = () => {
-  const { checked, loggedIn } = useSelector((state) => state.app)
-  const dispatch = useDispatch()
-
-  useEffect(() => {
-    // dispatch(authenticate({ loggedIn: true, checked: true }))
-  }, [])
-
-  // TODO: switch router by loggedIn state
-  console.log('[##] loggedIn', loggedIn)
-
-  // rendering
-  if (!checked) return <Welcome />
-  // <Text>Loading...</Text>
-  return <Main />
+  return <Welcome />
 }
 
 export default Routes

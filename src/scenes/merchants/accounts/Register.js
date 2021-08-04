@@ -53,7 +53,7 @@ const Register = ({ navigation }) => {
       fullname: inputs.storeName,
       email: inputs.email.toLowerCase().trim(),
     })
-    console.log(res)
+    // console.log(res)
     dispatch(isLoading(false))
 
     if (res.code === 201) {

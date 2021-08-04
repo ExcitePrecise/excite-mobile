@@ -18,17 +18,13 @@ const SnacksNotification = ({visible,message,handleNotification,navigation}) => 
     };
 
   return (
-    <View style={styles.container}>
+    <View style={{...styles.container, display:visible ? 'flex' : 'none'}}>
       {/* <Button onPress={onToggleSnackBar}>{visible ? 'Hide' : 'Show'}</Button> */}
       <Snackbar
         visible={visible}
         onDismiss={onDismissSnackBar}
-        action={{
-          label: 'Undo',
-          onPress: () => {
-            // Do something
-          },
-        }}>
+        style={{display:visible ? 'flex' : 'none'}}
+        >
         {message}
       </Snackbar>
     </View>
@@ -37,7 +33,6 @@ const SnacksNotification = ({visible,message,handleNotification,navigation}) => 
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     justifyContent: 'space-between',
   },
 });

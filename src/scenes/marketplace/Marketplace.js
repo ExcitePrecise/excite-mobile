@@ -29,7 +29,7 @@ export default function Marketplace({navigation}) {
       
     }
     useEffect(()=>{
-        console.log('marketplace')
+        // console.log('marketplace')
         getData()
     },[])
 

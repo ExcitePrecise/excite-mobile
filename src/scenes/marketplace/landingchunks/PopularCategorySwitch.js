@@ -22,7 +22,7 @@ export default function PopularCategorySwitch({navigation}) {
            icon:images.vehicle_icon,
        },
        {
-           category:"phones&tablets",
+           category:"phones-tablets",
            name:"Phones & Tablet",
            icon:images.phone_icon
        },
@@ -32,7 +32,7 @@ export default function PopularCategorySwitch({navigation}) {
            icon:images.hair_icon
        },
        {
-           category:"property",
+           category:"Property",
            name:"Properties",
            icon:images.property_icon
        },
@@ -47,7 +47,7 @@ export default function PopularCategorySwitch({navigation}) {
            icon:images.home_icon
        },
        {
-           category:"babies",
+           category:"kids",
            name:"Babies & Kids",
            icon:images.kid_icon
        },

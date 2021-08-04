@@ -6,8 +6,8 @@ import { FontAwesome5 } from '@expo/vector-icons'
 export default function ExciteBanner() {
   return (
     <View style={styles.root}>
-      <Text style={styles.header}>MARKETPLACE</Text>
-      <Text style={styles.body}>Find product and services without stress</Text>
+      {/* <Text style={styles.header}>MARKETPLACE</Text> */}
+      {/* <Text style={styles.body}>Find product and services without stress</Text> */}
       <View style={styles.inputWrapper}>
           <TextInput style={styles.input} textAlign='center' placeholder="Search products..." placeholderTextColor={COLORS.gray}/>
           <TouchableOpacity style={styles.icon}>
@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
   root: {
     backgroundColor: COLORS.exciteDark,
     paddingHorizontal: SIZES.padding,
-    paddingTop: SIZES.padding * 3,
+    paddingTop: SIZES.padding,
     paddingBottom: SIZES.padding * 1.5,
     justifyContent:'center',
     alignItems:'center'

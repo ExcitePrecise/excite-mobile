@@ -24,15 +24,16 @@ const MarketBottomTabs = ({ navigation }) => {
   }
   return (
     <MarketBottomInstance.Navigator
+
       //hide tab names
       tabBarOptions={{
         showLabel: false,
         style: {
           backgroundColor: 'white',
-          position: 'absolute',
-          bottom: 10,
+          // position: 'absolute',
+          // bottom: 10,
           height: 60,
-          marginHorizontal: 20,
+          // marginHorizontal: 20,
           borderRadius: 6,
           shadowColor: '#000',
           shadowOpacity: 0.06,

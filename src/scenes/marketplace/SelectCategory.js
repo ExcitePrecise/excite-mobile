@@ -1,24 +1,27 @@
 import React from 'react'
 import { useEffect } from 'react'
-import { StyleSheet, Text, TouchableOpacity, View,ScrollView } from 'react-native'
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  ScrollView,
+} from 'react-native'
 import { connect } from 'react-redux'
 import { useState } from 'react'
 import categories from '../../utils/productCategoriesHandler'
 import { FontAwesome, Ionicons } from '@expo/vector-icons'
-import { COLORS, SIZES } from '../../theme/theme'
+import { COLORS, FONTS, SIZES } from '../../theme/theme'
 import { fonts } from '../../theme'
+import ExciteBanner from './landingchunks/ExciteBanner'
 
-const Category = ({ route, products,navigation }) => {
+const Category = ({ route, products, navigation }) => {
   const [subs, setSubs] = useState([])
   const [data, setData] = useState([])
-const {category} = route.params
+  const { category } = route.params
   useEffect(() => {
-    const items = products?.filter(
-      (item) => item.category === category,
-    )
+    const items = products?.filter((item) => item.category === category)
     const cats = categories[category]
-    // console.log(categories[route.params.category])
-    // console.log(items?.length)
     setSubs(cats)
     setData(items)
   }, [products])
@@ -26,19 +29,32 @@ const {category} = route.params
     return data?.filter((item) => item.subCategory === subsCat)?.length
   }
   return (
-    <ScrollView>
-      <Text>Category {route.params.category}</Text>
+    <ScrollView style={styles.root}>
+      <View style={{marginBottom:20}}>
+      <ExciteBanner />
+      </View>
       {subs.map((item, index) => (
-        <TouchableOpacity key={index} style={styles.item} onPress={()=>navigation.navigate("Products",{category,subs:item})}>
+        <TouchableOpacity
+          key={index}
+          style={styles.item}
+          onPress={() =>
+            navigation.navigate('Products', { category, subs: item })
+          }
+        >
           <View style={styles.icon}>
-            <Ionicons name="car-sport" size={40} color={COLORS.lightGray}/>
+            <Ionicons name="car-sport" size={40} color={COLORS.lightGray} />
           </View>
           <View style={styles.wrapperText}>
             <View style={styles.text}>
-              <Text style={{marginBottom:10}}>{item}</Text>
-              <Text>{handleStatistcs(item)}</Text>
+              <Text style={{ marginBottom: 10,...FONTS.h3 }}>{item}</Text>
+              <Text style={{...FONTS.body4,color:COLORS.gray }}>{handleStatistcs(item)} Ads</Text>
             </View>
-            <FontAwesome name="angle-right" size={30} style={styles.icon2} color={COLORS.exciteGreen}/>
+            <FontAwesome
+              name="angle-right"
+              size={30}
+              style={styles.icon2}
+              color={COLORS.exciteGreen}
+            />
           </View>
         </TouchableOpacity>
       ))}
@@ -54,18 +70,33 @@ const mapStateToProps = (state) => {
 export default connect(mapStateToProps)(Category)
 
 const styles = StyleSheet.create({
+  root: {
+    // paddingBottom:SIZES.padding
+    marginBottom: 20,
+  },
   item: {
     flexDirection: 'row',
     padding: SIZES.padding,
-    backgroundColor:COLORS.white,
-    marginBottom:10
+    backgroundColor: COLORS.white,
+    marginBottom: 30,
+    borderRadius:3,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.23,
+    shadowRadius: 2.62,
+
+    elevation: 2,
   },
-  icon:{
-    marginRight:20
+  icon: {
+    marginRight: 20,
   },
-  wrapperText:{
-      flex:1,
+  wrapperText: {
+    flex: 1,
     flexDirection: 'row',
-justifyContent:'space-between'
-  }
+    justifyContent: 'space-between',
+    alignItems:'center'
+  },
 })

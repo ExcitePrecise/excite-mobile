@@ -35,7 +35,7 @@ export const images = {
   email:require('../../assets/images/email.png'),
   influencer:require('../../assets/images/influencer.png'),
   social:require('../../assets/images/social.png'),
-  // help:require('../../assets/images/'),
+  new:require('../../assets/images/new.png'),
 }
 
 // image preloading

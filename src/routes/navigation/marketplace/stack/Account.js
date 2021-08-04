@@ -21,7 +21,7 @@ const AccountStack = createStackNavigator()
 // 
 const AuthRequired = () => {
   return (
-    <AccountStack.Navigator screenOptions={{ headerShown: false }}>
+    <AccountStack.Navigator screenOptions={{ headerShown: true }} initialRouteName="Dashboard">
       <AccountStack.Screen name="Dashboard" component={Dashboard} />
       <AccountStack.Screen name="ProductListing" component={ListingProduct} />
       <AccountStack.Screen name="ServiceListing" component={ListingService} />

@@ -1,8 +1,6 @@
-import React, { useEffect } from 'react'
-import { Text } from 'react-native'
-import { useSelector, useDispatch } from 'react-redux'
-import { authenticate } from 'slices/app.slice'
-import Main from './navigation'
+import React from 'react'
+
+
 import Welcome from './welcome'
 
 

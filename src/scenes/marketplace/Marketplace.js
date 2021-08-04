@@ -1,6 +1,6 @@
 import React from 'react'
 import { useEffect } from 'react'
-import { View, Text, Button , ScrollView} from 'react-native'
+import { View, Text, Button , ScrollView, TouchableOpacity} from 'react-native'
 import ExciteBanner from './landingchunks/ExciteBanner'
 import PopularCategorySwitch from './landingchunks/PopularCategorySwitch'
 import { landingProduct } from '../../slices/marketplace.slice'
@@ -38,11 +38,10 @@ export default function Marketplace({navigation}) {
     return (
         <ScrollView style={{flex:1}}>
             <ExciteBanner />
+            {/* <TouchableOpacity > */}
             <ActivityLoading />
-            {/* <ActivityIndicator animating={true} color={Colors.red800} hidesWhenStopped={true}/> */}
+            {/* </TouchableOpacity> */}
             <PopularCategorySwitch navigation={navigation}/>
-            {/* <Displays /> */}
-                {/* <Button title="Drawer" onPress={()=>navigation.navigate('Category')}></Button> */}
         </ScrollView>
     )
 }

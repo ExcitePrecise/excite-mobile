@@ -5,10 +5,10 @@ import { rememberToken } from "../utils/axios/token";
 // Api
 const authLogin = async(email,password)=>{
     try {
-        const response = await useAxios.post('/auth',{email,password});
-        const {token} = response.data;
+        const response = await useAxios.post('/auth/mobile',{email,password});
+        const {token,profile} = response.data;
         if(token){
-            return token
+            return {token,profile}
         }else{
             return null
         }

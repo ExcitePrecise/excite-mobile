@@ -26,6 +26,16 @@ export const images = {
   fashion_icon:require('../../assets/images/fashion.png'),
   tools_icon:require('../../assets/images/tools.png'),
   top_icon:require('../../assets/images/tools.png'),
+  post_icon:require('../../assets/images/post.png'),
+  banner:require('../../assets/images/banner.png'),
+  book:require('../../assets/images/book.png'),
+  top:require('../../assets/images/top.png'),
+  help:require('../../assets/images/help.png'),
+  accounts:require('../../assets/images/accounts.png'),
+  email:require('../../assets/images/email.png'),
+  influencer:require('../../assets/images/influencer.png'),
+  social:require('../../assets/images/social.png'),
+  // help:require('../../assets/images/'),
 }
 
 // image preloading

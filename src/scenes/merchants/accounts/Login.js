@@ -45,8 +45,8 @@ const Login = ({ navigation }) => {
     const response = await Auth.authLogin(inputs.email, inputs.password)
     dispatch(isLoading(false))
     if (response) {
-      await rememberToken(response)
-      dispatch(authenticate({ token: response, loggedIn: true }))
+      await rememberToken(response.token)
+      dispatch(authenticate({ token: response.token, loggedIn: true,me:response.profile }))
     } else {
       handleNotification(true, 'Email/Password not correct')
     }
@@ -98,7 +98,7 @@ const Login = ({ navigation }) => {
             Sign Up
           </Button>
         </View>
-        {/* <Loading /> */}
+        <Loading />
     
       </KeyboardAvoidingView>
       {/* <SnacksNotification

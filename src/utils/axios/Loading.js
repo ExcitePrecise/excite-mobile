@@ -8,8 +8,9 @@ const ActivityLoading = ({ loading }) => (
   <View
     style={{
       ...styles.root,
-      zIndex: loading ? 10 : -10,
-      backgroundColor: loading ? 'rgba(0,0,0,0.1)' : 'transparent',
+      zIndex: loading ? 100000 : -10,
+      backgroundColor: loading ? 'rgba(0,0,0,0.05)' : 'transparent',
+      elevation:loading ? 10 : 0
     }}
   >
     <ActivityIndicator

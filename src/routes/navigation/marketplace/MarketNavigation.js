@@ -1,7 +1,7 @@
 import React from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import Home from '../../../scenes/home/Home'
-import { View, Text, TouchableOpacity } from 'react-native'
+import { View, Text, TouchableOpacity , Linking} from 'react-native'
 import { COLORS } from './../../../theme/theme'
 import MarketplaceStacks from './stack/Marketplace'
 import AccountStack from './stack/Account'
@@ -22,9 +22,13 @@ const MarketBottomTabs = ({ navigation }) => {
   function EmptyScreen() {
     return <View></View>
   }
+  const makeWhatsapp = () => {
+    let phoneNumber = `https://wa.me/+2347069452633`
+    Linking.openURL(phoneNumber)
+  }
   return (
     <MarketBottomInstance.Navigator
-
+    initialRouteName="Market"
       //hide tab names
       tabBarOptions={{
         showLabel: false,
@@ -44,6 +48,27 @@ const MarketBottomTabs = ({ navigation }) => {
         },
       }}
     >
+       <MarketBottomInstance.Screen
+        name="Home"
+        component={Home}
+        options={() => ({
+          tabBarButton: (props) => (
+            <TouchableOpacity
+              {...props}
+              onPress={() => navigation.navigate('Home')}
+            >
+              <View style={{ justifyContent: 'center', height: '100%' }}>
+                <FontAwesome5
+                  name="home"
+                  size={20}
+                  color={COLORS.lightGray}
+                ></FontAwesome5>
+              </View>
+            </TouchableOpacity>
+          ),
+          //    tabBarIcon
+        })}
+      />
       <MarketBottomInstance.Screen
         name="Market"
         component={MarketplaceStacks}
@@ -90,36 +115,31 @@ const MarketBottomTabs = ({ navigation }) => {
       <MarketBottomInstance.Screen
         name="Profile"
         component={AccountStack}
-        options={() => ({
-          tabBarButton: (props) => (
-            <TouchableOpacity
-              {...props}
-              onPress={() => navigation.navigate('Account')}
-            >
-              <View style={{ justifyContent: 'center', height: '100%' }}>
-                <FontAwesome5
-                  name="user"
-                  size={20}
-                  color={COLORS.lightGray}
-                ></FontAwesome5>
-              </View>
-            </TouchableOpacity>
-          ),
-          //    tabBarIcon
-        })}
+        options={{
+          tabBarIcon: ({ focused }) => {
+            return (
+                <MaterialIcons
+                  name="dashboard"
+                  size={25}
+                  color={focused ? COLORS.exciteGreen : COLORS.lightGray}
+                >
+                </MaterialIcons>
+            )
+          },
+        }}
       />
       <MarketBottomInstance.Screen
-        name="Home"
-        component={Home}
+        name="Help"
+        component={EmptyScreen}
         options={() => ({
           tabBarButton: (props) => (
             <TouchableOpacity
               {...props}
-              onPress={() => navigation.navigate('Home')}
+              onPress={() => makeWhatsapp()}
             >
               <View style={{ justifyContent: 'center', height: '100%' }}>
                 <FontAwesome5
-                  name="home"
+                  name="whatsapp"
                   size={20}
                   color={COLORS.lightGray}
                 ></FontAwesome5>

@@ -25,7 +25,9 @@ const styles = StyleSheet.create({
     paddingTop: SIZES.padding,
     paddingBottom: SIZES.padding * 1.5,
     justifyContent:'center',
-    alignItems:'center'
+    alignItems:'center',
+    borderBottomLeftRadius:20,
+    borderBottomRightRadius:20,
   },
   header: {
     ...FONTS.h1,

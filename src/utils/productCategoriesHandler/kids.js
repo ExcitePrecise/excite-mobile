@@ -44,7 +44,7 @@ const kids = [
 
 
 
-export const kidsName = kids.map(arr =>arr.name)
+export const kidsName = kids.map(arr =>arr.name).sort()
 
 export const returnSub =(category) => {
   const ty = kids.filter(item=>item.name===category);

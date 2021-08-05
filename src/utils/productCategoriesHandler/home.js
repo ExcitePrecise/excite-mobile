@@ -6,16 +6,8 @@ const homeGroup = [
   { name: "Home Appliance", sub: [] },
   { name: "Kitchen & Dining", sub: [] },
 ];
+export const homeCategory=homeGroup.map(item=>item.name).sort()
 
-export const homeCategory=()=>{
-  let cat = [];
-  for (const i of homeGroup) {
-    if(!cat.includes(i.name)){
-      cat.push(i.name)
-    }
-  }
-  return cat
-}
 
 export const subHome=(name)=>{
   const cat = homeGroup.filter(item=>item.name===name);

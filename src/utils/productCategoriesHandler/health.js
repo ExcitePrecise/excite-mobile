@@ -26,15 +26,7 @@ const health = [
   },
 ];
 
-export const healthCategory=()=>{
-  let cat = [];
-  for (const i of health) {
-    if(!cat.includes(i.name)){
-      cat.push(i.name)
-    }
-  }
-  return cat
-}
+export const healthCategory=health.map(item=>item.name).sort()
 
 export const subHealth=(name)=>{
   const cat = health.filter(item=>item.name===name);

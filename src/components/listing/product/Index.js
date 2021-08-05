@@ -3,11 +3,22 @@ import { StyleSheet, Text, View, Image } from 'react-native'
 import { images } from '../../../theme'
 import { TextInput } from 'react-native-paper'
 import { Picker } from '@react-native-picker/picker'
-import { FONT_SANS_10_BLACK } from 'jimp'
+import subs,{ CategoryMajor,category } from '../../../utils/productCategoriesHandler'
+import { COLORS } from '../../../theme/theme'
+import { useEffect } from 'react'
 
 
 const Index = () => {
-  const [selectedLanguage, setSelectedLanguage] = useState()
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [selectedSubCategory,setSelectedSubcategory] = useState([]);
+  const [subCategory,setSubCategory] = useState("")
+  useEffect(()=>{
+    if(selectedCategory){
+      console.log(subs[selectedCategory])
+      setSelectedSubcategory(subs[selectedCategory])
+
+    }
+  },[selectedCategory])
   return (
     <View style={styles.form}>
       <View style={styles.title}>
@@ -19,13 +30,30 @@ const Index = () => {
         />
         <Text style={{marginLeft:10}}>Product</Text>
       </View>
-      <TextInput />
+      {/* <TextInput /> */}
       <Picker
-        selectedValue={selectedLanguage}
-        onValueChange={(itemValue, itemIndex) => setSelectedLanguage(itemValue)}
+        selectedValue={selectedCategory}
+        onValueChange={(itemValue, itemIndex) => {
+          if(itemIndex===0) return null
+          return setSelectedCategory(itemValue)
+        }}
       >
-        <Picker.Item label="Java" value="java" />
-        <Picker.Item label="JavaScript" value="js" />
+        <Picker.Item color={COLORS.lightGray} label="Select Category" value={null} />
+        {CategoryMajor.map((item,index)=> 
+        <Picker.Item key={index} label={item.type} value={item.key} /> )}
+      </Picker>
+      {/* Sub Category */}
+      <Picker
+        selectedValue={subCategory}
+        onValueChange={(itemValue, itemIndex) => {
+          if(itemIndex===0) return null
+          return setSubCategory(itemValue)
+        }}
+        style={{marginTop:20, display: selectedCategory ? 'flex':'none'}}
+      >
+        <Picker.Item color={COLORS.lightGray} label="Select Category" value={null} />
+        {selectedSubCategory.map((item,index)=> 
+        <Picker.Item key={index} label={item} value={item} /> )}
       </Picker>
     </View>
   )

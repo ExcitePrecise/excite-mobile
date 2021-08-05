@@ -7,7 +7,7 @@ const ppty = [
 ];
 
 
-export const pptyCategory=()=>ppty.map(item=>item.name).sort();
+export const pptyCategory=ppty.map(item=>item.name).sort();
 
 export const subPpty=(name)=>{
   const cat = ppty.filter(item=>item.name===name);

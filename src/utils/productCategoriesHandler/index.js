@@ -4,6 +4,7 @@ import {healthCategory} from './health';
 import {phoneCategory} from './phones';
 import {vehiclesTypes} from './vehicle'
 import {pptyCategory} from './property'
+import {kidsName} from './kids'
 
 
 export default {
@@ -12,6 +13,31 @@ export default {
     "health":healthCategory,
     "phones-tablets":phoneCategory,
     "vehicle":vehiclesTypes,
-    "Property":pptyCategory
-
+    "Property":pptyCategory,
+    "kids":kidsName,
 }
+
+export const CategoryMajor = [
+    {
+        type:"Electronics",
+        key:"electronics"
+    },
+    {
+        type:"Fashion & Styles",
+        key:"fashion"
+    },
+    {
+        type:"Health & Beauty",
+        key:"health"
+    },
+    {
+        type:"Automobile",
+        key:"vehicle"
+    },
+    {
+        type:"Property & Real Estate",
+        key:"Property"
+    }
+]
+
+export const category = CategoryMajor.map(item=>item.type).sort((a,b)=>a.type > b.type)

@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Button, Snackbar } from 'react-native-paper';
+// import { teal700 } from 'react-native-paper/lib/typescript/styles/colors';
 
 
 
@@ -23,6 +24,8 @@ const SnacksNotification = ({visible,message,handleNotification,navigation}) => 
       <Snackbar
         visible={visible}
         onDismiss={onDismissSnackBar}
+        duration={10000}
+        wrapperStyle={{position:'relative',top:50}}
         style={{display:visible ? 'flex' : 'none'}}
         >
         {message}

@@ -47,6 +47,8 @@ function Account({ auth, loggedIn,navigation, ...props }) {
     return <AuthRequired {...props} navigation={navigation}/>
   }
   return <SignRoute {...props}/>
+  // return <AuthRequired {...props} navigation={navigation}/>
+
 }
 
 const mapStateToProps = (state) => {

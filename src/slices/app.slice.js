@@ -24,11 +24,12 @@ const appSlice = createSlice({
   initialState,
   reducers: {
     authenticate: (state, { payload }) => {
-      state.loggedIn = payload.loggedIn
-      ;(state.token = payload.token), (state.me = { ...payload.me })
+      state.loggedIn = payload.loggedIn;
+      state.token = payload.token;
+      state.me = { ...payload.me };
     },
     authLogOut: (state, { payload }) => {
-      ;(state.loggedIn = false), (state.token = null), (me = {})
+      ;(state.loggedIn = false), (state.token = null), (state.me = {})
     },
     saveMe: (state, { payload }) => {
       state.me = payload.me

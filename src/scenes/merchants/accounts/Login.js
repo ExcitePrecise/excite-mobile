@@ -8,6 +8,8 @@ import {
   SafeAreaView,
   Platform,
   KeyboardAvoidingView,
+  ActivityIndicator,
+  Alert
 } from 'react-native'
 import { COLORS, FONTS, SIZES } from '../../../theme/theme'
 import { TextInput, Button } from 'react-native-paper'
@@ -27,6 +29,7 @@ import { rememberToken } from './../../../utils/axios/token'
 const Login = ({ navigation }) => {
   const [inputs, setInput] = useState({ email: '', password: '' })
   const dispatch = useDispatch()
+  const [isSubmit, setIsSubmit] = useState(false)
 
   //notification
   const [visible, setVisible] = React.useState(false)
@@ -41,16 +44,23 @@ const Login = ({ navigation }) => {
 
   //
   const handleSubmit = async () => {
-    dispatch(isLoading(true))
-    const response = await Auth.authLogin(inputs.email, inputs.password)
-    dispatch(isLoading(false))
+    // dispatch(isLoading(true))
+    setIsSubmit(true)
+    try {
+      const response = await Auth.authLogin(inputs.email, inputs.password)
+    // dispatch(isLoading(false))
+    setIsSubmit(false)
     if (response) {
       await rememberToken(response.token)
       dispatch(authenticate({ token: response.token, loggedIn: true,me:response.profile }))
     } else {
       handleNotification(true, 'Email/Password not correct')
+      return Alert.alert('Invalid email/password')
     }
-    // console.log(response)
+    } catch (error) {
+    setIsSubmit(false)
+    return Alert.alert('Network/Server error')
+    }
   }
 
   return (
@@ -81,13 +91,19 @@ const Login = ({ navigation }) => {
           mode="outlined"
           style={{ marginBottom: 50 }}
         />
-        <TouchableOpacity style={{ marginBottom: 30 }}>
+        <TouchableOpacity disabled={isSubmit} onPress={() => handleSubmit()} style={{ marginBottom: 30,flexDirection:'row', justifyContent:'center', backgroundColor:COLORS.exciteDark }}>
+        {isSubmit && (
+                  <ActivityIndicator
+                    size="large"
+                    animating={isSubmit}
+                    color={COLORS.exciteGreen}
+                    hidesWhenStopped={true}
+                  />
+                )}
           <Button
-            icon="camera"
             dark
             color={COLORS.exciteDark}
             mode="contained"
-            onPress={() => handleSubmit()}
           >
             Login
           </Button>
@@ -101,11 +117,6 @@ const Login = ({ navigation }) => {
         <Loading />
     
       </KeyboardAvoidingView>
-      {/* <SnacksNotification
-        visible={visible}
-        message={message}
-        handleNotification={handleNotification}
-      /> */}
     </SafeAreaView>
   )
 }

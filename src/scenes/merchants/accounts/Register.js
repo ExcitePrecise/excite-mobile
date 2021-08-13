@@ -9,6 +9,8 @@ import {
   Platform,
   KeyboardAvoidingView,
   ScrollView,
+  ActivityIndicator,
+  Alert
 } from 'react-native'
 import { COLORS, FONTS, SIZES } from '../../../theme/theme'
 import { TextInput, Button } from 'react-native-paper'
@@ -23,6 +25,7 @@ import { isLoading } from '../../../slices/app.slice'
 //
 const Register = ({ navigation }) => {
   const dispatch = useDispatch()
+  const [isSubmit, setIsSubmit] = useState(false)
 
   //notification
   const [visible, setVisible] = React.useState(false)
@@ -47,18 +50,17 @@ const Register = ({ navigation }) => {
   }
 
   const handleSubmit = async () => {
-    dispatch(isLoading(true))
+    setIsSubmit(true)
     const res = await authSignUp({
       ...inputs,
       fullname: inputs.storeName,
       email: inputs.email.toLowerCase().trim(),
     })
     // console.log(res)
-    dispatch(isLoading(false))
-
+    setIsSubmit(false)
     if (res.code === 201) {
-      setMessage('Account created')
-      handleNotification(true)
+      Alert.alert('Account created successfully')
+      navigation.navigate('Login')
     }
   }
   return (
@@ -105,27 +107,28 @@ const Register = ({ navigation }) => {
             mode="outlined"
             style={{ marginBottom: 50 }}
           />
-          <TouchableOpacity style={{ marginBottom: 30 }}>
-            <Button
-              icon="camera"
-              dark
-              color={COLORS.exciteDark}
-              mode="contained"
-              onPress={() => handleSubmit()}
-            >
-              Register
-            </Button>
-          </TouchableOpacity>
+          <TouchableOpacity disabled={isSubmit} onPress={() => handleSubmit()} style={{ marginBottom: 30,flexDirection:'row', justifyContent:'center', backgroundColor:COLORS.exciteDark }}>
+        {isSubmit && (
+                  <ActivityIndicator
+                    size="large"
+                    animating={isSubmit}
+                    color={COLORS.exciteGreen}
+                    hidesWhenStopped={true}
+                  />
+                )}
+          <Button
+            dark
+            color={COLORS.exciteDark}
+            mode="contained"
+          >
+            Register
+          </Button>
+        </TouchableOpacity>
           <View style={styles.signup}>
             <Text>Have an account ?</Text>
             <Button onPress={() => navigation.navigate('Login')}>Login</Button>
           </View>
-          <SnacksNotification
-            visible={visible}
-            navigation={navigation}
-            message={message}
-            handleNotification={handleNotification}
-          />
+         
         </ScrollView>
         <Loading />
       </KeyboardAvoidingView>

@@ -42,7 +42,7 @@ const makeCall = (num) => {
 const Item = ({ item, navigation, route }) => {
   return (
     <TouchableOpacity
-      onPress={() => navigation.navigate('Details', { productID: item._id })}
+      onPress={() => navigation.push('Details', { productID: item._id })}
       // onPress={() => makeCall()}
       style={{
         marginHorizontal: 5,

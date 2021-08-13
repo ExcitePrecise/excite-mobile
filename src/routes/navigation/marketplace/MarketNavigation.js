@@ -1,7 +1,7 @@
 import React from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import Home from '../../../scenes/home/Home'
-import { View, Text, TouchableOpacity , Linking} from 'react-native'
+import { View, Text, TouchableOpacity, Linking } from 'react-native'
 import { COLORS } from './../../../theme/theme'
 import MarketplaceStacks from './stack/Marketplace'
 import AccountStack from './stack/Account'
@@ -11,7 +11,8 @@ import { FontAwesome5, MaterialIcons } from '@expo/vector-icons'
 //
 const MarketBottomInstance = createBottomTabNavigator()
 const MarketBottomTabs = ({ navigation }) => {
-  function PostScreen() {
+  function PostScreen({ navigation }) {
+    // return navigation.navigate("Profile")
     return (
       <View>
         <Text>Post</Text>
@@ -28,7 +29,7 @@ const MarketBottomTabs = ({ navigation }) => {
   }
   return (
     <MarketBottomInstance.Navigator
-    initialRouteName="Market"
+      initialRouteName="Market"
       //hide tab names
       tabBarOptions={{
         showLabel: false,
@@ -48,7 +49,7 @@ const MarketBottomTabs = ({ navigation }) => {
         },
       }}
     >
-       <MarketBottomInstance.Screen
+      <MarketBottomInstance.Screen
         name="Home"
         component={Home}
         options={() => ({
@@ -90,27 +91,50 @@ const MarketBottomTabs = ({ navigation }) => {
       />
       <MarketBottomInstance.Screen
         name="Post"
-        component={PostScreen}
-        options={{
-          tabBarIcon: ({ focused }) => {
-            return (
-              <View
-                style={{
-                  flexDirection: 'row',
-                  backgroundColor: focused
-                    ? COLORS.exciteGreen
-                    : COLORS.lightGray,
-                  paddingHorizontal: 15,
-                  paddingVertical: 10,
-                  borderRadius: 6,
-                }}
-              >
+        component={EmptyScreen}
+        // options={{
+        //   tabBarIcon: ({ focused }) => {
+        //     return (
+        //       <View
+        //         style={{
+        //           flexDirection: 'row',
+        //           backgroundColor: focused
+        //             ? COLORS.exciteGreen
+        //             : COLORS.lightGray,
+        //           paddingHorizontal: 15,
+        //           paddingVertical: 10,
+        //           borderRadius: 6,
+        //         }}
+        //       >
+        //         <MaterialIcons name="add" size={20}></MaterialIcons>
+        //         <Text>SELL</Text>
+        //       </View>
+        //     )
+        //   },
+        // }}
+        options={() => ({
+          tabBarButton: (props) => (
+            <TouchableOpacity
+              {...props}
+              onPress={() =>
+                navigation.navigate('Profile', { screen: 'ProductListing' })
+              }
+              style={{
+                flexDirection: 'row',
+                backgroundColor: props.focused
+                  ? COLORS.exciteGreen
+                  : COLORS.lightGray,
+                paddingHorizontal: 15,
+                paddingVertical: 10,
+                borderRadius: 6,
+              }}
+            >
+              <View style={{ justifyContent: 'center', height: '100%' }}>
                 <MaterialIcons name="add" size={20}></MaterialIcons>
-                <Text>SELL</Text>
               </View>
-            )
-          },
-        }}
+            </TouchableOpacity>
+          ),
+        })}
       />
       <MarketBottomInstance.Screen
         name="Profile"
@@ -118,12 +142,11 @@ const MarketBottomTabs = ({ navigation }) => {
         options={{
           tabBarIcon: ({ focused }) => {
             return (
-                <MaterialIcons
-                  name="dashboard"
-                  size={25}
-                  color={focused ? COLORS.exciteGreen : COLORS.lightGray}
-                >
-                </MaterialIcons>
+              <MaterialIcons
+                name="dashboard"
+                size={25}
+                color={focused ? COLORS.exciteGreen : COLORS.lightGray}
+              ></MaterialIcons>
             )
           },
         }}
@@ -133,10 +156,7 @@ const MarketBottomTabs = ({ navigation }) => {
         component={EmptyScreen}
         options={() => ({
           tabBarButton: (props) => (
-            <TouchableOpacity
-              {...props}
-              onPress={() => makeWhatsapp()}
-            >
+            <TouchableOpacity {...props} onPress={() => makeWhatsapp()}>
               <View style={{ justifyContent: 'center', height: '100%' }}>
                 <FontAwesome5
                   name="whatsapp"
@@ -146,7 +166,6 @@ const MarketBottomTabs = ({ navigation }) => {
               </View>
             </TouchableOpacity>
           ),
-          //    tabBarIcon
         })}
       />
     </MarketBottomInstance.Navigator>

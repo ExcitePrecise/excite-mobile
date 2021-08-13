@@ -16,7 +16,7 @@ const index = ({ navigation }) => {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <ScrollView style={styles.root}>
-        <Index />
+        <Index navigation={navigation}/>
       </ScrollView>
     </SafeAreaView>
   )

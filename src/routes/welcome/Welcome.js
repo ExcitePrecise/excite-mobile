@@ -14,7 +14,7 @@ const MarketStack = createStackNavigator()
 const BusinessArea = () => {
     function BusinessHome(){
         return(
-            <View><Text>Business Home</Text></View>
+            <View style={{marginTop: 20}}><Text>Business Home</Text></View>
         )
     }
   return (

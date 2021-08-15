@@ -36,8 +36,8 @@ export default function PopularCategorySwitch({ navigation }) {
       icon: images.phone_icon,
     },
     {
-      category: 'fashion',
-      name: 'Hair & Beauty',
+      category: 'health',
+      name: 'Health & Beauty',
       icon: images.hair_icon,
     },
     {
@@ -51,7 +51,7 @@ export default function PopularCategorySwitch({ navigation }) {
       icon: images.fashion_icon,
     },
     {
-      category: 'home-ofices',
+      category: 'home-kitchen-appliance',
       name: 'Home & Offices',
       icon: images.home_icon,
     },
@@ -60,30 +60,44 @@ export default function PopularCategorySwitch({ navigation }) {
       name: 'Babies & Kids',
       icon: images.kid_icon,
     },
+    // {
+    //   category: 'babies',
+    //   name: 'Euipment & Tools',
+    //   icon: images.tools_icon,
+    // },
     {
-      category: 'babies',
-      name: 'Euipment & Tools',
-      icon: images.tools_icon,
-    },
-    {
-      category: 'repairs',
+      category: 'services',
       name: 'Services',
       icon: images.repairs_icon,
     },
     {
-      category: 'repairs',
+      category: 'agro',
       name: 'Animals & Pets',
       icon: images.pets_icon,
     },
     {
-      category: 'repairs',
-      name: 'Top Products',
+      category: 'laptops-accessories',
+      name: 'Laptops & Acc.',
       icon: images.top_icon,
     },
   ]
   return (
     <View style={styles.root}>
-      {navItems.map((item, index) => (
+         <TouchableOpacity
+          style={styles.tabs}
+          // onPress={() =>
+          //   navigation.navigate('Category', { category: "top" })
+          // }
+        >
+          <Image
+            source={images.top}
+            width={20}
+            height={40}
+            resizeMode="contain"
+          />
+          <Text style={styles.tabText}>{"Top Products"}</Text>
+        </TouchableOpacity>
+      {navItems.sort((a,b)=>a.name > b.name).map((item, index) => (
         <TouchableOpacity
           key={index}
           style={styles.tabs}
@@ -100,6 +114,7 @@ export default function PopularCategorySwitch({ navigation }) {
           <Text style={styles.tabText}>{item.name}</Text>
         </TouchableOpacity>
       ))}
+    
     </View>
   )
 }

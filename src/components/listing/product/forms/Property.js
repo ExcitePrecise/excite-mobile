@@ -17,7 +17,7 @@ import {
   listProductCancelImages,
 } from '../../../../slices/app.slice'
 //
-const Electronics = ({ category, subCategory, images, token, productListing }) => {
+const Property = ({ category, subCategory, images, token, productListing }) => {
   const dispatch = useDispatch()
   const [isSubmit, setIsSubmit] = useState(false)
   //
@@ -39,7 +39,7 @@ const Electronics = ({ category, subCategory, images, token, productListing }) =
           setIsSubmit(true)
           try {
             const response = await useAxios.post(
-              '/app/marketplace/products/add-item/electronics',
+              '/app/marketplace/products/add-item/property',
               {
                 ...values,
                 category,
@@ -256,4 +256,4 @@ const mapStateToProps = (state) => {
   }
 }
 
-export default connect(mapStateToProps)(Electronics)
+export default connect(mapStateToProps)(Property)

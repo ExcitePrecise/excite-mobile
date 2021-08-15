@@ -135,6 +135,32 @@ const Fashion = ({ category, subCategory, images, token, productListing }) => {
               }}
             >
               <Picker
+                selectedValue={values.condition}
+                onValueChange={(itemValue, itemIndex) => {
+                  setFieldValue('condition', itemValue)
+                  // this.setState({selectedLanguage: itemValue})
+                }}
+                mode="dropdown"
+              >
+                <Picker.Item
+                  color={COLORS.lightGray}
+                  label="Condition"
+                  value={null}
+                />
+                {['Faily Used', 'New'].map((item, index) => (
+                  <Picker.Item key={index} label={item} value={item} />
+                ))}
+              </Picker>
+            </View>
+            <View
+              style={{
+                borderWidth: 1,
+                borderColor: '#444',
+                borderRadius: 5,
+                marginBottom: 20,
+              }}
+            >
+              <Picker
                 selectedValue={values.gender}
                 onValueChange={(itemValue, itemIndex) => {
                   setFieldValue('gender', itemValue)

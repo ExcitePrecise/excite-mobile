@@ -5,6 +5,8 @@ const homeGroup = [
   { name: "Home Accessories", sub: [] },
   { name: "Home Appliance", sub: [] },
   { name: "Kitchen & Dining", sub: [] },
+  { name: "Office & Supplies", sub: [] },
+  { name: "School Supplies", sub: [] },
 ];
 export const homeCategory=homeGroup.map(item=>item.name).sort()
 

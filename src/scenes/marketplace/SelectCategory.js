@@ -21,9 +21,13 @@ const Category = ({ route, products, navigation }) => {
   const { category } = route.params
   useEffect(() => {
     const items = products?.filter((item) => item.category === category)
-    const cats = categories[category]
-    setSubs(cats)
-    setData(items)
+    const cats = categories[category];
+    if(cats){
+      setSubs(cats)
+      setData(items)
+      return
+    }
+   
   }, [products])
   const handleStatistcs = (subsCat) => {
     return data?.filter((item) => item.subCategory === subsCat)?.length
@@ -78,7 +82,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     padding: SIZES.padding,
     backgroundColor: COLORS.white,
-    marginBottom: 30,
+    marginBottom: 10,
     borderRadius:3,
     shadowColor: '#000',
     shadowOffset: {

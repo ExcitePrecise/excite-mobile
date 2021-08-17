@@ -15,7 +15,7 @@ const useAxios = axios.create({
     if (token) {
       // console.log('setting token', token)
       // Setting the Authorisation header for all future GET requests
-      useAxios.defaults.headers.common['Authorization'] = `Bearer ${token}`
+      // useAxios.defaults.headers.common['Authorization'] = `Bearer ${token}`
       useAxios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
       useAxios.defaults.xsrfCookieName = "csrftoken";
     } else {

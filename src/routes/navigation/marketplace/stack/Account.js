@@ -7,6 +7,7 @@ import Dashboard from '../../../../scenes/merchants/dashboard/Index'
 import ListingProduct from '../../../../scenes/merchants/dashboard/listing/products'
 import ListingService from '../../../../scenes/merchants/dashboard/listing/services'
 import BookKeeping from '../../../../scenes/merchants/dashboard/book'
+import Performance from '../../../../scenes/merchants/dashboard/book/Performance'
 import Subscription from '../../../../scenes/merchants/dashboard/subscriptions'
 import Influencer from '../../../../scenes/merchants/dashboard/influencer'
 import PaymentGate from '../../../../scenes/merchants/dashboard/payment'
@@ -119,6 +120,11 @@ const AuthRequired = () => {
         headerRight: () => <HeaderRight />,
       })}
       />
+      <AccountStack.Screen
+      name="Performance"
+      component={Performance}
+      options={() => ({ title: 'Sales Performance' })}
+    />
     </AccountStack.Navigator>
   )
 }
@@ -133,20 +139,18 @@ const SignRoute = () => {
 }
 
 // MAIN
-function Account({ auth, loggedIn,navigation, ...props }) {
+function Account({
+  auth, loggedIn, navigation, ...props
+}) {
   if (auth && loggedIn) {
-    return <AuthRequired {...props} navigation={navigation}/>
+    return <AuthRequired {...props} navigation={navigation} />
   }
-  return <SignRoute {...props}/>
-  // return <AuthRequired {...props} navigation={navigation}/>
-
+  return <SignRoute {...props} />
 }
 
-const mapStateToProps = (state) => {
-  return {
-    auth: state.app.token,
-    loggedIn: state.app.loggedIn,
-  }
-}
+const mapStateToProps = (state) => ({
+  auth: state.app.token,
+  loggedIn: state.app.loggedIn,
+})
 
 export default connect(mapStateToProps)(Account)

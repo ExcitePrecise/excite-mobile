@@ -11,6 +11,8 @@ const initialState = {
   loggedIn: false,
   token: null,
   me: {},
+  title: 'Excite',
+  tabIcon:'shopping-bag',
   loading: false,
   productListing: { category: '', subCategory: '', images: [] },
 }
@@ -33,6 +35,12 @@ const appSlice = createSlice({
     },
     saveMe: (state, { payload }) => {
       state.me = payload.me
+    },
+    setTitle: (state, { payload }) => {
+      state.title = payload.title
+    },
+    setTabIcon: (state, { payload }) => {
+      state.tabIcon = payload.icon
     },
     isLoading: (state, { payload }) => {
       state.loading = payload
@@ -66,6 +74,8 @@ export const { action } = appSlice
 export const {
   authenticate,
   saveMe,
+  setTitle,
+  setTabIcon,
   isLoading,
   authLogOut,
   listProduct,

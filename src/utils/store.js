@@ -5,11 +5,13 @@ import {
 } from '@reduxjs/toolkit'
 import logger from 'redux-logger'
 import appReducer from 'slices/app.slice'
-import marketplaceReducer from '../slices/marketplace.slice'
+import paymentReducer from 'slices/payment.slice'
+import marketplaceReducer from 'slices/marketplace.slice'
 
 const rootReducer = combineReducers({
   app: appReducer,
-  marketplace:marketplaceReducer
+  marketplace:marketplaceReducer,
+  payment:paymentReducer
   // add more reducers
 })
 

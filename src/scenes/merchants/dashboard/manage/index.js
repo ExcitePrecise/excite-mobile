@@ -1,10 +1,11 @@
 import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
-import Account from "../../../../components/profile/Index"
+import ManageListing from "../../../../components/managelisting/Index"
+
 const index = () => {
     return (
         <View>
-            <Account />
+            <ManageListing />
         </View>
     )
 }

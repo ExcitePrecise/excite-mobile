@@ -7,15 +7,18 @@ import {
   View,
   ScrollView,
 } from 'react-native'
-import { connect } from 'react-redux'
+import { connect, useDispatch } from 'react-redux'
 import { useState } from 'react'
 import categories from '../../utils/productCategoriesHandler'
 import { FontAwesome, Ionicons } from '@expo/vector-icons'
 import { COLORS, FONTS, SIZES } from '../../theme/theme'
 import { fonts } from '../../theme'
 import ExciteBanner from './landingchunks/ExciteBanner'
+import { setTabIcon, setTitle } from '../../slices/app.slice'
 
+// 
 const Category = ({ route, products, navigation }) => {
+  const dispatch=useDispatch()
   const [subs, setSubs] = useState([])
   const [data, setData] = useState([])
   const { category } = route.params
@@ -32,6 +35,13 @@ const Category = ({ route, products, navigation }) => {
   const handleStatistcs = (subsCat) => {
     return data?.filter((item) => item.subCategory === subsCat)?.length
   }
+  React.useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      dispatch(setTitle({title:"Select category"}))
+      dispatch(setTabIcon({icon:'shopping-bag'}))
+    });
+    return unsubscribe;
+  }, [navigation]);
   return (
     <ScrollView style={styles.root}>
       <View style={{marginBottom:20}}>

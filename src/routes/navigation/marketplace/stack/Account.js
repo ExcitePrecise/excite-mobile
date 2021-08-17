@@ -1,9 +1,7 @@
 import React from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import Login from '../../../../scenes/merchants/accounts/Login'
 import Register from '../../../../scenes/merchants/accounts/Register'
-import { View, Text, TouchableOpacity } from 'react-native'
 import { connect } from 'react-redux'
 import Dashboard from '../../../../scenes/merchants/dashboard/Index'
 import ListingProduct from '../../../../scenes/merchants/dashboard/listing/products'
@@ -11,6 +9,16 @@ import ListingService from '../../../../scenes/merchants/dashboard/listing/servi
 import BookKeeping from '../../../../scenes/merchants/dashboard/book'
 import Subscription from '../../../../scenes/merchants/dashboard/subscriptions'
 import Influencer from '../../../../scenes/merchants/dashboard/influencer'
+import PaymentGate from '../../../../scenes/merchants/dashboard/payment'
+import Store from "../../../../scenes/merchants/dashboard/store";
+import Banner from "../../../../scenes/merchants/dashboard/banner";
+import ManageListing from "../../../../scenes/merchants/dashboard/manage";
+import MyAccount from "../../../../scenes/merchants/dashboard/profile";
+
+import { COLORS } from '../../../../theme/theme'
+import HeaderTitle from './HeaderTitle'
+import HeaderLeft from './HeaderLeft'
+import HeaderRight from './HeaderRight'
 
 // navigations
 const AccountStack = createStackNavigator()
@@ -21,13 +29,96 @@ const AccountStack = createStackNavigator()
 // 
 const AuthRequired = () => {
   return (
-    <AccountStack.Navigator screenOptions={{ headerShown: true }} initialRouteName="Dashboard">
-      <AccountStack.Screen name="Dashboard" component={Dashboard} />
-      <AccountStack.Screen name="ProductListing" component={ListingProduct} />
-      <AccountStack.Screen name="ServiceListing" component={ListingService} />
-      <AccountStack.Screen name="BookKeeping" component={BookKeeping} />
-      <AccountStack.Screen name="Influencer" component={Influencer} />
-      <AccountStack.Screen name="Subscription" component={Subscription} />
+    <AccountStack.Navigator screenOptions={{headerStyle:{backgroundColor:COLORS.exciteDark,elevation:0},headerTintColor:COLORS.white}} initialRouteName="Dashboard">
+      <AccountStack.Screen name="Dashboard" component={Dashboard} 
+       options={({ navigation }) => ({
+        title: 'Home',
+        headerLeft: () => <HeaderLeft navigation={navigation} />,
+        headerTitle: () => <HeaderTitle />,
+        headerRight: () => <HeaderRight />,
+      })}
+      />
+      <AccountStack.Screen name="ProductListing" component={ListingProduct}
+       options={({ navigation }) => ({
+        title: 'Product Listing',
+        headerLeft: () => <HeaderLeft navigation={navigation} />,
+        headerTitle: () => <HeaderTitle />,
+        headerRight: () => <HeaderRight />,
+      })}
+      
+      />
+      <AccountStack.Screen name="ServiceListing" component={ListingService} 
+       options={({ navigation }) => ({
+        title: 'Service Listing',
+        headerLeft: () => <HeaderLeft navigation={navigation} />,
+        headerTitle: () => <HeaderTitle />,
+        headerRight: () => <HeaderRight />,
+      })}
+      />
+      <AccountStack.Screen name="BookKeeping" component={BookKeeping} 
+       options={({ navigation }) => ({
+        title: 'Book Keeping',
+        headerLeft: () => <HeaderLeft navigation={navigation} />,
+        headerTitle: () => <HeaderTitle />,
+        headerRight: () => <HeaderRight />,
+      })}
+      />
+      <AccountStack.Screen name="Influencer" component={Influencer} 
+       options={({ navigation }) => ({
+        title: 'Influencer',
+        headerLeft: () => <HeaderLeft navigation={navigation} />,
+        headerTitle: () => <HeaderTitle />,
+        headerRight: () => <HeaderRight />,
+      })}
+      />
+      <AccountStack.Screen name="Subscription" component={Subscription}
+       options={({ navigation }) => ({
+        title: 'Subscription',
+        headerLeft: () => <HeaderLeft navigation={navigation} />,
+        headerTitle: () => <HeaderTitle />,
+        headerRight: () => <HeaderRight />,
+      })}
+      />
+      <AccountStack.Screen name="PaymentGate" component={PaymentGate}
+       options={({ navigation }) => ({
+        title: 'PaymentGate',
+        headerLeft: () => <HeaderLeft navigation={navigation} />,
+        headerTitle: () => <HeaderTitle />,
+        headerRight: () => <HeaderRight />,
+      })}
+      />
+      <AccountStack.Screen name="Store" component={Store}
+       options={({ navigation }) => ({
+        title: 'Store',
+        headerLeft: () => <HeaderLeft navigation={navigation} />,
+        headerTitle: () => <HeaderTitle />,
+        headerRight: () => <HeaderRight />,
+      })}
+      />
+      <AccountStack.Screen name="PostBanner" component={Banner}
+       options={({ navigation }) => ({
+        title: 'PostBanner',
+        headerLeft: () => <HeaderLeft navigation={navigation} />,
+        headerTitle: () => <HeaderTitle />,
+        headerRight: () => <HeaderRight />,
+      })}
+      />
+      <AccountStack.Screen name="ManageListing" component={ManageListing}
+       options={({ navigation }) => ({
+        title: 'ManageListing',
+        headerLeft: () => <HeaderLeft navigation={navigation} />,
+        headerTitle: () => <HeaderTitle />,
+        headerRight: () => <HeaderRight />,
+      })}
+      />
+      <AccountStack.Screen name="MyAccount" component={MyAccount}
+       options={({ navigation }) => ({
+        title: 'MyAccount',
+        headerLeft: () => <HeaderLeft navigation={navigation} />,
+        headerTitle: () => <HeaderTitle />,
+        headerRight: () => <HeaderRight />,
+      })}
+      />
     </AccountStack.Navigator>
   )
 }

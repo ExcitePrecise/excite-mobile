@@ -1,3 +1,3 @@
-import { authLogin,authSignUp } from "./auth";
+import { authLogin,authSignUp,getProfileInfo } from "./auth";
 
-export default {authLogin,authSignUp}
+export default {authLogin,authSignUp,getProfileInfo}

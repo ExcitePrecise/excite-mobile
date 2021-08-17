@@ -27,7 +27,20 @@ const authSignUp = async (data)=>{
         console.log(error)
     }
 }
+
+const getProfileInfo=async (token)=>{
+    try {
+        const response = await useAxios.get('/app/profile/get/profile/email',{headers:{
+            authorization:`Bearer ${token}`
+        }});
+        // console.log(response.data)
+        return response.data
+    } catch (error) {
+        console.log(error)
+        return null
+    }
+}
 // ........................
 
 
-export {authLogin,authSignUp}
+export {authLogin,authSignUp,getProfileInfo}

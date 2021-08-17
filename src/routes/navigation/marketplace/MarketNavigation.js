@@ -12,14 +12,7 @@ import { FontAwesome5, MaterialIcons } from '@expo/vector-icons'
 //
 const MarketBottomInstance = createBottomTabNavigator()
 const MarketBottomTabs = ({ navigation }) => {
-  function PostScreen({ navigation }) {
-    // return navigation.navigate("Profile")
-    return (
-      <View>
-        <Text>Post</Text>
-      </View>
-    )
-  }
+  
 
   function EmptyScreen() {
     return <View></View>
@@ -94,6 +87,7 @@ const MarketBottomTabs = ({ navigation }) => {
         name="Post"
         component={PostProduct}
         options={{
+          
           tabBarIcon: ({ focused }) => {
             return (
               <View
@@ -110,31 +104,9 @@ const MarketBottomTabs = ({ navigation }) => {
                 <MaterialIcons name="add" size={20}></MaterialIcons>
               </View>
             )
+
           },
         }}
-        // options={() => ({
-        //   tabBarButton: (props) => (
-        //     <TouchableOpacity
-        //       {...props}
-        //       onPress={() =>
-        //         navigation.navigate('Profile', { screen: 'ProductListing' })
-        //       }
-        //       style={{
-        //         flexDirection: 'row',
-        //         backgroundColor: props.focused
-        //           ? COLORS.exciteGreen
-        //           : COLORS.lightGray,
-        //         paddingHorizontal: 15,
-        //         paddingVertical: 10,
-        //         borderRadius: 6,
-        //       }}
-        //     >
-        //       <View style={{ justifyContent: 'center', height: '100%' }}>
-        //         <MaterialIcons name="add" size={20}></MaterialIcons>
-        //       </View>
-        //     </TouchableOpacity>
-        //   ),
-        // })}
       />
       <MarketBottomInstance.Screen
         name="Profile"

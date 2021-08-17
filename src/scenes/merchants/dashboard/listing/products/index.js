@@ -1,14 +1,19 @@
 import React from 'react'
 import { StyleSheet, Text, View, ScrollView, SafeAreaView } from 'react-native'
+import { useDispatch } from 'react-redux'
 import Index from '../../../../../components/listing/product/Index'
+import { setTabIcon, setTitle } from '../../../../../slices/app.slice'
 import { COLORS, SIZES } from '../../../../../theme/theme'
 
 const index = ({ navigation }) => {
+  const disptach = useDispatch()
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       // Screen was focused
       // Do something
       //   alert('hello')
+      disptach(setTitle({title:"Product Listing"}))
+      disptach(setTabIcon({icon:'playlist-add'}))
     })
 
     return unsubscribe

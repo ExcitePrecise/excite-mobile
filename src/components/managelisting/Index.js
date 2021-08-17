@@ -1,14 +1,14 @@
 import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
-import Account from "../../../../components/profile/Index"
-const index = () => {
+
+const Index = () => {
     return (
         <View>
-            <Account />
+            <Text>manage</Text>
         </View>
     )
 }
 
-export default index
+export default Index
 
 const styles = StyleSheet.create({})

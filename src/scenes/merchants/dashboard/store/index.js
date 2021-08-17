@@ -1,10 +1,11 @@
 import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
-import Account from "../../../../components/profile/Index"
+import Store from "../../../../components/store/Store"
+
 const index = () => {
     return (
-        <View>
-            <Account />
+        <View style={{flex:1}}>
+            <Store />
         </View>
     )
 }

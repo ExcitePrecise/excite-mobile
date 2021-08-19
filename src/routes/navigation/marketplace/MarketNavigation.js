@@ -27,6 +27,7 @@ const MarketBottomTabs = ({ navigation }) => {
       //hide tab names
       tabBarOptions={{
         showLabel: false,
+        keyboardHidesTabBar:true,
         style: {
           backgroundColor: 'white',
           // position: 'absolute',
@@ -42,6 +43,7 @@ const MarketBottomTabs = ({ navigation }) => {
           },
         },
       }}
+    
     >
       <MarketBottomInstance.Screen
         name="Home"

@@ -30,7 +30,11 @@ const AccountStack = createStackNavigator()
 // 
 const AuthRequired = () => {
   return (
-    <AccountStack.Navigator screenOptions={{headerStyle:{backgroundColor:COLORS.exciteDark,elevation:0},headerTintColor:COLORS.white}} initialRouteName="Dashboard">
+    <AccountStack.Navigator 
+    screenOptions={{headerStyle:{backgroundColor:COLORS.exciteDark,elevation:0},headerTintColor:COLORS.white}} 
+    initialRouteName="Dashboard"
+    
+    >
       <AccountStack.Screen name="Dashboard" component={Dashboard} 
        options={({ navigation }) => ({
         title: 'Home',

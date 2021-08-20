@@ -14,10 +14,12 @@ import {
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5'
 import { FontAwesome } from '@expo/vector-icons'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
-import { connect } from 'react-redux'
+import { connect, useDispatch } from 'react-redux'
 import { COLORS, FONTS, SIZES } from '../../theme/theme'
 import ExciteBanner from './landingchunks/ExciteBanner'
+import { setTabIcon, setTitle } from '../../slices/app.slice'
 
+// 
 const makeCall = (num) => {
   let phoneNumber = ''
 
@@ -102,7 +104,8 @@ const Item = ({ item, navigation, route }) => {
 }
 
 const Products = ({ route, products, navigation }) => {
-  const { category, subs } = route.params
+  const { category, subs } = route.params;
+  const dispatch = useDispatch()
   const [data, setData] = useState([])
   useEffect(() => {
     const items = products?.filter(
@@ -111,6 +114,14 @@ const Products = ({ route, products, navigation }) => {
     // console.log(category, subs)
     setData(items)
   }, [products])
+  React.useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      dispatch(setTitle({title:`Browse ${subs} Collections`}))
+      dispatch(setTabIcon({icon:'shopping-bag'}))
+    });
+    return unsubscribe;
+  }, [navigation]);
+
   return (
     <View style={styles.root}>
       <ExciteBanner />

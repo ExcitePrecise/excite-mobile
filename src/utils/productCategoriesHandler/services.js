@@ -17,12 +17,4 @@ const service=[
 
 
 
-export const serviceTypes=()=>{
-    let cat = [];
-  for (const i of service) {
-    if(!cat.includes(i.name)){
-      cat.push(i.name)
-    }
-  }
-  return cat.sort()
-}
+export const serviceTypes=service.map(item=>item.name).sort()

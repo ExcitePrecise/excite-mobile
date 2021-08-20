@@ -36,6 +36,13 @@ import {
 } from '../../../slices/app.slice'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { ImageResizer } from '../../ImageResizer'
+import Vehicle from './forms/Vehicle'
+import Health from './forms/Health'
+import Property from './forms/Property'
+import Kids from './forms/Kids'
+import Services from './forms/Services'
+import Home from './forms/Home'
+import Agro from './forms/Agro'
 
 //
 const createFormData = async (photo) => {
@@ -126,7 +133,7 @@ const Index = ({ productListing, productImg, navigation }) => {
             'Content-Type': 'multipart/form-data',
           },
           onUploadProgress: (e) => {
-            console.log(e)
+            // console.log(e)
           },
         },
       )
@@ -167,6 +174,22 @@ const Index = ({ productListing, productImg, navigation }) => {
     switch (productListing?.category) {
       case 'fashion':
         return <Fashion />
+      case 'electronics':
+        return <Electronics />
+      case 'vehicle':
+        return <Vehicle />
+      case 'health':
+        return <Health />
+      case 'Property':
+        return <Property />
+      case 'kids':
+        return <Kids />
+      case 'services':
+        return <Services />
+      case 'home':
+        return <Home />
+      case 'agro':
+        return <Agro />
       default:
         return <View></View>
     }

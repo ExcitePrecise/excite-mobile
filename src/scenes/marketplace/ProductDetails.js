@@ -13,7 +13,7 @@ import {
   Image,
 } from 'react-native'
 import { useScrollToTop } from '@react-navigation/native';
-import { connect } from 'react-redux'
+import { connect, useDispatch } from 'react-redux'
 import { COLORS, FONTS } from '../../theme/theme'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import { Button, TextInput } from 'react-native-paper'
@@ -21,8 +21,10 @@ import MiniSearch from 'minisearch'
 import useAxios from '../../utils/axios/init'
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5'
 import { FontAwesome } from '@expo/vector-icons'
-import { set } from 'lodash'
+import { setTitle } from '../../slices/app.slice';
 
+
+// 
 const makeCall = (num) => {
     let phoneNumber = ''
   
@@ -134,6 +136,7 @@ const Item = ({ item, navigation, route }) => {
 //
 const ProductDetails = ({ route, products, navigation }) => {
   const { productID } = route.params
+  const dispatch = useDispatch()
   const [item, setItem] = useState(null)
 
   const [similar, setSimilar] = useState([])
@@ -141,7 +144,7 @@ const ProductDetails = ({ route, products, navigation }) => {
   const getSimilarProducts = async () => {
     // Search with default options
     if (item) {
-    setSimilar(item.merchant.product.filter(data=>data._id !== item._id))
+    setSimilar(item?.merchant?.product.filter(data=>data._id !== item._id))
     }
   }
 
@@ -158,7 +161,18 @@ const ProductDetails = ({ route, products, navigation }) => {
     // getSimilarProducts()
   }, [products,productID])
 
+  // 
+  React.useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      // if(item){
+      //   dispatch(setTitle({title:`${item?.title}`}))
+      // }
+      // TODO
+    });
+    return unsubscribe;
+  }, [navigation]);
   //
+
   return (
     <SafeAreaView>
       <ScrollView ref={ref} >
@@ -257,7 +271,7 @@ const ProductDetails = ({ route, products, navigation }) => {
                 Other products by same vendor
               </Text>
             </View>
-            {similar.map((item, index) => (
+            {similar?.map((item, index) => (
               <Item key={index} item={item} navigation={navigation} />
             ))}
           </View>

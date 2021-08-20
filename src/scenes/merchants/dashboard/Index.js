@@ -9,7 +9,7 @@ import {
 } from 'react-native'
 import { Button } from 'react-native-paper'
 import { useDispatch } from 'react-redux'
-import { authLogOut } from '../../../slices/app.slice'
+import { authLogOut, setTabIcon, setTitle } from '../../../slices/app.slice'
 import { images } from '../../../theme'
 import { COLORS, FONTS } from '../../../theme/theme'
 import { rememberToken, getValidToken } from './../../../utils/axios/token'
@@ -29,7 +29,7 @@ const navItem = [
   {
     name: 'Place Banner',
     icon: images.banner,
-    navigate: '',
+    navigate: 'PostBanner',
   },
   {
     name: 'Book Keeping',
@@ -99,16 +99,18 @@ function DasboardRoute({navigation}) {
 
 //
 const Index = ({navigation}) => {
-
+const dispatch = useDispatch()
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       // Screen was focused
       // Do something
+      dispatch(setTitle({title:"My Account"}))
+      dispatch(setTabIcon({icon:'account-circle'}))
     });
 
     return unsubscribe;
   }, [navigation]);
-  const dispatch = useDispatch()
+  // const dispatch = useDispatch()
   return (
     <ScrollView>
       <View>

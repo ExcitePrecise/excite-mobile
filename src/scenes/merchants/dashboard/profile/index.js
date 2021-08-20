@@ -1,10 +1,10 @@
 import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
-
+import Account from "../../../../components/profile/Index"
 const index = () => {
     return (
         <View>
-            <Text>Profile</Text>
+            <Account />
         </View>
     )
 }

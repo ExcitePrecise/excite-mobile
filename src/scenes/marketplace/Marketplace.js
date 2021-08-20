@@ -13,7 +13,7 @@ import ExciteBanner from './landingchunks/ExciteBanner'
 import PopularCategorySwitch from './landingchunks/PopularCategorySwitch'
 import { landingProduct } from '../../slices/marketplace.slice'
 import { useDispatch } from 'react-redux'
-import { isLoading } from './../../slices/app.slice'
+import { isLoading, setTabIcon, setTitle } from './../../slices/app.slice'
 import axios from 'axios'
 import useAxios from './../../utils/axios/init'
 import ActivityLoading from './../../utils/axios/Loading'
@@ -52,13 +52,13 @@ export default function Marketplace({ navigation }) {
     getData()
   }, [])
 
-  // React.useEffect(() => {
-  //     const unsubscribe = navigation.addListener('focus', () => {
-  //     //   Alert.alert('Refreshed');
-  //     getData()
-  //     });
-  //     return unsubscribe;
-  //   }, [navigation]);
+  React.useEffect(() => {
+      const unsubscribe = navigation.addListener('focus', () => {
+        dispatch(setTitle({title:"Marketplace"}))
+        dispatch(setTabIcon({icon:'shopping-bag'}))
+      });
+      return unsubscribe;
+    }, [navigation]);
 
   return (
     <ScrollView

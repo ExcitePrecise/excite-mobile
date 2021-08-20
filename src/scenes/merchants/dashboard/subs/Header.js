@@ -11,8 +11,7 @@ const Header = ({user}) => {
 
     return (
         <SafeAreaView style={styles.root}>
-            <Text style={{color:COLORS.white,...FONTS.h2}}>My Account</Text>
-            <Text style={{color:COLORS.exciteGreen,marginTop:20}}>{user}</Text>
+            <Text style={{color:COLORS.exciteGreen,marginTop:1}}>{user}</Text>
             <TouchableOpacity onPress={()=>dispatch(authLogOut())}><Button icon='logout'>Log Out</Button></TouchableOpacity>
         </SafeAreaView>
     )
@@ -30,6 +29,6 @@ const styles = StyleSheet.create({
     root:{
         backgroundColor:COLORS.exciteDark,
         paddingHorizontal:SIZES.padding,
-        paddingVertical:SIZES.padding * 2
+        paddingVertical:SIZES.padding
     }
 })

@@ -4,21 +4,15 @@ import Home from '../../../scenes/home/Home'
 import { View, Text, TouchableOpacity, Linking } from 'react-native'
 import { COLORS } from './../../../theme/theme'
 import MarketplaceStacks from './stack/Marketplace'
-import AccountStack from './stack/Account'
+import AccountStack from './stack/Account';
+import PostProduct from './stack/PostProduct';
 // Font Awesome
 import { FontAwesome5, MaterialIcons } from '@expo/vector-icons'
 
 //
 const MarketBottomInstance = createBottomTabNavigator()
 const MarketBottomTabs = ({ navigation }) => {
-  function PostScreen({ navigation }) {
-    // return navigation.navigate("Profile")
-    return (
-      <View>
-        <Text>Post</Text>
-      </View>
-    )
-  }
+  
 
   function EmptyScreen() {
     return <View></View>
@@ -91,50 +85,28 @@ const MarketBottomTabs = ({ navigation }) => {
       />
       <MarketBottomInstance.Screen
         name="Post"
-        component={EmptyScreen}
-        // options={{
-        //   tabBarIcon: ({ focused }) => {
-        //     return (
-        //       <View
-        //         style={{
-        //           flexDirection: 'row',
-        //           backgroundColor: focused
-        //             ? COLORS.exciteGreen
-        //             : COLORS.lightGray,
-        //           paddingHorizontal: 15,
-        //           paddingVertical: 10,
-        //           borderRadius: 6,
-        //         }}
-        //       >
-        //         <MaterialIcons name="add" size={20}></MaterialIcons>
-        //         <Text>SELL</Text>
-        //       </View>
-        //     )
-        //   },
-        // }}
-        options={() => ({
-          tabBarButton: (props) => (
-            <TouchableOpacity
-              {...props}
-              onPress={() =>
-                navigation.navigate('Profile', { screen: 'ProductListing' })
-              }
-              style={{
-                flexDirection: 'row',
-                backgroundColor: props.focused
-                  ? COLORS.exciteGreen
-                  : COLORS.lightGray,
-                paddingHorizontal: 15,
-                paddingVertical: 10,
-                borderRadius: 6,
-              }}
-            >
-              <View style={{ justifyContent: 'center', height: '100%' }}>
+        component={PostProduct}
+        options={{
+          
+          tabBarIcon: ({ focused }) => {
+            return (
+              <View
+                style={{
+                  flexDirection: 'row',
+                  backgroundColor: focused
+                    ? COLORS.exciteGreen
+                    : COLORS.lightGray,
+                  paddingHorizontal: 15,
+                  paddingVertical: 10,
+                  borderRadius: 6,
+                }}
+              >
                 <MaterialIcons name="add" size={20}></MaterialIcons>
               </View>
-            </TouchableOpacity>
-          ),
-        })}
+            )
+
+          },
+        }}
       />
       <MarketBottomInstance.Screen
         name="Profile"

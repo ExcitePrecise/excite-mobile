@@ -4,7 +4,7 @@ import { StyleSheet, Text, View } from 'react-native'
 const Index = () => {
     return (
         <View>
-            <Text>Subscription</Text>
+            <Text>my account</Text>
         </View>
     )
 }

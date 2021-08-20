@@ -2,20 +2,30 @@
 
 import React, { useState, useCallback } from 'react'
 import {
-  SafeAreaView, StyleSheet, Text, View, Button, TouchableOpacity, Image, RefreshControl, ScrollView, Pressable,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  View,
+  Button,
+  TouchableOpacity,
+  Image,
+  RefreshControl,
+  ScrollView,
+  Pressable,
 } from 'react-native'
 import { List, Modal } from 'react-native-paper'
 import { images } from 'theme'
 import Summary from './Summary'
 
-const Bookkeeping = ({navigation}) => {
+const Bookkeeping = ({ navigation }) => {
   const [refreshing, setRefreshing] = useState(false)
   const [modalVisible, setModalVisible] = useState(false)
   const [expanded, setExpanded] = useState(true)
 
   const handlePress = () => setExpanded(!expanded)
 
-  const wait = (timeout) => new Promise((resolve) => setTimeout(resolve, timeout))
+  const wait = (timeout) =>
+    new Promise((resolve) => setTimeout(resolve, timeout))
 
   const onRefresh = useCallback(() => {
     setRefreshing(true)
@@ -28,9 +38,10 @@ const Bookkeeping = ({navigation}) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView refreshControl={
-        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-    }
+      <ScrollView
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
       >
         <Summary />
         <ScrollView>
@@ -49,23 +60,44 @@ const Bookkeeping = ({navigation}) => {
             left={(props) => <List.Icon {...props} icon={images.finance} />}
           >
             <Pressable onPress={handleModal}>
-              <List.Item title="Income Statements" />
+              <List.Item
+                title="Income Statements"
+                onPress={() => navigation.navigate('Finance')}
+              />
             </Pressable>
-            <List.Item title="Receivables Ledger" />
-            <List.Item title="Payables" />
-            <List.Item title="Liabilitiies" />
+            <Pressable onPress={handleModal}>
+              <List.Item
+                title="Receivables Ledger"
+                onPress={() => console.log('Receivables button pressed!')}
+              />
+            </Pressable>
+            <Pressable onPress={handleModal}>
+              <List.Item
+                title="Payables"
+                onPress={() => console.log('Payables button pressed!')}
+              />
+            </Pressable>
+            <Pressable onPress={handleModal}>
+              <List.Item
+                title="Liabilitiies"
+                onPress={() => console.log('Liabilitiies button pressed!')}
+              />
+            </Pressable>
           </List.Accordion>
 
           <TouchableOpacity>
             <List.Item
               style={styles.item}
               title="Transactions"
-              left={(props) => <List.Icon {...props} icon="credit-card-check" />}
+              left={(props) => (
+                <List.Icon {...props} icon="credit-card-check" />
+              )}
             />
           </TouchableOpacity>
 
           <TouchableOpacity>
             <List.Item
+              onPress={() => navigation.navigate('Customer')}
               style={styles.item}
               title="Customers"
               left={(props) => <List.Icon {...props} icon="account" />}
@@ -78,17 +110,25 @@ const Bookkeeping = ({navigation}) => {
         <Image source={images.create} style={styles.createNew} />
       </Pressable>
 
-      <Modal style={styles.modalContainer} animationType="slide" transparent visible={modalVisible} onRequestClose={handleModal}>
+      <Modal
+        transparent
+        animationType="slide"
+        visible={modalVisible}
+        onRequestClose={handleModal}
+      >
+        <View style={styles.modalContainer}>
+          <Text> Create New </Text>
 
-        <TouchableOpacity style={styles.modalItem} onPress={handleModal}>
-          <Image source={images.transaction} style={styles.categories_img} />
-          <Text> Add Transactions</Text>
-        </TouchableOpacity>
+          <TouchableOpacity style={styles.modalItem} onPress={handleModal}>
+            <Image source={images.transaction} style={styles.categories_img} />
+            <Text> Transaction</Text>
+          </TouchableOpacity>
 
-        <TouchableOpacity style={styles.modalItem}>
-          <Image source={images.customer} style={styles.categories_img} />
-          <Text> Add Customer </Text>
-        </TouchableOpacity>
+          <TouchableOpacity style={styles.modalItem}>
+            <Image source={images.customer} style={styles.categories_img} />
+            <Text> Customer </Text>
+          </TouchableOpacity>
+        </View>
       </Modal>
     </SafeAreaView>
   )
@@ -99,6 +139,7 @@ export default Bookkeeping
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#ffffff',
   },
   dropdown: {
     marginHorizontal: 10,
@@ -107,7 +148,7 @@ const styles = StyleSheet.create({
     borderColor: '#aaaaaa',
     borderWidth: 1,
     padding: 0,
-    backgroundColor: '#efefef',
+    backgroundColor: '#ffffff',
   },
   item: {
     marginHorizontal: 10,
@@ -118,7 +159,8 @@ const styles = StyleSheet.create({
     padding: 7,
   },
   modalContainer: {
-    margin: 50,
+    padding: 30,
+    backgroundColor: '#ffffff',
   },
   modalItem: {
     flexDirection: 'row',
@@ -131,16 +173,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     color: 'black',
   },
-  // categories: {
-  //   // flexDirection: 'row',
-  //   marginHorizontal: 10,
-  //   marginVertical: 2,
-  //   borderRadius: 10,
-  //   borderColor: '#aaaaaa',
-  //   borderWidth: 1,
-  //   padding: 16,
-  //   backgroundColor: 'white',
-  // },
   categories_img: {
     paddingHorizontal: 5,
     marginRight: 20,

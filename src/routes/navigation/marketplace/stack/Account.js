@@ -10,6 +10,9 @@ import ListingProduct from '../../../../scenes/merchants/dashboard/listing/produ
 import ListingService from '../../../../scenes/merchants/dashboard/listing/services'
 import BookKeeping from '../../../../scenes/merchants/dashboard/book'
 import Performance from '../../../../scenes/merchants/dashboard/book/Performance'
+import Finance from '../../../../scenes/merchants/dashboard/book/Finance'
+import Inventory from '../../../../scenes/merchants/dashboard/book/Inventory'
+import Customer from '../../../../scenes/merchants/dashboard/book/Customer'
 import Subscription from '../../../../scenes/merchants/dashboard/subscriptions'
 import Influencer from '../../../../scenes/merchants/dashboard/influencer'
 
@@ -17,7 +20,10 @@ import Influencer from '../../../../scenes/merchants/dashboard/influencer'
 const AccountStack = createStackNavigator()
 
 const AuthRequired = () => (
-  <AccountStack.Navigator screenOptions={{ headerShown: true }} initialRouteName="Dashboard">
+  <AccountStack.Navigator
+    screenOptions={{ headerShown: true }}
+    initialRouteName="Dashboard"
+  >
     <AccountStack.Screen name="Dashboard" component={Dashboard} />
     <AccountStack.Screen name="ProductListing" component={ListingProduct} />
     <AccountStack.Screen name="ServiceListing" component={ListingService} />
@@ -34,6 +40,22 @@ const AuthRequired = () => (
       component={Performance}
       options={() => ({ title: 'Sales Performance' })}
     />
+    <AccountStack.Screen
+      name="Finance"
+      component={Finance}
+      options={() => ({ title: 'Finanncial Report' })}
+    />
+
+    <AccountStack.Screen
+      name="Inventory"
+      component={Inventory}
+      options={() => ({ title: 'Inventory' })}
+    />
+    <AccountStack.Screen
+      name="Customer"
+      component={Customer}
+      options={() => ({ title: 'Customers' })}
+    />
   </AccountStack.Navigator>
 )
 
@@ -45,9 +67,7 @@ const SignRoute = () => (
 )
 
 // MAIN
-function Account({
-  auth, loggedIn, navigation, ...props
-}) {
+function Account({ auth, loggedIn, navigation, ...props }) {
   if (auth && loggedIn) {
     return <AuthRequired {...props} navigation={navigation} />
   }

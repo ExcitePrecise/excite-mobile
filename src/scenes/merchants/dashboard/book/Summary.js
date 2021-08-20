@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import {
-  SafeAreaView, StyleSheet, Text, View,
-} from 'react-native'
+import { SafeAreaView, StyleSheet, Text, View } from 'react-native'
 import { connect } from 'react-redux'
 import { colors } from 'theme'
 // import axios from 'axios'
@@ -45,24 +43,30 @@ const Summary = ({ token }) => {
     return inventorySum
   }
 
-  const incomeData = summary.filter((incomes) => incomes.accountType === 'income')
+  const incomeData = summary.filter(
+    (incomes) => incomes.accountType === 'income',
+  )
 
-  const expenseData = summary.filter((expenses) => expenses.accountType === 'expense')
+  const expenseData = summary.filter(
+    (expenses) => expenses.accountType === 'expense',
+  )
 
   const costData = summary.filter((costs) => {
     if (costs.accountType === 'costOfSale') {
       costs.productSaleSum === costs.total
     }
-    return (costs.accountType === 'costOfSale') || (costs.productSaleSum)
+    return costs.accountType === 'costOfSale' || costs.productSaleSum
   })
 
   const currencyFormat = (num) => {
     return 'N' + num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
- }
+  }
 
-  const calculateGrossProfit = (calculateGrandTotal(incomeData) - calculateTotalCost(costData)) || 0
+  const calculateGrossProfit =
+    calculateGrandTotal(incomeData) - calculateTotalCost(costData) || 0
 
-  const calculateNetProfit = (calculateGrossProfit - calculateGrandTotal(expenseData)) || 0
+  const calculateNetProfit =
+    calculateGrossProfit - calculateGrandTotal(expenseData) || 0
 
   return (
     <SafeAreaView>
@@ -77,7 +81,9 @@ const Summary = ({ token }) => {
           <View style={styles.column}>
             <Text style={styles.heading}>Cost of Sale</Text>
             <Text style={styles.title2}>
-              {calculateTotalCost(costData) ? currencyFormat(calculateTotalCost(costData)) : '0'}
+              {calculateTotalCost(costData)
+                ? currencyFormat(calculateTotalCost(costData))
+                : '0'}
             </Text>
           </View>
           <View style={styles.column}>
@@ -100,8 +106,10 @@ export default connect(mapStateToProps)(Summary)
 
 const styles = StyleSheet.create({
   container: {
-    margin: 10,
-    padding: 10,
+    marginHorizontal: 10,
+    marginTop: 10,
+    marginBottom: 50,
+    padding: 15,
     backgroundColor: '#0D0827',
     borderRadius: 10,
   },

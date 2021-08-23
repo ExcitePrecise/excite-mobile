@@ -14,7 +14,8 @@ const styles = StyleSheet.create({
 })
 
 const HeaderTitle = ({ title }) => (
-  <Text numberOfLines={1} ellipsizeMode='clip' style={styles.title}>{title || ''}</Text>
+  <Text numberOfLines={1} ellipsizeMode='clip'
+   style={styles.title}>{title || ''}</Text>
 )
 
 HeaderTitle.propTypes = {}

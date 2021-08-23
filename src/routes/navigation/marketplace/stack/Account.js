@@ -15,25 +15,28 @@ import Store from "../../../../scenes/merchants/dashboard/store";
 import Banner from "../../../../scenes/merchants/dashboard/banner";
 import ManageListing from "../../../../scenes/merchants/dashboard/manage";
 import MyAccount from "../../../../scenes/merchants/dashboard/profile";
+// Modal screens
+import ManageListingModal from "../../../../scenes/merchants/dashboard/modals/managelisting"
 
+// 
 import { COLORS } from '../../../../theme/theme'
 import HeaderTitle from './HeaderTitle'
 import HeaderLeft from './HeaderLeft'
 import HeaderRight from './HeaderRight'
-
+import { View,Text, Button } from 'react-native'
 // navigations
-const AccountStack = createStackNavigator()
-
+const RootStack = createStackNavigator();
+const AccountStack = createStackNavigator();
+const ModalStack= createStackNavigator();
 
 
 
 // 
-const AuthRequired = () => {
+const AuthRequiredMain = () => {
   return (
     <AccountStack.Navigator 
     screenOptions={{headerStyle:{backgroundColor:COLORS.exciteDark,elevation:0},headerTintColor:COLORS.white}} 
     initialRouteName="Dashboard"
-    
     >
       <AccountStack.Screen name="Dashboard" component={Dashboard} 
        options={({ navigation }) => ({
@@ -133,6 +136,26 @@ const AuthRequired = () => {
   )
 }
 
+
+// Fullscreen Modals
+const FullModalScreens = ()=>{
+  return(
+    <ModalStack.Navigator 
+    screenOptions={{headerStyle:{backgroundColor:COLORS.exciteDark,elevation:0},headerTintColor:COLORS.white}} 
+    >
+      <ModalStack.Screen name="ProductListingEdit" component={ManageListingModal}
+       options={({ navigation }) => ({
+        title: 'Manage Listing',
+        headerLeft: () => <HeaderLeft navigation={navigation} />,
+        headerTitle: () => <HeaderTitle />,
+        headerRight: () => <HeaderRight />,
+      })}
+      
+      />
+    </ModalStack.Navigator>
+  )
+}
+
 const SignRoute = () => {
   return (
     <AccountStack.Navigator screenOptions={{headerShown:false}}>
@@ -142,12 +165,26 @@ const SignRoute = () => {
   )
 }
 
+function RootStackScreen() {
+  return (
+    <RootStack.Navigator mode="modal" screenOptions={{headerShown:false}}>
+      <RootStack.Screen
+        name="Main"
+        component={AuthRequiredMain}
+        options={{ headerShown: false }}
+      />
+      <RootStack.Screen name="Modals" component={FullModalScreens} />
+    </RootStack.Navigator>
+  );
+}
+
 // MAIN
 function Account({
   auth, loggedIn, navigation, ...props
 }) {
   if (auth && loggedIn) {
-    return <AuthRequired {...props} navigation={navigation} />
+    // return <AuthRequiredMain {...props} navigation={navigation} />
+    return <RootStackScreen {...props} navigation={navigation} />
   }
   return <SignRoute {...props} />
 }

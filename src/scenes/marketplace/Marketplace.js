@@ -14,7 +14,6 @@ import PopularCategorySwitch from './landingchunks/PopularCategorySwitch'
 import { landingProduct } from '../../slices/marketplace.slice'
 import { useDispatch } from 'react-redux'
 import { isLoading, setTabIcon, setTitle } from './../../slices/app.slice'
-import axios from 'axios'
 import useAxios from './../../utils/axios/init'
 import ActivityLoading from './../../utils/axios/Loading'
 //

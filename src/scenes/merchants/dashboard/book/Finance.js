@@ -6,7 +6,6 @@ import {
 } from 'react-native'
 import { List, Modal } from 'react-native-paper'
 import { images } from 'theme'
-import Summary from './Summary'
 
 const Finance = ({navigation}) => {
   const [refreshing, setRefreshing] = useState(false)

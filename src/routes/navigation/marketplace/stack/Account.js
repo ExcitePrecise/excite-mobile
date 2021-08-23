@@ -8,6 +8,9 @@ import ListingProduct from '../../../../scenes/merchants/dashboard/listing/produ
 import ListingService from '../../../../scenes/merchants/dashboard/listing/services'
 import BookKeeping from '../../../../scenes/merchants/dashboard/book'
 import Performance from '../../../../scenes/merchants/dashboard/book/Performance'
+import Finance from '../../../../scenes/merchants/dashboard/book/Finance'
+import Inventory from '../../../../scenes/merchants/dashboard/book/Inventory'
+import Customer from '../../../../scenes/merchants/dashboard/book/Customer'
 import Subscription from '../../../../scenes/merchants/dashboard/subscriptions'
 import Influencer from '../../../../scenes/merchants/dashboard/influencer'
 import PaymentGate from '../../../../scenes/merchants/dashboard/payment'
@@ -53,9 +56,9 @@ const AuthRequiredMain = () => {
         headerTitle: () => <HeaderTitle />,
         headerRight: () => <HeaderRight />,
       })}
-      
+
       />
-      <AccountStack.Screen name="ServiceListing" component={ListingService} 
+      <AccountStack.Screen name="ServiceListing" component={ListingService}
        options={({ navigation }) => ({
         title: 'Service Listing',
         headerLeft: () => <HeaderLeft navigation={navigation} />,
@@ -63,7 +66,7 @@ const AuthRequiredMain = () => {
         headerRight: () => <HeaderRight />,
       })}
       />
-      <AccountStack.Screen name="BookKeeping" component={BookKeeping} 
+      <AccountStack.Screen name="BookKeeping" component={BookKeeping}
        options={({ navigation }) => ({
         title: 'Book Keeping',
         headerLeft: () => <HeaderLeft navigation={navigation} />,
@@ -71,7 +74,7 @@ const AuthRequiredMain = () => {
         headerRight: () => <HeaderRight />,
       })}
       />
-      <AccountStack.Screen name="Influencer" component={Influencer} 
+      <AccountStack.Screen name="Influencer" component={Influencer}
        options={({ navigation }) => ({
         title: 'Influencer',
         headerLeft: () => <HeaderLeft navigation={navigation} />,
@@ -132,10 +135,23 @@ const AuthRequiredMain = () => {
       component={Performance}
       options={() => ({ title: 'Sales Performance' })}
     />
-    </AccountStack.Navigator>
-  )
-}
-
+    <AccountStack.Screen
+      name="Finance"
+      component={Finance}
+      options={() => ({ title: 'Finanncial Report' })}
+    />
+      <AccountStack.Screen
+      name="Inventory"
+      component={Inventory}
+      options={() => ({ title: 'Inventory' })}
+    />
+    <AccountStack.Screen
+      name="Customer"
+      component={Customer}
+      options={() => ({ title: 'Customers' })}
+    />
+  </AccountStack.Navigator>
+  )}
 
 // Fullscreen Modals
 const FullModalScreens = ()=>{
@@ -156,14 +172,12 @@ const FullModalScreens = ()=>{
   )
 }
 
-const SignRoute = () => {
-  return (
-    <AccountStack.Navigator screenOptions={{headerShown:false}}>
-      <AccountStack.Screen name="Login" component={Login} />
-      <AccountStack.Screen name="Register" component={Register} />
-    </AccountStack.Navigator>
-  )
-}
+const SignRoute = () => (
+  <AccountStack.Navigator screenOptions={{ headerShown: false }}>
+    <AccountStack.Screen name="Login" component={Login} />
+    <AccountStack.Screen name="Register" component={Register} />
+  </AccountStack.Navigator>
+)
 
 function RootStackScreen() {
   return (
@@ -179,9 +193,7 @@ function RootStackScreen() {
 }
 
 // MAIN
-function Account({
-  auth, loggedIn, navigation, ...props
-}) {
+function Account({ auth, loggedIn, navigation, ...props }) {
   if (auth && loggedIn) {
     // return <AuthRequiredMain {...props} navigation={navigation} />
     return <RootStackScreen {...props} navigation={navigation} />

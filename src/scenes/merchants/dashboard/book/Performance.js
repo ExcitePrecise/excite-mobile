@@ -630,9 +630,9 @@ const Performance = ({ token, navigation }) => {
             dark={false}
             color="white"
             accessibilityLabel="Sales"
+            onPress={() => navigation.navigate('Sales')}
           >
-            {' '}
-            Sales{' '}
+            Sales
           </Button>
         </View>
         <View style={styles.menu}>

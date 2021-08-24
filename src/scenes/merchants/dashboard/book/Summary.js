@@ -71,13 +71,23 @@ const Summary = ({ token }) => {
   return (
     <SafeAreaView>
       <View style={styles.container}>
-        <View style={styles.heading1}>
-          <Text style={styles.heading}>Gross Profit</Text>
-          <Text style={styles.title}>
-            {calculateGrossProfit ? currencyFormat(calculateGrossProfit) : '0'}
-          </Text>
+        <View style={styles.row1}>
+          <View style={styles.column}>
+            <Text style={styles.heading}>Income</Text>
+            <Text style={styles.title2}>
+              {currencyFormat(calculateGrandTotal(incomeData))}
+            </Text>
+          </View>
+          <View style={styles.column}>
+            <Text style={styles.heading}>Gross Profit</Text>
+            <Text style={styles.title2}>
+              {calculateGrossProfit
+                ? currencyFormat(calculateGrossProfit)
+                : '0'}
+            </Text>
+          </View>
         </View>
-        <View style={styles.row}>
+        <View style={styles.row2}>
           <View style={styles.column}>
             <Text style={styles.heading}>Cost of Sale</Text>
             <Text style={styles.title2}>
@@ -113,7 +123,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#0D0827',
     borderRadius: 10,
   },
-  row: {
+  row1: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 10,
+  },
+  row2: {
     flexDirection: 'row',
     justifyContent: 'space-between',
   },

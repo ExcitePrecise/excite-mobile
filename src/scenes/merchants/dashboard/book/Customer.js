@@ -4,18 +4,15 @@ import {
   StyleSheet,
   Text,
   View,
-  TouchableOpacity,
-  Image,
   RefreshControl,
   ScrollView,
-  Pressable,
   Platform,
   Linking,
 } from 'react-native'
 import { List, Modal, Paragraph, Button } from 'react-native-paper'
 import { colors, images } from 'theme'
 import { connect } from 'react-redux'
-import { FontAwesome5, MaterialIcons } from '@expo/vector-icons'
+// import { FontAwesome5, MaterialIcons } from '@expo/vector-icons'
 import useAxios from '../../../../utils/axios/init'
 import AddCustomer from './AddCustomer'
 
@@ -26,8 +23,8 @@ const Customer = ({ token, navigation }) => {
   const [customerData, setCustomerData] = useState([])
   const [customer, setCustomer] = useState({})
 
-  const handleAddCustomerModal = () => {
-    setAddCustomerModal(!addCustomerModal)
+  const handleAddCustomerModal = (state) => {
+    setAddCustomerModal(state)
   }
 
   const handleCustomerModal = () => {
@@ -104,7 +101,7 @@ const Customer = ({ token, navigation }) => {
           <Button
             icon="account-plus"
             mode="contained"
-            onPress={handleAddCustomerModal}
+            onPress={() => handleAddCustomerModal(true)}
           >
             Add New
           </Button>
@@ -168,7 +165,10 @@ const Customer = ({ token, navigation }) => {
       </ScrollView>
 
       {/* add customer modal */}
-      <AddCustomer isOpen={addCustomerModal} />
+      <AddCustomer
+        isOpen={addCustomerModal}
+        handleAddCustomerModal={handleAddCustomerModal}
+      />
 
       {/* view customer modal */}
       <Modal

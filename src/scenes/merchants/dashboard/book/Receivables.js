@@ -15,7 +15,7 @@ import useAxios from '../../../../utils/axios/init'
 import InventoryOptions from './InventoryOptions'
 import AddInventoryOrder from './AddInventoryOrder'
 
-const Inventory = ({ token, navigation }) => {
+const Receivables = ({ token, navigation }) => {
   // const [refreshing, setRefreshing] = useState(false)
   const [inventoryOptionsModal, setInventoryOptionsModal] = useState(false)
   const [inventoryModal, setInventoryModal] = useState(false)
@@ -163,7 +163,7 @@ const mapStateToProps = (state) => ({
   token: state?.app?.token,
 })
 
-export default connect(mapStateToProps)(Inventory)
+export default connect(mapStateToProps)(Receivables)
 
 const styles = StyleSheet.create({
   container: {

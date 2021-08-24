@@ -28,7 +28,7 @@ const navItem = [
   {
     name: 'List a Service',
     icon: images.repairs_icon,
-    navigate: 'ServiceListing',
+    navigate: 'ProductListing',
   },
   {
     name: 'Place Banner',
@@ -55,11 +55,11 @@ const navItem = [
     icon: images.top,
     navigate: 'ManageListing',
   },
-  {
-    name: 'Help Desk',
-    icon: images.help,
-    navigate: 'HelpDesk',
-  },
+  // {
+  //   name: 'Help Desk',
+  //   icon: images.help,
+  //   navigate: 'HelpDesk',
+  // },
   {
     name: 'My Store',
     icon: images.services_icon,
@@ -75,11 +75,11 @@ const navItem = [
     icon: images.services_icon,
     navigate: 'Subscription',
   },
-  {
-    name: 'Verify Email',
-    icon: images.email,
-    navigate: 'EmailVerification',
-  },
+  // {
+  //   name: 'Verify Email',
+  //   icon: images.email,
+  //   navigate: 'EmailVerification',
+  // },
 ]
 
 function DasboardRoute({navigation}) {
@@ -134,6 +134,7 @@ const dispatch = useDispatch();
     refreshControl={
       <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
     }
+    showsVerticalScrollIndicator={false}
     >
       <View>
         {/* <Text>Dashboard</Text> */}

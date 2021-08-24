@@ -8,6 +8,7 @@ import { COLORS } from '../../../../theme/theme'
 import HeaderTitle from './HeaderTitle'
 import HeaderLeft from './HeaderLeft'
 import HeaderRight from './HeaderRight'
+import Search from '../../../../scenes/marketplace/Search'
 // 
 const MarketStack = createStackNavigator()
 
@@ -41,6 +42,14 @@ export default function Marketplace() {
             <MarketStack.Screen name='Details' component={ProductDetails}
              options={({ navigation }) => ({
                 title: 'Details',
+                headerLeft: () => <HeaderLeft navigation={navigation} />,
+                headerTitle: () => <HeaderTitle />,
+                headerRight: () => <HeaderRight />,
+              })}
+            />
+            <MarketStack.Screen name='Search' component={Search}
+             options={({ navigation }) => ({
+                title: 'Search',
                 headerLeft: () => <HeaderLeft navigation={navigation} />,
                 headerTitle: () => <HeaderTitle />,
                 headerRight: () => <HeaderRight />,

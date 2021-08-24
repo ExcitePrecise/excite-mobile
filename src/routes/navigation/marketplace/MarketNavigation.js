@@ -8,6 +8,7 @@ import AccountStack from './stack/Account';
 import PostProduct from './stack/PostProduct';
 // Font Awesome
 import { FontAwesome5, MaterialIcons } from '@expo/vector-icons'
+import { FAB } from 'react-native-paper'
 
 //
 const MarketBottomInstance = createBottomTabNavigator()
@@ -18,7 +19,7 @@ const MarketBottomTabs = ({ navigation }) => {
     return <View></View>
   }
   const makeWhatsapp = () => {
-    let phoneNumber = `https://wa.me/+2347069452633`
+    let phoneNumber = `https://wa.me/+2349138650923`
     Linking.openURL(phoneNumber)
   }
   return (
@@ -92,19 +93,10 @@ const MarketBottomTabs = ({ navigation }) => {
           
           tabBarIcon: ({ focused }) => {
             return (
-              <View
-                style={{
-                  flexDirection: 'row',
-                  backgroundColor: focused
-                    ? COLORS.exciteGreen
-                    : COLORS.lightGray,
-                  paddingHorizontal: 15,
-                  paddingVertical: 10,
-                  borderRadius: 6,
-                }}
-              >
-                <MaterialIcons name="add" size={20}></MaterialIcons>
-              </View>
+              
+                <FAB icon='plus' color={COLORS.white} small  style={{backgroundColor:focused ? COLORS.exciteGreen : COLORS.exciteDark}}/>
+                
+      
             )
 
           },
@@ -134,8 +126,8 @@ const MarketBottomTabs = ({ navigation }) => {
               <View style={{ justifyContent: 'center', height: '100%' }}>
                 <FontAwesome5
                   name="whatsapp"
-                  size={20}
-                  color={COLORS.lightGray}
+                  size={25}
+                  color={COLORS.exciteDark}
                 ></FontAwesome5>
               </View>
             </TouchableOpacity>

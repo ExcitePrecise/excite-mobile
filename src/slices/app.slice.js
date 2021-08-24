@@ -15,6 +15,7 @@ const initialState = {
   tabIcon:'shopping-bag',
   loading: false,
   productListing: { category: '', subCategory: '', images: [] },
+  banner:{visible:false, msg: '',bg: '',icon: '',type:""}
 }
 
 // ------------------------------------
@@ -44,6 +45,9 @@ const appSlice = createSlice({
     },
     isLoading: (state, { payload }) => {
       state.loading = payload
+    },
+    popBanner: (state, { payload }) => {
+      state.banner = {...state.banner,...payload}
     },
     listProduct: (state, { payload }) => {
       state.productListing = {
@@ -84,6 +88,7 @@ export const {
   listProductDeleteImage,
   selectProductListingCategory,
   selectProductListingSubCategory,
+  popBanner
 } = appSlice.actions
 
 export default appSlice.reducer

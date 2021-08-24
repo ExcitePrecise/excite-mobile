@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { View } from 'react-native'
+import { PersistGate } from 'redux-persist/integration/react'
+// import reduxStrore from './redux/store';
 import { Provider } from 'react-redux'
-import store from 'utils/store'
+import reduxStrore from 'utils/store'
 import 'utils/ignore'
 import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
 // assets
@@ -37,12 +39,15 @@ const App = () => {
       accent: 'yellow',
     },
   };
+  const {store,persistor}= reduxStrore();
 
   return (
     <Provider store={store}>
+    <PersistGate loading={null} persistor={persistor}>
       <PaperProvider theme={theme}>
       <Router />
       </PaperProvider>
+      </PersistGate>
     </Provider>
   )
 }

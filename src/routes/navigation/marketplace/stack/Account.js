@@ -173,9 +173,23 @@ const FullModalScreens = ()=>{
 }
 
 const SignRoute = () => (
-  <AccountStack.Navigator screenOptions={{ headerShown: false }}>
-    <AccountStack.Screen name="Login" component={Login} />
-    <AccountStack.Screen name="Register" component={Register} />
+  <AccountStack.Navigator screenOptions={{ headerShown: true,headerStyle:{backgroundColor:COLORS.exciteDark,elevation:0},headerTintColor:COLORS.white }}>
+    <AccountStack.Screen name="Login" component={Login} 
+      options={({ navigation }) => ({
+        title: 'Login',
+        headerLeft: () => <HeaderLeft navigation={navigation} />,
+        headerTitle: () => <HeaderTitle />,
+        headerRight: () => <HeaderRight />,
+      })}
+    />
+    <AccountStack.Screen name="Register" component={Register} 
+    options={({ navigation }) => ({
+      title: 'Register',
+      headerLeft: () => <HeaderLeft navigation={navigation} />,
+      headerTitle: () => <HeaderTitle />,
+      headerRight: () => <HeaderRight />,
+    })}
+    />
   </AccountStack.Navigator>
 )
 

@@ -86,24 +86,7 @@ const Item = ({ item, navigation, route }) => {
       }}
     >
       <View style={{ flex: 1 }}>
-        {/* <SkeletonContent isLoading={true}> */}
-        {/* <Image
-            source={{ uri: item?.images[0]?.Location }}
-            resizeMode="cover"
-            style={{ height: 200, width: '100%' }}
-            onLoadStart={() => {
-              // setIsLoading(false)
-            console.log('end')
-            }}
-            onLoad={()=>console.log('e')}
-            loadingIndicatorSource={images.wallet}
-            
-          /> */}
-        {/* </SkeletonContent> */}
         <ProgressiveImage item={item} />
-        {/* <View style={{position:'absolute',top:0,left:0}}>
-          <Text>Loading</Text>
-        </View> */}
       </View>
       <View
         style={{

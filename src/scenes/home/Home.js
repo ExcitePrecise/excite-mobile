@@ -11,15 +11,13 @@ import {
 import Button from 'components/Button'
 import { colors, images } from 'theme'
 import { text, padding } from '../../../assets/constant/index'
+import { COLORS } from '../../theme/theme'
 // import { color } from 'react-native-reanimated'
 
 const styles = StyleSheet.create({
   root: {
     flex: 1,
-    // flexDirection: 'column',
-    // alignItems: 'center',
-    // justifyContent: 'center',
-    backgroundColor: 'white',
+    backgroundColor: COLORS.bg,
   },
   title: {
     fontSize: 24,
@@ -90,10 +88,7 @@ const Home = ({ navigation }) => {
             backgroundColor={colors.exciteGreen}
             style={styles.btn}
             onPress={() => {
-              // navigation.navigate('Details', { from: 'Home' })
-              navigation.navigate('BusinessHome', { from: 'Home' })
-
-              // navigation.navigate('Details', { from: 'Home' })
+              navigation.navigate('BusinessHome')
             }}
           />
         </ImageBackground>
@@ -101,7 +96,7 @@ const Home = ({ navigation }) => {
     )
   }
   return (
-    <ScrollView style={styles.root}>
+    <ScrollView style={styles.root} contentContainerStyle={{justifyContent:'center'}}>
       <StatusBar barStyle="light-content" />
       <WelcomeText />
       <Categories />

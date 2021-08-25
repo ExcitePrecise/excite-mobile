@@ -13,7 +13,7 @@ const styles = StyleSheet.create({
 })
 
 const HeaderLeft = ({ navigation }) => (
-  <Image source={images.logo_sm} style={styles.logo} />
+  <Image source={images.logo_sm} style={styles.logo}  resizeMode='contain'/>
 )
 
 

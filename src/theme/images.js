@@ -42,6 +42,8 @@ export const images = {
   customer: require('../../assets/images/customer.png'),
   create: require('../../assets/images/create.png'),
   inventory: require('../../assets/images/inventory.png'),
+  wallet: require('../../assets/images/wallet.png'),
+  menu: require('../../assets/images/menu.png'),
 }
 
 // image preloading

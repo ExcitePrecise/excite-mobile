@@ -72,7 +72,7 @@ const navItem = [
   },
   {
     name: 'Subscription',
-    icon: images.services_icon,
+    icon: images.wallet,
     navigate: 'Subscription',
   },
   // {

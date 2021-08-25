@@ -2,14 +2,13 @@ import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { Button } from 'react-native-paper'
 
-
-
+// 
 const index = ({navigation}) => {
     return (
         <View style={styles.root}>
-        <Text style={{fontStyle:'italic'}}>coming soon</Text>
-        <Button style={{marginTop:20}} onPress={()=>navigation.goBack()}>Go Back</Button>
-    </View>
+            <Text style={{fontStyle:'italic'}}>coming soon</Text>
+            <Button style={{marginTop:20}} onPress={()=>navigation.goBack()}>Go Back</Button>
+        </View>
     )
 }
 

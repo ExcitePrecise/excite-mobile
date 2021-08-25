@@ -15,6 +15,7 @@ import Sales from '../../../../scenes/merchants/dashboard/book/Sales'
 import Customer from '../../../../scenes/merchants/dashboard/book/Customer'
 import Subscription from '../../../../scenes/merchants/dashboard/subscriptions'
 import Influencer from '../../../../scenes/merchants/dashboard/influencer'
+import SocialCommerce from '../../../../scenes/merchants/dashboard/commerce'
 import PaymentGate from '../../../../scenes/merchants/dashboard/payment'
 import Store from '../../../../scenes/merchants/dashboard/store'
 import Banner from '../../../../scenes/merchants/dashboard/banner'
@@ -70,6 +71,16 @@ const AuthRequiredMain = () => {
         component={Influencer}
         options={({ navigation }) => ({
           title: 'Influencer',
+          headerLeft: () => <HeaderLeft navigation={navigation} />,
+          headerTitle: () => <HeaderTitle />,
+          headerRight: () => <HeaderRight />,
+        })}
+      />
+      <AccountStack.Screen
+        name="SocialCommerce"
+        component={SocialCommerce}
+        options={({ navigation }) => ({
+          title: 'Social Commerce',
           headerLeft: () => <HeaderLeft navigation={navigation} />,
           headerTitle: () => <HeaderTitle />,
           headerRight: () => <HeaderRight />,

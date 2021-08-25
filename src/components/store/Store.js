@@ -7,11 +7,13 @@ import EditModeTable from './subs/EditModeTable'
 
 // 
 function Store({store}) {
+    const [edit,setEdit]=React.useState(false);
+    const isEdit=(state)=>{
+        setEdit(state)
+    }
     return (
         <View>
-            <Text>Store {store?.storeName}</Text>
-            {/* <ReadModeTable /> */}
-            <EditModeTable />
+            {edit ? <EditModeTable isEdit={isEdit} /> : <ReadModeTable isEdit={isEdit}/>}
         </View>
     )
 }

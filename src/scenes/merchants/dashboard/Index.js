@@ -6,14 +6,18 @@ import {
   View,
   Image,
   ScrollView,
+  RefreshControl,
+
 } from 'react-native'
 import { Button } from 'react-native-paper'
-import { useDispatch } from 'react-redux'
+import { connect, useDispatch } from 'react-redux'
 import { authLogOut, setTabIcon, setTitle } from '../../../slices/app.slice'
 import { images } from '../../../theme'
 import { COLORS, FONTS } from '../../../theme/theme'
 import { rememberToken, getValidToken } from './../../../utils/axios/token'
 import Header from './subs/Header'
+import { getProfileInfo } from '../../../apis/auth'
+import { saveMe } from '../../../slices/app.slice'
 
 const navItem = [
   {
@@ -24,7 +28,7 @@ const navItem = [
   {
     name: 'List a Service',
     icon: images.repairs_icon,
-    navigate: 'ServiceListing',
+    navigate: 'ProductListing',
   },
   {
     name: 'Place Banner',
@@ -51,11 +55,11 @@ const navItem = [
     icon: images.top,
     navigate: 'ManageListing',
   },
-  {
-    name: 'Help Desk',
-    icon: images.help,
-    navigate: 'HelpDesk',
-  },
+  // {
+  //   name: 'Help Desk',
+  //   icon: images.help,
+  //   navigate: 'HelpDesk',
+  // },
   {
     name: 'My Store',
     icon: images.services_icon,
@@ -68,14 +72,14 @@ const navItem = [
   },
   {
     name: 'Subscription',
-    icon: images.services_icon,
+    icon: images.wallet,
     navigate: 'Subscription',
   },
-  {
-    name: 'Verify Email',
-    icon: images.email,
-    navigate: 'EmailVerification',
-  },
+  // {
+  //   name: 'Verify Email',
+  //   icon: images.email,
+  //   navigate: 'EmailVerification',
+  // },
 ]
 
 function DasboardRoute({navigation}) {
@@ -98,8 +102,22 @@ function DasboardRoute({navigation}) {
 
 
 //
-const Index = ({navigation}) => {
-const dispatch = useDispatch()
+const Index = ({navigation,token}) => {
+const dispatch = useDispatch();
+
+  // Refresh control
+  const [refreshing, setRefreshing] = React.useState(false)
+
+  const onRefresh = React.useCallback(async () => {
+    setRefreshing(true);
+    const updatedProf =await getProfileInfo(token);
+    if(updatedProf){
+      dispatch(saveMe({me:updatedProf}))
+    }
+    setRefreshing(false)
+    // getData()
+  }, [])
+
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       // Screen was focused
@@ -112,7 +130,12 @@ const dispatch = useDispatch()
   }, [navigation]);
   // const dispatch = useDispatch()
   return (
-    <ScrollView>
+    <ScrollView
+    refreshControl={
+      <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+    }
+    showsVerticalScrollIndicator={false}
+    >
       <View>
         {/* <Text>Dashboard</Text> */}
         <Header />
@@ -122,7 +145,14 @@ const dispatch = useDispatch()
   )
 }
 
-export default Index
+
+const mapStateToProps = (state)=>{
+  return{
+    token:state.app?.token
+  }
+}
+export default connect(mapStateToProps)(Index);
+
 
 const styles = StyleSheet.create({
   route: {

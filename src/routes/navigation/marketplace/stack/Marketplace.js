@@ -3,11 +3,13 @@ import { createStackNavigator } from '@react-navigation/stack'
 import MarketplaceHome from '../../../../scenes/marketplace'
 import SelectCategory from '../../../../scenes/marketplace/SelectCategory'
 import Products from '../../../../scenes/marketplace/Products'
+import TopProducts from '../../../../scenes/marketplace/TopProducts '
 import ProductDetails from '../../../../scenes/marketplace/ProductDetails'
 import { COLORS } from '../../../../theme/theme'
 import HeaderTitle from './HeaderTitle'
 import HeaderLeft from './HeaderLeft'
 import HeaderRight from './HeaderRight'
+import Search from '../../../../scenes/marketplace/Search'
 // 
 const MarketStack = createStackNavigator()
 
@@ -38,9 +40,25 @@ export default function Marketplace() {
                 headerRight: () => <HeaderRight />,
               })}
             />
+            <MarketStack.Screen name='TopProducts' component={TopProducts}
+             options={({ navigation }) => ({
+                title: 'Top Products',
+                headerLeft: () => <HeaderLeft navigation={navigation} />,
+                headerTitle: () => <HeaderTitle />,
+                headerRight: () => <HeaderRight />,
+              })}
+            />
             <MarketStack.Screen name='Details' component={ProductDetails}
              options={({ navigation }) => ({
                 title: 'Details',
+                headerLeft: () => <HeaderLeft navigation={navigation} />,
+                headerTitle: () => <HeaderTitle />,
+                headerRight: () => <HeaderRight />,
+              })}
+            />
+            <MarketStack.Screen name='Search' component={Search}
+             options={({ navigation }) => ({
+                title: 'Search',
                 headerLeft: () => <HeaderLeft navigation={navigation} />,
                 headerTitle: () => <HeaderTitle />,
                 headerRight: () => <HeaderRight />,

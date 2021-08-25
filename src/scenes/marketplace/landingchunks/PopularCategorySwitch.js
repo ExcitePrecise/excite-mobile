@@ -85,9 +85,9 @@ export default function PopularCategorySwitch({ navigation }) {
     <View style={styles.root}>
          <TouchableOpacity
           style={styles.tabs}
-          // onPress={() =>
-          //   navigation.navigate('Category', { category: "top" })
-          // }
+          onPress={() =>
+            navigation.navigate('TopProducts')
+          }
         >
           <Image
             source={images.top}

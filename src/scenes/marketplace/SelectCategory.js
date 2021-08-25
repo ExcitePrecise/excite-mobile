@@ -6,13 +6,14 @@ import {
   TouchableOpacity,
   View,
   ScrollView,
+  Image
 } from 'react-native'
 import { connect, useDispatch } from 'react-redux'
 import { useState } from 'react'
 import categories from '../../utils/productCategoriesHandler'
 import { FontAwesome, Ionicons } from '@expo/vector-icons'
 import { COLORS, FONTS, SIZES } from '../../theme/theme'
-import { fonts } from '../../theme'
+import { fonts, images } from '../../theme'
 import ExciteBanner from './landingchunks/ExciteBanner'
 import { setTabIcon, setTitle } from '../../slices/app.slice'
 
@@ -56,7 +57,8 @@ const Category = ({ route, products, navigation }) => {
           }
         >
           <View style={styles.icon}>
-            <Ionicons name="car-sport" size={40} color={COLORS.lightGray} />
+            <Image source={images.menu} style={{width:24,height:24}} resizeMode='contain'/>
+            {/* <Ionicons name="car-sport" size={40} color={COLORS.lightGray} /> */}
           </View>
           <View style={styles.wrapperText}>
             <View style={styles.text}>
@@ -106,6 +108,7 @@ const styles = StyleSheet.create({
   },
   icon: {
     marginRight: 20,
+    justifyContent:'center'
   },
   wrapperText: {
     flex: 1,

@@ -68,9 +68,9 @@ const createFormData = async (photo) => {
 const Index = ({ productListing, productImg, navigation }) => {
   // console.log(productListing)
   const dispatch = useDispatch()
-  const [selectedCategory, setSelectedCategory] = useState(null)
+  // const [selectedCategory, setSelectedCategory] = useState(null)
   const [selectedSubCategory, setSelectedSubcategory] = useState([])
-  const [subCategory, setSubCategory] = useState('')
+  // const [subCategory, setSubCategory] = useState('')
   useEffect(() => {
     if (productListing?.category) {
       // console.log(subs[selectedCategory])

@@ -214,9 +214,10 @@ const ProductDetails = ({ route, products, navigation }) => {
               </View>
             </View>
             <View style={{ width: '45%' }}>
-              <Text style={{ ...FONTS.h2, color: COLORS.exciteGreen }}>
-                &#8358; {Number(item?.price).toLocaleString()}
-              </Text>
+              {item?.category !== 'services' ?
+             <Text style={{ ...FONTS.h2, color: COLORS.exciteGreen }}>
+             &#8358; {Number(item?.price).toLocaleString()}
+           </Text> : <Text></Text>}
             </View>
           </View>
           {/* CTA */}

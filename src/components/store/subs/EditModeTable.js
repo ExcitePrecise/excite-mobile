@@ -18,8 +18,13 @@ import { COLORS } from '../../../theme/theme'
 import { connect, useDispatch } from 'react-redux'
 import useAxios from '../../../utils/axios/init'
 import { getProfileInfo } from '../../../apis/auth'
+import { saveMe } from '../../../slices/app.slice'
+import { MaterialIcons } from '@expo/vector-icons'
 
-function StoreTableEditMode({ store, token }) {
+
+
+// 
+function StoreTableEditMode({ store, token,isEdit }) {
 const dispatch = useDispatch()
   const [inputs,setInputs] = React.useState({storeName:"",storePhone:"",storeAddress:"",storeLga:"",storeState:""});
 
@@ -46,8 +51,13 @@ const handleUpdate=async ()=>{
       }})
       if(update.data.code===201){
         setInputs({ ...update.data.store });
+        const updatedStore = await getProfileInfo(token);
+        if(updatedStore){
+          dispatch(saveMe({me:updatedStore}))
+        }
         //  dispatch(getProfileInfo(token))
          Alert.alert("Store updated")
+         isEdit(false)
         }
     } catch (error) {
       console.log(error)
@@ -66,6 +76,37 @@ const handleUpdate=async ()=>{
             cellStyle="Basic"
             title="Edit/Update"
             contentContainerStyle={{ alignItems: 'center', height: 60 }}
+            cellContentView={
+              <View
+                style={{
+                  width: '100%',
+                  marginTop: 10,
+                  alignItems: 'flex-end',
+                }}
+              >
+                 <TouchableOpacity
+                  style={{
+                  flexDirection: 'row',
+                  justifyContent:'flex-end',
+                  alignItems:'center',
+                  width:100
+                  }}
+                  onPress={() => isEdit(false)}
+                >
+                <Text style={{ color: COLORS.lightGrayDark, marginRight: 5 }}>
+                  close
+                </Text>
+                <View style={{height:40,width:40,borderRadius:20,backgroundColor:COLORS.red,justifyContent:'center',alignItems:'center'}}>
+                <MaterialIcons
+                    color={COLORS.white}
+                    name="close"
+                    size={20}
+                  />
+                </View>
+                 
+                </TouchableOpacity>
+              </View>
+            }
           />
           <Cell
             cellContentView={

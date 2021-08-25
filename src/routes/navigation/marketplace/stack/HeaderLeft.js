@@ -1,6 +1,6 @@
 import React from 'react'
 // import PropTypes from 'prop-types'
-import { StyleSheet, Image } from 'react-native'
+import { StyleSheet, Image, TouchableOpacity } from 'react-native'
 // import FontIcon from 'react-native-vector-icons/FontAwesome5'
 import { images } from 'theme'
 
@@ -13,8 +13,9 @@ const styles = StyleSheet.create({
 })
 
 const HeaderLeft = ({ navigation }) => (
-  <Image source={images.logo_sm} style={styles.logo}  resizeMode='contain'/>
+  <TouchableOpacity>
+    <Image source={images.logo_sm} style={styles.logo} resizeMode="contain" />
+  </TouchableOpacity>
 )
-
 
 export default HeaderLeft

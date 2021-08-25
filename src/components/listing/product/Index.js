@@ -43,6 +43,7 @@ import Kids from './forms/Kids'
 import Services from './forms/Services'
 import Home from './forms/Home'
 import Agro from './forms/Agro'
+import Laptops from './forms/Laptops'
 
 //
 const createFormData = async (photo) => {
@@ -190,6 +191,8 @@ const Index = ({ productListing, productImg, navigation }) => {
         return <Home />
       case 'agro':
         return <Agro />
+      case 'laptops-acc':
+        return <Laptops />
       default:
         return <View></View>
     }

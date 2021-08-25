@@ -191,8 +191,6 @@ const Login = ({ navigation, popBanner }) => {
             </View>
           )}
         </Formik>
-
-        <Loading />
       </ScrollView>
     </SafeAreaView>
   )

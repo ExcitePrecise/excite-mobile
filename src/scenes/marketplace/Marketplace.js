@@ -1,21 +1,18 @@
 import React from 'react'
 import { useEffect } from 'react'
 import {
-  View,
-  Text,
-  Button,
   ScrollView,
-  TouchableOpacity,
-  Alert,
   RefreshControl,
 } from 'react-native'
 import ExciteBanner from './landingchunks/ExciteBanner'
 import PopularCategorySwitch from './landingchunks/PopularCategorySwitch'
 import { landingProduct } from '../../slices/marketplace.slice'
 import { useDispatch } from 'react-redux'
-import { isLoading, setTabIcon, setTitle } from './../../slices/app.slice'
+import { isLoading, setTabIcon, setTitle,popBanner } from './../../slices/app.slice'
 import useAxios from './../../utils/axios/init'
 import ActivityLoading from './../../utils/axios/Loading'
+import BannerNotification from '../../components/BannerNotification'
+
 //
 export default function Marketplace({ navigation }) {
   // Refresh control
@@ -26,18 +23,19 @@ export default function Marketplace({ navigation }) {
   const getData = async () => {
     try {
       dispatch(isLoading(true))
+      // setRefreshing(true)
       const response = await useAxios.get(
         '/marketplace/landing/products/banners/offers/get',
       )
       const data = response.data
       // console.log(response)
       dispatch(isLoading(false))
-
       dispatch(landingProduct(data))
       setRefreshing(false)
     } catch (error) {
       dispatch(isLoading(false))
-
+      setRefreshing(false)
+      dispatch(popBanner({visible:true,msg:'Network Error',type:'error'}))
       console.log('err', error)
     }
   }
@@ -48,7 +46,9 @@ export default function Marketplace({ navigation }) {
   }, [])
 
   React.useEffect(() => {
-    getData()
+    getData();
+    //clean up
+    return ()=>setRefreshing(false)
   }, [])
 
   React.useEffect(() => {
@@ -65,7 +65,9 @@ export default function Marketplace({ navigation }) {
       refreshControl={
         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
       }
-    >
+      showsVerticalScrollIndicator={false}
+    > 
+    <BannerNotification />
       <ExciteBanner />
       {/* <TouchableOpacity > */}
       <ActivityLoading />

@@ -10,7 +10,7 @@ import BookKeeping from '../../../../scenes/merchants/dashboard/book'
 import Performance from '../../../../scenes/merchants/dashboard/book/Performance'
 import Finance from '../../../../scenes/merchants/dashboard/book/Finance'
 import Inventory from '../../../../scenes/merchants/dashboard/book/Inventory'
-import Receivables from '../../../../scenes/merchants/dashboard/book/Receivables'
+import Orders from '../../../../scenes/merchants/dashboard/book/Orders'
 import Sales from '../../../../scenes/merchants/dashboard/book/Sales'
 import Customer from '../../../../scenes/merchants/dashboard/book/Customer'
 import Subscription from '../../../../scenes/merchants/dashboard/subscriptions'
@@ -166,9 +166,9 @@ const AuthRequired = () => {
       />
 
       <AccountStack.Screen
-        name="Receivables"
-        component={Receivables}
-        options={() => ({ title: 'Receivables' })}
+        name="Orders"
+        component={Orders}
+        options={() => ({ title: 'Orders' })}
       />
 
       <AccountStack.Screen

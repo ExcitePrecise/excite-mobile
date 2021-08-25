@@ -6,26 +6,26 @@ import { connect } from 'react-redux'
 import { Entypo } from '@expo/vector-icons'
 import AddInventoryOrder from './AddInventoryOrder'
 
-const InventoryOptions = ({
+const OrderOptions = ({
   navigation,
   token,
   isOpen,
-  handleInventoryOptionsModal,
+  handleOrderOptionsModal,
   handleAddInventoryOrderModal,
   item,
 }) => {
   const [product, setProduct] = useState({})
-  const [inventoryModal, setInventoryModal] = useState(false)
+  const [orderModal, setOrderModal] = useState(false)
 
   // const handleAddInventoryOrderModal = () => {
-  //   setInventoryModal(!inventoryModal)
+  //   setOrderModal(!orderModal)
   // }
 
   return (
     <Modal
       animationType="slide"
       visible={isOpen}
-      onRequestClose={() => handleInventoryOptionsModal(false)}
+      onRequestClose={() => handleOrderOptionsModal(false)}
     >
       <View style={styles.optionsContainer}>
         <View style={styles.title}>
@@ -41,7 +41,7 @@ const InventoryOptions = ({
           </Text>
         </View>
         <View style={{ alignItems: 'center' }}>
-          <Paragraph>Select an option.</Paragraph>
+          <Paragraph>Select an Order option.</Paragraph>
         </View>
 
         <View
@@ -57,13 +57,13 @@ const InventoryOptions = ({
             color="black"
             style={{ borderColor: 'black', marginBottom: 15 }}
             onPress={() => {
-              // setInventoryModal(true)
-              handleInventoryOptionsModal(false)
+              // setOrderModal(true)
+              handleOrderOptionsModal(false)
               handleAddInventoryOrderModal(true)
               setProduct(item)
             }}
           >
-            Place an Order
+            Order fulfilled
           </Button>
           <Button
             icon="pencil"
@@ -71,26 +71,26 @@ const InventoryOptions = ({
             color="black"
             style={{ borderColor: 'black', marginBottom: 15 }}
             onPress={() => {
-              handleInventoryOptionsModal(false)
+              handleOrderOptionsModal(false)
             }}
           >
-            Edit this Product
+            Cancel Order
           </Button>
           <Button
             icon="close-circle"
             mode="outlined"
             color="black"
             style={{ borderColor: 'black', marginBottom: 15 }}
-            onPress={() => handleInventoryOptionsModal(false)}
+            onPress={() => handleOrderOptionsModal(false)}
           >
-            Cancel
+            Close
           </Button>
           <Button
             icon="trash-can-outline"
             mode="outlined"
             color="red"
             style={{ borderColor: 'red' }}
-            onPress={() => handleInventoryOptionsModal(false)}
+            onPress={() => handleOrderOptionsModal(false)}
           >
             Delete this Product
           </Button>
@@ -99,7 +99,7 @@ const InventoryOptions = ({
         <View style={styles.rowBtn}></View>
       </View>
       <AddInventoryOrder
-        isOpen={inventoryModal}
+        isOpen={orderModal}
         handleAddInventoryOrderModal={handleAddInventoryOrderModal}
         product={product}
       />
@@ -111,7 +111,7 @@ const mapStateToProps = (state) => ({
   token: state?.app?.token,
 })
 
-export default connect(mapStateToProps)(InventoryOptions)
+export default connect(mapStateToProps)(OrderOptions)
 
 const styles = StyleSheet.create({
   row: {

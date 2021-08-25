@@ -18,7 +18,7 @@ import { connect } from 'react-redux'
 import { FontAwesome, MaterialIcons, Entypo } from '@expo/vector-icons'
 import useAxios from '../../../../utils/axios/init'
 
-const AddInventoryOrder = ({
+const AddOrder = ({
   navigation,
   token,
   isOpen,
@@ -29,20 +29,15 @@ const AddInventoryOrder = ({
   const [inputs, setInputs] = useState({
     productName: '',
     quantity: null,
-    price: String(product.price),
+    price: null,
     description: product.description,
     buyersEmail: product.buyersEmail,
     buyersContact: product.buyersContact,
   })
 
-  React.useEffect(() => {
-    if (product) {
-      setInputs({ ...product })
-    }
-  }, [])
   // Post to Orders list
   const handleSubmit = () => {
-    subtractQuantity()
+    console.log('pressed submit!')
 
     // const modifiedData = { ...product }
     // modifiedData.price = inputs.price
@@ -113,7 +108,7 @@ const AddInventoryOrder = ({
                 paddingLeft: 5,
               }}
             >
-              New Orders
+              New Order
             </Text>
           </View>
 

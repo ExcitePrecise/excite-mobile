@@ -12,16 +12,16 @@ import { colors, images } from 'theme'
 import { connect } from 'react-redux'
 import { FontAwesome5, MaterialIcons } from '@expo/vector-icons'
 import useAxios from '../../../../utils/axios/init'
-import InventoryOptions from './InventoryOptions'
+import OrderOptions from './OrderOptions'
 import AddInventoryOrder from './AddInventoryOrder'
 
-const Receivables = ({ token, navigation }) => {
+const Orders = ({ token, navigation }) => {
   // const [refreshing, setRefreshing] = useState(false)
-  const [inventoryOptionsModal, setInventoryOptionsModal] = useState(false)
+  const [OrderOptionsModal, setOrderOptionsModal] = useState(false)
   const [inventoryModal, setInventoryModal] = useState(false)
   const [product, setProduct] = useState({})
   const [expanded, setExpanded] = useState(true)
-  const [tableData, setTableData] = useState([])
+  const [orderData, setOrderData] = useState([])
 
   const handlePress = () => setExpanded(!expanded)
 
@@ -37,25 +37,25 @@ const Receivables = ({ token, navigation }) => {
   //   wait(2000).then(() => setRefreshing(false))
   // }, [])
 
-  const handleInventoryOptionsModal = () => {
-    setInventoryOptionsModal(!inventoryOptionsModal)
+  const handleOrderOptionsModal = () => {
+    setOrderOptionsModal(!OrderOptionsModal)
   }
 
   const handleAddInventoryOrderModal = () => {
     setInventoryModal(!inventoryModal)
   }
 
-  // Get products in store list
-  const getData = () => {
+  // Get orders list
+  const getOrders = () => {
     useAxios
-      .get('/book-keeping/all', {
+      .get('/receivables/all', {
         headers: { authorization: `Bearer ${token}` },
       })
       .then((res) => {
         if (res.status == 200) {
           const data = res.data.records
-          // console.log('books data is ', res.data.records)
-          setTableData(data)
+          console.log('orders data is ', res.data.records)
+          setOrderData(data)
         } else {
           return <p>Oops! Could not fetch data.</p>
         }
@@ -64,11 +64,11 @@ const Receivables = ({ token, navigation }) => {
   }
 
   useEffect(() => {
-    getData()
+    getOrders()
   }, [])
 
   const calculateGrandTotal = () => {
-    const itemArray = [...tableData]
+    const itemArray = [...orderData]
     // console.log('itemArray ', itemArray);
     let total = 0
     // eslint-disable-next-line no-plusplus
@@ -81,7 +81,7 @@ const Receivables = ({ token, navigation }) => {
   const renderItem = ({ item }) => (
     <TouchableOpacity
       onLongPress={() => {
-        setInventoryOptionsModal(true)
+        setOrderOptionsModal(true)
         setProduct(item)
       }}
     >
@@ -103,6 +103,10 @@ const Receivables = ({ token, navigation }) => {
             <Text>{item.qtySold}</Text>
           </View>
         </View>
+        <View style={styles.row}>
+          <Text style={{ color: 'gray' }}>Date: </Text>
+          <Text style={{ color: 'gray' }}>{item.createdAt.split('T')[0]}</Text>
+        </View>
       </View>
     </TouchableOpacity>
   )
@@ -119,8 +123,8 @@ const Receivables = ({ token, navigation }) => {
       {/* <View> */}
       <View style={styles.summary}>
         <View style={styles.summaryDetailLeft}>
-          <Text style={styles.titleLeft}>Products Count </Text>
-          <Text style={styles.detailLeft}> {tableData.length} </Text>
+          <Text style={styles.titleLeft}>Order Count </Text>
+          <Text style={styles.detailLeft}> {orderData.length} </Text>
         </View>
         <View style={styles.summaryDetailRight}>
           <Text style={styles.titleRight}>Value </Text>
@@ -131,21 +135,21 @@ const Receivables = ({ token, navigation }) => {
       </View>
 
       <View style={styles.itemList}>
-        <Text style={styles.title}> Products in Store </Text>
+        <Text style={styles.title}> Orders </Text>
         <Paragraph style={{ marginLeft: 5 }}>
           Press and hold a product for more options.
         </Paragraph>
       </View>
 
       <FlatList
-        data={tableData}
+        data={orderData}
         renderItem={renderItem}
         keyExtractor={(item) => item._id}
         ItemSeparatorComponent={SeparatorComponent}
       />
-      <InventoryOptions
-        isOpen={inventoryOptionsModal}
-        handleInventoryOptionsModal={handleInventoryOptionsModal}
+      <OrderOptions
+        isOpen={OrderOptionsModal}
+        handleOrderOptionsModal={handleOrderOptionsModal}
         item={product}
         handleAddInventoryOrderModal={handleAddInventoryOrderModal}
       />
@@ -163,7 +167,7 @@ const mapStateToProps = (state) => ({
   token: state?.app?.token,
 })
 
-export default connect(mapStateToProps)(Receivables)
+export default connect(mapStateToProps)(Orders)
 
 const styles = StyleSheet.create({
   container: {

@@ -153,6 +153,7 @@ const Inventory = ({ token, navigation }) => {
       <AddInventoryOrder
         isOpen={inventoryModal}
         handleAddInventoryOrderModal={handleAddInventoryOrderModal}
+        navigation={navigation}
         product={product}
       />
     </SafeAreaView>

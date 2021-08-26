@@ -21,7 +21,7 @@ export default {
     "services":serviceTypes,
     "home-kitchen-appliance":homeCategory,
     "agro":agro,
-    "laptops-accessories":laptopCats
+    "laptops-acc":laptopCats
 }
 
 export const CategoryMajor = [
@@ -67,7 +67,7 @@ export const CategoryMajor = [
     },
     {
         type:"Laptops & Accessories",
-        key:"laptops-accessories"
+        key:"laptops-acc"
     },
 ]
 

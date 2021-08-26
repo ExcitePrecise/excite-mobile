@@ -18,6 +18,7 @@ import { connect, useDispatch } from 'react-redux'
 import { COLORS, FONTS, SIZES } from '../../theme/theme'
 import ExciteBanner from './landingchunks/ExciteBanner'
 import { setTabIcon, setTitle } from '../../slices/app.slice'
+import SkeletonContent from 'react-native-skeleton-content'
 
 //
 const makeCall = (num) => {
@@ -37,6 +38,29 @@ const makeWhatsapp = (num) => {
 }
 const convertPrice = (price) => {
   return Number(price).toLocaleString()
+}
+
+const ProgressiveImage = ({ item }) => {
+  const [isLoading, setIsLoading] = React.useState(true)
+  const [img, setImg] = React.useState()
+  React.useState(() => {
+    setImg(item)
+  }, [])
+  return (
+    <React.Fragment>
+      <Image
+        source={{ uri: img?.images[0]?.Location }}
+        resizeMode="cover"
+        style={{ height: 200, width: '100%' }}
+        onLoad={() => setIsLoading(false)}
+      />
+      <View style={{ position: 'absolute',width:'100%',top:0,bottom:0 }}>
+        <SkeletonContent isLoading={isLoading}>
+          <View style={{flex:1,width:'100%'}} />
+        </SkeletonContent>
+      </View>
+    </React.Fragment>
+  )
 }
 
 const Item = ({ item, navigation, route }) => {
@@ -61,11 +85,8 @@ const Item = ({ item, navigation, route }) => {
       }}
     >
       <View style={{ flex: 1 }}>
-        <Image
-          source={{ uri: item?.images[0]?.Location }}
-          resizeMode="cover"
-          style={{ height: 200, width: '100%' }}
-        />
+      <ProgressiveImage item={item} />
+      
       </View>
       <View
         style={{

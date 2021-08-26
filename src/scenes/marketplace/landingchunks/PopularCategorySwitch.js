@@ -76,7 +76,7 @@ export default function PopularCategorySwitch({ navigation }) {
       icon: images.pets_icon,
     },
     {
-      category: 'laptops-accessories',
+      category: 'laptops-acc',
       name: 'Laptops & Acc.',
       icon: images.top_icon,
     },

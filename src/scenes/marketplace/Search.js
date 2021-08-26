@@ -17,6 +17,8 @@ import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5'
 import { FontAwesome } from '@expo/vector-icons'
 import { COLORS, FONTS } from './../../theme/theme'
 import { TextInput } from 'react-native-paper'
+import SkeletonContent from 'react-native-skeleton-content'
+
 // import {FONTS} from './../../theme/theme'
 
 //
@@ -37,6 +39,29 @@ const makeWhatsapp = (num) => {
 }
 const convertPrice = (price) => {
   return Number(price).toLocaleString()
+}
+
+const ProgressiveImage = ({ item }) => {
+  const [isLoading, setIsLoading] = React.useState(true)
+  const [img, setImg] = React.useState()
+  React.useState(() => {
+    setImg(item)
+  }, [])
+  return (
+    <React.Fragment>
+      <Image
+        source={{ uri: img?.images[0]?.Location }}
+        resizeMode="cover"
+        style={{ height: 200, width: '100%' }}
+        onLoad={() => setIsLoading(false)}
+      />
+      <View style={{ position: 'absolute',width:'100%',top:0,bottom:0 }}>
+        <SkeletonContent isLoading={isLoading}>
+          <View style={{flex:1,width:'100%'}} />
+        </SkeletonContent>
+      </View>
+    </React.Fragment>
+  )
 }
 
 const Item = ({ item, navigation, route }) => {
@@ -61,11 +86,7 @@ const Item = ({ item, navigation, route }) => {
       }}
     >
       <View style={{ flex: 1 }}>
-        <Image
-          source={{ uri: item?.images[0]?.Location }}
-          resizeMode="cover"
-          style={{ height: 200, width: '100%' }}
-        />
+      <ProgressiveImage item={item} />
       </View>
       <View
         style={{

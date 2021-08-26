@@ -30,7 +30,7 @@ const Login = ({ navigation, popBanner }) => {
 
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
-      dispatch(setTitle({ title: 'Account' }))
+      dispatch(setTitle({ title: 'Account Login' }))
       dispatch(setTabIcon({ icon: 'dashboard' }))
     })
     return unsubscribe
@@ -130,7 +130,7 @@ const Login = ({ navigation, popBanner }) => {
                     backgroundColor: 'transparent',
                     color: COLORS.white,
                   }}
-                  placeholderTextColor={'#444'}
+                  placeholderTextColor={'#888'}
                   placeholder="Email"
                   theme={{ colors: { text: COLORS.white } }}
                 />
@@ -152,7 +152,7 @@ const Login = ({ navigation, popBanner }) => {
                     backgroundColor: 'transparent',
                     color: COLORS.white,
                   }}
-                  placeholderTextColor={"#444"}
+                  placeholderTextColor={"#888"}
                   placeholder="Password"
                   theme={{ colors: { text: COLORS.white } }}
                 />
@@ -191,8 +191,6 @@ const Login = ({ navigation, popBanner }) => {
             </View>
           )}
         </Formik>
-
-        <Loading />
       </ScrollView>
     </SafeAreaView>
   )

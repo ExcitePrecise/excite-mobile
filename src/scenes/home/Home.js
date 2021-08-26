@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 15,
     // paddingVertical: 40,
     marginBottom:10,
-    transform: [{ translateY: -100 }],
+    transform: [{ translateY: -80 }],
   },
   wrapper: {
     backgroundColor:'transparent',

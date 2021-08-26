@@ -27,7 +27,7 @@ const BannerNotification = ({ banner, popBanner }) => {
     if (banner?.visible) {
       setTimeout(() => {
         popBanner({ visible: false, msg: '',type:"" })
-      }, 2000)
+      }, 4000)
     }
   }, [banner?.visible])
   return (

@@ -64,7 +64,7 @@ const Profile = ({ navigation, token, banner }) => {
             newPassword: Yup.string().min(8,'Minimum of 8 characters is required').max(150,'Maximum number of character reached').required('New password is required'),
             confirmNewPassword: Yup.string().min(8,'Minimum of 8 characters is required').max(150,'Maximum number of character reached').required('Confirm password'),
           })}
-          onSubmit={async (values) => {
+          onSubmit={async (values,{setSubmitting, setErrors, setStatus, resetForm}) => {
             try {
               const response = await useAxios.post(
                 '/change-password/update',
@@ -79,6 +79,7 @@ const Profile = ({ navigation, token, banner }) => {
              
               // console.log(response.data)
               if (code===200) {
+                resetForm()
                 return banner({visible:true,msg:message, type:'success'})
               } 
               if (code===404) {

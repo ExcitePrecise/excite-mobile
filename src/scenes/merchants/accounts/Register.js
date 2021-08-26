@@ -73,7 +73,7 @@ const Register = ({ navigation, popBanner }) => {
             storeLga: Yup.string().required('LGA is required'),
             // storeLga:Yup.string().required("LGA is required"),
           })}
-          onSubmit={async (values) => {
+          onSubmit={async (values,{setSubmitting, setErrors, setStatus, resetForm}) => {
             if (values.password !== values.password2) {
               return popBanner({
                 visible: true,
@@ -96,6 +96,7 @@ const Register = ({ navigation, popBanner }) => {
                   msg: 'Account created successfully',
                   type: 'success',
                 })
+                resetForm()
                 return navigation.navigate('Login')
               }
               if (res.code === 405) {

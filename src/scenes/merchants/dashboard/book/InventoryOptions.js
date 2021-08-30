@@ -66,33 +66,13 @@ const InventoryOptions = ({
             Place an Order
           </Button>
           <Button
-            icon="pencil"
-            mode="outlined"
-            color="black"
-            style={{ borderColor: 'black', marginBottom: 15 }}
-            onPress={() => {
-              handleInventoryOptionsModal(false)
-            }}
-          >
-            Edit this Product
-          </Button>
-          <Button
             icon="close-circle"
             mode="outlined"
-            color="black"
-            style={{ borderColor: 'black', marginBottom: 15 }}
+            color="red"
+            style={{ borderColor: 'red', marginBottom: 15 }}
             onPress={() => handleInventoryOptionsModal(false)}
           >
             Cancel
-          </Button>
-          <Button
-            icon="trash-can-outline"
-            mode="outlined"
-            color="red"
-            style={{ borderColor: 'red' }}
-            onPress={() => handleInventoryOptionsModal(false)}
-          >
-            Delete this Product
           </Button>
         </View>
 
@@ -135,3 +115,28 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
 })
+
+{
+  /* <Button
+icon="pencil"
+mode="outlined"
+color="black"
+style={{ borderColor: 'black', marginBottom: 15 }}
+onPress={() => {
+  handleInventoryOptionsModal(false)
+}}
+>
+Edit this Product
+</Button>
+
+
+<Button
+icon="trash-can-outline"
+mode="outlined"
+color="red"
+style={{ borderColor: 'red' }}
+onPress={() => handleInventoryOptionsModal(false)}
+>
+Delete this Product
+</Button> */
+}

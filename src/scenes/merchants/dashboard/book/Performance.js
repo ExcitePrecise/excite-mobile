@@ -9,6 +9,7 @@ import {
   Dimensions,
   Icon,
   Pressable,
+  ActivityIndicator,
 } from 'react-native'
 import { Button } from 'react-native-paper'
 import {
@@ -32,6 +33,7 @@ const Performance = ({ token, navigation }) => {
   //       .catch((error) => console.log(error))
   //   }
 
+  const [loading, setLoading] = useState(true)
   const [summaryData, setSummaryData] = useState([])
   // const [tableData, setTableData] = useState([])
   const [salesTableData, setSalesTableData] = useState([])
@@ -90,6 +92,7 @@ const Performance = ({ token, navigation }) => {
 
   // Get sales list
   const getSales = () => {
+    setLoading(true)
     useAxios
       .get('/sales/all', { headers: { authorization: `Bearer ${token}` } })
       .then((res) => {
@@ -322,6 +325,7 @@ const Performance = ({ token, navigation }) => {
     setTableForChart(saleWeek1Array)
     setMonthlyTableData(false)
     setYearlyTableData(false)
+    setLoading(false)
   }
 
   const displayMonthly = () => {
@@ -543,93 +547,94 @@ const Performance = ({ token, navigation }) => {
 
   return (
     <SafeAreaView style={styles.root}>
-      <ScrollView
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
-      >
-        <View style={styles.chart}>
-          <Text style={styles.header}>Sales</Text>
-          <LineChart
-            data={dataYear}
-            width={Dimensions.get('window').width - 32}
-            height={220}
-            yAxisLabel="N"
-            chartConfig={{
-              backgroundColor: '#BCF75E',
-              backgroundGradientFrom: '#000000',
-              backgroundGradientTo: '#001700',
-              decimalPlaces: 0, // optional, defaults to 2dp
-              color: (opacity = 255) => `rgba(167, 250, 72, ${opacity})`,
-              style: {
+      {loading ? (
+        <ActivityIndicator color={colors.exciteGreen} size="large" />
+      ) : (
+        <ScrollView
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
+        >
+          <View style={styles.chart}>
+            <Text style={styles.header}>Sales</Text>
+            <LineChart
+              data={dataYear}
+              width={Dimensions.get('window').width - 32}
+              height={220}
+              yAxisLabel="N"
+              chartConfig={{
+                backgroundColor: '#BCF75E',
+                backgroundGradientFrom: '#000000',
+                backgroundGradientTo: '#001700',
+                decimalPlaces: 0, // optional, defaults to 2dp
+                color: (opacity = 255) => `rgba(167, 250, 72, ${opacity})`,
+                style: {
+                  borderRadius: 16,
+                },
+              }}
+              bezier
+              style={{
+                marginVertical: 8,
                 borderRadius: 16,
-              },
-            }}
-            bezier
-            style={{
-              marginVertical: 8,
-              borderRadius: 16,
-            }}
-          />
-        </View>
+              }}
+            />
+          </View>
 
-        <View style={styles.chartBtn}>
-          <Button
-            onPress={displayYearly}
-            title="Years"
-            color="black"
-            mode="outlined"
-            accessibilityLabel="Display chart by years"
-          >
-            {' '}
-            Years
-          </Button>
-          <Button
-            onPress={displayMonthly}
-            title="Months"
-            color="black"
-            mode="outlined"
-            accessibilityLabel="Display chart by months"
-          >
-            {' '}
-            Months
-          </Button>
-        </View>
-        <View style={styles.menu}>
-          <Button
-            icon="storefront-outline"
-            mode="contained"
-            color="white"
-            accessibilityLabel="Items in Store"
-            onPress={() => navigation.navigate('Inventory')}
-          >
-            {' '}
-            Items in Store{' '}
-          </Button>
-        </View>
-        <View style={styles.menu}>
-          <Button
-            icon="cart-arrow-down"
-            mode="contained"
-            dark={false}
-            color="white"
-            accessibilityLabel="Sales"
-            onPress={() => navigation.navigate('Sales')}
-          >
-            Sales
-          </Button>
-        </View>
-        <View style={styles.menu}>
-          <Button
-            icon="chart-bar"
-            mode="contained"
-            color="white"
-            onPress={() => console.log('Pressed')}
-          >
-            Sales Plan
-          </Button>
-        </View>
-      </ScrollView>
+          {/* <View style={styles.chartBtn}>
+            <Button
+              onPress={displayYearly}
+              title="Years"
+              color="black"
+              mode="outlined"
+              accessibilityLabel="Display chart by years"
+            >
+              Years
+            </Button>
+            <Button
+              onPress={displayMonthly}
+              title="Months"
+              color="black"
+              mode="outlined"
+              accessibilityLabel="Display chart by months"
+            >
+              Months
+            </Button>
+          </View> */}
+          <View style={styles.menu}>
+            <Button
+              icon="storefront-outline"
+              mode="contained"
+              color="white"
+              accessibilityLabel="Items in Store"
+              onPress={() => navigation.navigate('Inventory')}
+            >
+              Items in Store
+            </Button>
+          </View>
+          <View style={styles.menu}>
+            <Button
+              icon="credit-card"
+              mode="contained"
+              dark={false}
+              color="white"
+              accessibilityLabel="Sales"
+              onPress={() => navigation.navigate('Sales')}
+            >
+              Sales
+            </Button>
+          </View>
+          <View style={styles.menu}>
+            <Button
+              icon="chart-bar"
+              mode="contained"
+              color="white"
+              onPress={() => navigation.navigate('SalesPlan')}
+            >
+              Sales Plan
+            </Button>
+          </View>
+        </ScrollView>
+      )}
     </SafeAreaView>
   )
 }
@@ -650,6 +655,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#001100',
+    marginBottom: 40,
   },
   chartBtn: {
     flexDirection: 'row',

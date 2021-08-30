@@ -17,54 +17,59 @@ import { colors, images } from 'theme'
 import { connect } from 'react-redux'
 import { FontAwesome, MaterialIcons, Entypo } from '@expo/vector-icons'
 import useAxios from '../../../../utils/axios/init'
+import SelelctTransactionModal from './SelelctTransactionModal'
 
-const AddInventoryOrder = ({
+const PostTransaction = ({
   navigation,
   token,
   isOpen,
-  handleAddInventoryOrderModal,
-  product,
+  handlePostTrannsactionModal,
+  transaction,
 }) => {
-  const [option, setOption] = useState('')
+  const [selected, setSelectedd] = useState({})
+  const [selectTransaction, setSelectTransaction] = useState(false)
   const [inputs, setInputs] = useState({
-    productName: '',
-    quantity: String(product.quantity),
-    price: String(product.price),
-    description: product.description,
-    buyersEmail: product.buyersEmail,
-    buyersContact: product.buyersContact,
+    selectedTitle: '',
+    accountType: '',
+    account: '',
+    amount: '',
+    postTransactionDescription: '',
   })
 
-  React.useEffect(() => {
-    if (product) {
-      setInputs({ ...product })
-    }
-  }, [])
+  // React.useEffect(() => {
+  //   if (transaction) {
+  //     setInputs({ ...transaction })
+  //   }
+  // }, [])
 
-  // Post to Orders list
+  const getSelectedTransaction = (data) => {
+    setSelectedd(data)
+  }
+
+  const handleSelectTransaction = () => {
+    setSelectTransaction(!selectTransaction)
+  }
+
+  // Handle PostTransaction submit
   const handleSubmit = () => {
-    if (inputs.quantity === null || inputs.quantity === '') {
-      inputs.quantity = 1
+    inputs.amount = Number(inputs.amount)
+    inputs.selectedTitle = selected.description
+    inputs.accountType = selected.accountType
+    if (inputs.accountType === 'income') {
+      inputs.account = 'credit'
+    } else {
+      inputs.account = 'debit'
     }
 
-    const modifiedData = { ...product }
-    modifiedData.price = inputs.price
-    modifiedData.inventoryPrice = product.price
-    modifiedData.quantity = Number(inputs.quantity)
-    modifiedData.buyersEmail = inputs.buyersEmail
-    modifiedData.buyersContact = inputs.buyersContact
-    modifiedData.cost = inputs.cost
-    modifiedData.total = modifiedData.quantity * modifiedData.price
-    console.log('inventory submitted moddata is ', modifiedData)
-
+    console.log('post trans input is ', inputs)
     useAxios
-      .post('/receivables/new', modifiedData, {
+      .post('/post-transaction/new', inputs, {
         headers: { authorization: `Bearer ${token}` },
       })
       .then((res) => {
         console.log('post res is ', res.status)
-        if (res.status === 200) {
-          subtractQuantity()
+        if (res.status === 201) {
+          handlePostTrannsactionModal()
         } else {
           return alert('Something went wrong!')
         }
@@ -74,39 +79,28 @@ const AddInventoryOrder = ({
 
   // Subtract order quantity from book-keeping
   const subtractQuantity = () => {
-    if (inputs.quantity === null || inputs.quantity === '') {
-      inputs.quantity = 1
-    }
-    if (product.qtySold === null) {
-      product.qtySold = 0
-    }
-    product.qtySold -= Number(inputs.qtySold)
-    product.quantity -= Number(inputs.quantity)
-    product.total = product.quantity * product.price
-    product.cost += inputs.cost
-    console.log('subtractQty function is ', product)
-    useAxios
-      .put(`book-keeping/${product._id}`, product, {
-        headers: { authorization: `Bearer ${token}` },
-      })
-      .then(() => {
-        // console.log('reached subtractquantity()')
-        handleAddInventoryOrderModal(false)
-        // alert('Inside subtractqty. post successful!')
-        navigation.navigate('Orders')
-        // Flash('success', 'Successful', '', 3000, window.location.reload())
-      })
-      .catch((err) => {
-        // Flash('error', 'Something went wrong', 'Error', 3000)
-        console.error(err)
-      })
+    // useAxios
+    //   .put(`book-keeping/${transaction._id}`, transaction, {
+    //     headers: { authorization: `Bearer ${token}` },
+    //   })
+    //   .then(() => {
+    //     // console.log('reached subtractquantity()')
+    //     handlePostTrannsactionModal(false)
+    //     // alert('Inside subtractqty. post successful!')
+    //     navigation.navigate('Orders')
+    //     // Flash('success', 'Successful', '', 3000, window.location.reload())
+    //   })
+    //   .catch((err) => {
+    //     // Flash('error', 'Something went wrong', 'Error', 3000)
+    //     console.error(err)
+    //   })
   }
 
   return (
     <Modal
       animationType="slide"
       visible={isOpen}
-      onRequestClose={() => handleAddInventoryOrderModal(false)}
+      onRequestClose={() => handlePostTrannsactionModal(false)}
     >
       <ScrollView>
         <View style={styles.addInventoryContainer}>
@@ -119,7 +113,7 @@ const AddInventoryOrder = ({
                 paddingLeft: 5,
               }}
             >
-              New Order
+              Post Transaction
             </Text>
           </View>
 
@@ -127,45 +121,56 @@ const AddInventoryOrder = ({
             <Text
               style={{ color: 'gray', alignSelf: 'center', marginBottom: 20 }}
             >
-              An Order Invoice for this product will be sent to buyer when you
-              press 'Submit'
+              An Order Invoice for this transaction will be sent to buyer when
+              you press 'Submit'
             </Text>
+
+            <Button
+              icon="plus-circle-outline"
+              mode="outlined"
+              color="black"
+              style={{ borderColor: 'black' }}
+              onPress={() => setSelectTransaction(true)}
+            >
+              Select Transaction
+            </Button>
+
             <TextInput
               style={styles.inputBox}
               mode="outlined"
-              label="Product name"
+              label="Transaction Name"
               // placeholder="Product name"
               right={<TextInput.Icon name="cart" />}
               onChangeText={(input) =>
-                setInputs({ ...inputs, productName: input })
+                setInputs({ ...inputs, selectedTitle: input })
               }
-              value={product.productName}
+              value={selected.description}
             />
 
             <TextInput
               style={styles.inputBox}
               mode="outlined"
-              label="Quantity"
+              label="Amount"
               placeholder="Quantity ordered"
-              right={<TextInput.Icon name="counter" />}
-              onChangeText={(input) =>
-                setInputs({ ...inputs, quantity: input })
-              }
-              value={inputs.quantity}
+              right={<TextInput.Icon name="currency-ngn" />}
+              onChangeText={(input) => setInputs({ ...inputs, amount: input })}
+              value={inputs.amount}
               keyboardType="numeric"
             />
 
             <TextInput
               style={styles.inputBox}
               mode="outlined"
-              label="Sale Price"
-              placeholder="Sale Price"
-              right={<TextInput.Icon name="currency-ngn" />}
-              onChangeText={(input) => setInputs({ ...inputs, price: input })}
-              value={inputs.price}
+              label="Description"
+              placeholder="Description"
+              right={<TextInput.Icon name="pen" />}
+              onChangeText={(input) =>
+                setInputs({ ...inputs, postTransactionDescription: input })
+              }
+              value={inputs.postTransactionDescription}
             />
 
-            <TextInput
+            {/* <TextInput
               style={styles.inputBox}
               mode="outlined"
               label="Description"
@@ -175,33 +180,7 @@ const AddInventoryOrder = ({
                 setInputs({ ...inputs, description: input })
               }
               value={inputs.description}
-            />
-
-            <TextInput
-              style={styles.inputBox}
-              mode="outlined"
-              label="Email"
-              placeholder="Customer email"
-              right={<TextInput.Icon name="email" />}
-              onChangeText={(input) =>
-                setInputs({ ...inputs, buyersEmail: input })
-              }
-              value={inputs.buyersEmail}
-              keyboardType="email-address"
-              email-price
-            />
-
-            <TextInput
-              style={styles.inputBox}
-              mode="outlined"
-              label="Additional Details"
-              placeholder="Any other detail"
-              right={<TextInput.Icon name="pencil-box-outline" />}
-              onChangeText={(input) =>
-                setInputs({ ...inputs, buyersContact: input })
-              }
-              value={inputs.buyersCContact}
-            />
+            /> */}
 
             <View style={styles.rowBtn}>
               <Button
@@ -217,7 +196,7 @@ const AddInventoryOrder = ({
                 mode="outlined"
                 color="red"
                 style={{ borderColor: 'red' }}
-                onPress={() => handleAddInventoryOrderModal(false)}
+                onPress={() => handlePostTrannsactionModal(false)}
               >
                 Cancel
               </Button>
@@ -225,6 +204,11 @@ const AddInventoryOrder = ({
           </View>
         </View>
       </ScrollView>
+      <SelelctTransactionModal
+        isOpen={selectTransaction}
+        getSelectedTransaction={getSelectedTransaction}
+        handleSelectTransaction={handleSelectTransaction}
+      />
     </Modal>
   )
 }
@@ -233,7 +217,7 @@ const mapStateToProps = (state) => ({
   token: state?.app?.token,
 })
 
-export default connect(mapStateToProps)(AddInventoryOrder)
+export default connect(mapStateToProps)(PostTransaction)
 
 const styles = StyleSheet.create({
   row: {

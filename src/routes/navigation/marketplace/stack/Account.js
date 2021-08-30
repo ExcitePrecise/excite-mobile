@@ -8,11 +8,16 @@ import ListingProduct from '../../../../scenes/merchants/dashboard/listing/produ
 import ListingService from '../../../../scenes/merchants/dashboard/listing/services'
 import BookKeeping from '../../../../scenes/merchants/dashboard/book'
 import Performance from '../../../../scenes/merchants/dashboard/book/Performance'
-import Finance from '../../../../scenes/merchants/dashboard/book/Finance'
 import Inventory from '../../../../scenes/merchants/dashboard/book/Inventory'
 import Orders from '../../../../scenes/merchants/dashboard/book/Orders'
 import Sales from '../../../../scenes/merchants/dashboard/book/Sales'
+import IncomeStatement from '../../../../scenes/merchants/dashboard/book/IncomeStatement'
+import Revenue from '../../../../scenes/merchants/dashboard/book/Revenue'
+import Cost from '../../../../scenes/merchants/dashboard/book/Cost'
+import Expense from '../../../../scenes/merchants/dashboard/book/Expense'
+import Transaction from '../../../../scenes/merchants/dashboard/book/Transaction'
 import Customer from '../../../../scenes/merchants/dashboard/book/Customer'
+import SalesPlan from '../../../../scenes/merchants/dashboard/book/SalesPlan'
 import Subscription from '../../../../scenes/merchants/dashboard/subscriptions'
 import Influencer from '../../../../scenes/merchants/dashboard/influencer'
 import SocialCommerce from '../../../../scenes/merchants/dashboard/commerce'
@@ -65,7 +70,7 @@ const AuthRequiredMain = () => {
           headerRight: () => <HeaderRight />,
         })}
       />
-     
+
       <AccountStack.Screen
         name="Influencer"
         component={Influencer}
@@ -166,15 +171,35 @@ const AuthRequiredMain = () => {
           headerRight: () => <HeaderRight />,
         })}
       />
-        <AccountStack.Screen
+      <AccountStack.Screen
         name="Performance"
         component={Performance}
         options={() => ({ title: 'Sales Performance' })}
       />
       <AccountStack.Screen
-        name="Finance"
-        component={Finance}
-        options={() => ({ title: 'Finanncial Report' })}
+        name="IncomeStatement"
+        component={IncomeStatement}
+        options={() => ({ title: 'Income Statement' })}
+      />
+      <AccountStack.Screen
+        name="Revenue"
+        component={Revenue}
+        options={() => ({ title: 'Revenue' })}
+      />
+      <AccountStack.Screen
+        name="Cost"
+        component={Cost}
+        options={() => ({ title: 'Cost of Sale' })}
+      />
+      <AccountStack.Screen
+        name="Expense"
+        component={Expense}
+        options={() => ({ title: 'Expense' })}
+      />
+      <AccountStack.Screen
+        name="Transaction"
+        component={Transaction}
+        options={() => ({ title: 'Transactions' })}
       />
 
       <AccountStack.Screen
@@ -199,11 +224,11 @@ const AuthRequiredMain = () => {
         options={() => ({ title: 'Sales' })}
       />
 
-      {/* <AccountStack.Screen
-        name="Customer"
-        component={Customer}
-        options={() => ({ title: 'Customers' })}
-      /> */}
+      <AccountStack.Screen
+        name="SalesPlan"
+        component={SalesPlan}
+        options={() => ({ title: 'Sales Plan' })}
+      />
     </AccountStack.Navigator>
   )
 }

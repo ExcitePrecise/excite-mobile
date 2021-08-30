@@ -6,8 +6,9 @@ import {
   View,
   FlatList,
   TouchableOpacity,
+  ActivityIndicator,
 } from 'react-native'
-import { Paragraph, Modal } from 'react-native-paper'
+import { Paragraph, Modal, Banner, Button } from 'react-native-paper'
 import { colors, images } from 'theme'
 import { connect } from 'react-redux'
 import { FontAwesome5, MaterialIcons } from '@expo/vector-icons'
@@ -17,6 +18,7 @@ import AddInventoryOrder from './AddInventoryOrder'
 
 const Orders = ({ token, navigation }) => {
   // const [refreshing, setRefreshing] = useState(false)
+  const [loading, setLoading] = useState(false)
   const [OrderOptionsModal, setOrderOptionsModal] = useState(false)
   const [inventoryModal, setInventoryModal] = useState(false)
   const [product, setProduct] = useState({})
@@ -47,6 +49,7 @@ const Orders = ({ token, navigation }) => {
 
   // Get orders list
   const getOrders = () => {
+    setLoading(true)
     useAxios
       .get('/receivables/all', {
         headers: { authorization: `Bearer ${token}` },
@@ -54,8 +57,16 @@ const Orders = ({ token, navigation }) => {
       .then((res) => {
         if (res.status == 200) {
           const data = res.data.records
-          console.log('orders data is ', res.data.records)
-          setOrderData(data)
+          // console.log('orders data is ', res.data.records)
+          setOrderData(
+            data.sort((a, b) => {
+              return (
+                new Date(b.createdAt.split('T')[0]) -
+                new Date(a.createdAt.split('T')[0])
+              )
+            }),
+          )
+          setLoading(false)
         } else {
           return <p>Oops! Could not fetch data.</p>
         }
@@ -99,8 +110,8 @@ const Orders = ({ token, navigation }) => {
             <Text>{item.quantity}</Text>
           </View>
           <View style={styles.row}>
-            <Text style={styles.detailTitle}> Sold: </Text>
-            <Text>{item.qtySold}</Text>
+            <Text style={styles.detailTitle}> Total: </Text>
+            <Text>{currencyFormat(item.total)}</Text>
           </View>
         </View>
         <View style={styles.row}>
@@ -120,45 +131,70 @@ const Orders = ({ token, navigation }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* <View> */}
-      <View style={styles.summary}>
-        <View style={styles.summaryDetailLeft}>
-          <Text style={styles.titleLeft}>Order Count </Text>
-          <Text style={styles.detailLeft}> {orderData.length} </Text>
+      {loading ? (
+        <ActivityIndicator color={colors.exciteGreen} size="large" />
+      ) : (
+        <View>
+          <View style={styles.summary}>
+            <View style={styles.summaryDetailLeft}>
+              <Text style={styles.titleLeft}>Pending Orders </Text>
+              <Text style={styles.detailLeft}> {orderData.length} </Text>
+            </View>
+            <View style={styles.summaryDetailRight}>
+              <Text style={styles.titleRight}>Value </Text>
+              <Text style={styles.detailRight}>
+                {currencyFormat(calculateGrandTotal())}
+              </Text>
+            </View>
+          </View>
+
+          <View style={styles.itemList}>
+            <View style={styles.linkSect}>
+              <Button
+                icon="storefront-outline"
+                mode="outlined"
+                color="black"
+                style={{ borderColor: 'black' }}
+                onPress={() => navigation.navigate('Inventory')}
+              >
+                View Inventory
+              </Button>
+              <Button
+                icon="credit-card"
+                mode="outlined"
+                color="black"
+                style={{ borderColor: 'black' }}
+                onPress={() => navigation.navigate('Sales')}
+              >
+                View Sales
+              </Button>
+            </View>
+            <Text style={styles.title}> Pending Orders </Text>
+            <Paragraph style={{ marginLeft: 5 }}>
+              Press and hold for more options.
+            </Paragraph>
+          </View>
+
+          <FlatList
+            data={orderData}
+            renderItem={renderItem}
+            keyExtractor={(item) => item._id}
+            ItemSeparatorComponent={SeparatorComponent}
+          />
+          <OrderOptions
+            isOpen={OrderOptionsModal}
+            handleOrderOptionsModal={handleOrderOptionsModal}
+            item={product}
+            handleAddInventoryOrderModal={handleAddInventoryOrderModal}
+          />
+
+          <AddInventoryOrder
+            isOpen={inventoryModal}
+            handleAddInventoryOrderModal={handleAddInventoryOrderModal}
+            product={product}
+          />
         </View>
-        <View style={styles.summaryDetailRight}>
-          <Text style={styles.titleRight}>Value </Text>
-          <Text style={styles.detailRight}>
-            {currencyFormat(calculateGrandTotal())}
-          </Text>
-        </View>
-      </View>
-
-      <View style={styles.itemList}>
-        <Text style={styles.title}> Orders </Text>
-        <Paragraph style={{ marginLeft: 5 }}>
-          Press and hold a product for more options.
-        </Paragraph>
-      </View>
-
-      <FlatList
-        data={orderData}
-        renderItem={renderItem}
-        keyExtractor={(item) => item._id}
-        ItemSeparatorComponent={SeparatorComponent}
-      />
-      <OrderOptions
-        isOpen={OrderOptionsModal}
-        handleOrderOptionsModal={handleOrderOptionsModal}
-        item={product}
-        handleAddInventoryOrderModal={handleAddInventoryOrderModal}
-      />
-
-      <AddInventoryOrder
-        isOpen={inventoryModal}
-        handleAddInventoryOrderModal={handleAddInventoryOrderModal}
-        product={product}
-      />
+      )}
     </SafeAreaView>
   )
 }
@@ -173,6 +209,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#ffffff',
+    paddingBottom: 40,
   },
   summary: {
     flexDirection: 'row',
@@ -219,9 +256,15 @@ const styles = StyleSheet.create({
     backgroundColor: '#EEEEEE',
   },
   itemList: {
-    marginHorizontal: 10,
-    marginVertical: 30,
     justifyContent: 'space-between',
+    backgroundColor: '#F7FAE9',
+    paddingVertical: 10,
+    paddingHorizontal: 5,
+  },
+  linkSect: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 15,
   },
   item: {
     paddingHorizontal: 20,

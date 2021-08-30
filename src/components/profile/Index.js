@@ -18,7 +18,7 @@ const Index = () => {
           </Button>
         </View>
         <View style={styles.action}>
-          <Button icon="key" mode="outlined" dark uppercase={false} contentStyle={{justifyContent:'flex-start', height:50}}>
+          <Button icon="key" mode="outlined" dark uppercase={false} onPress={()=>navigation.navigate("Modals",{screen:"ChangePassword"})} contentStyle={{justifyContent:'flex-start', height:50}}>
             Change Password
           </Button>
         </View>

@@ -26,6 +26,9 @@ import Store from '../../../../scenes/merchants/dashboard/store'
 import Banner from '../../../../scenes/merchants/dashboard/banner'
 import ManageListing from '../../../../scenes/merchants/dashboard/manage'
 import MyAccount from '../../../../scenes/merchants/dashboard/profile'
+import EmailVerification from '../../../../scenes/profile/EmailVerification'
+import ChangePassword from '../../../../scenes/profile/ChangePassword'
+
 // Modal screens
 import ManageListingModal from '../../../../scenes/merchants/dashboard/modals/managelisting'
 
@@ -246,6 +249,16 @@ const FullModalScreens = () => {
         component={ManageListingModal}
         options={({ navigation }) => ({
           title: 'Manage Listing',
+          headerLeft: () => <HeaderLeft navigation={navigation} />,
+          headerTitle: () => <HeaderTitle />,
+          headerRight: () => <HeaderRight />,
+        })}
+      />
+      <ModalStack.Screen
+        name="ChangePassword"
+        component={ChangePassword}
+        options={({ navigation }) => ({
+          title: 'Change Password',
           headerLeft: () => <HeaderLeft navigation={navigation} />,
           headerTitle: () => <HeaderTitle />,
           headerRight: () => <HeaderRight />,

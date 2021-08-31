@@ -18,7 +18,7 @@ import { connect } from 'react-redux'
 import { FontAwesome, MaterialIcons, Entypo } from '@expo/vector-icons'
 import useAxios from '../../../../utils/axios/init'
 
-const AddInventoryOrder = ({
+const AddOrder = ({
   navigation,
   token,
   isOpen,
@@ -28,78 +28,67 @@ const AddInventoryOrder = ({
   const [option, setOption] = useState('')
   const [inputs, setInputs] = useState({
     productName: '',
-    quantity: String(product.quantity),
-    price: String(product.price),
+    quantity: null,
+    price: null,
     description: product.description,
     buyersEmail: product.buyersEmail,
     buyersContact: product.buyersContact,
   })
 
-  React.useEffect(() => {
-    if (product) {
-      setInputs({ ...product })
-    }
-  }, [])
-
   // Post to Orders list
   const handleSubmit = () => {
-    if (inputs.quantity === null || inputs.quantity === '') {
-      inputs.quantity = 1
-    }
+    console.log('pressed submit!')
 
-    const modifiedData = { ...product }
-    modifiedData.price = inputs.price
-    modifiedData.inventoryPrice = product.price
-    modifiedData.quantity = Number(inputs.quantity)
-    modifiedData.buyersEmail = inputs.buyersEmail
-    modifiedData.buyersContact = inputs.buyersContact
-    modifiedData.cost = inputs.cost
-    modifiedData.total = modifiedData.quantity * modifiedData.price
-    console.log('inventory submitted moddata is ', modifiedData)
+    // const modifiedData = { ...product }
+    // modifiedData.price = inputs.price
+    // modifiedData.inventoryPrice = product.price
+    // modifiedData.quantity = inputs.quantity
+    // modifiedData.buyersEmail = inputs.buyersEmail
+    // modifiedData.buyersContact = inputs.buyersContact
+    // modifiedData.cost = inputs.cost
+    // modifiedData.total = modifiedData.quantity * modifiedData.price
+    // console.log('modifiedData is ', modifiedData)
 
-    useAxios
-      .post('/receivables/new', modifiedData, {
-        headers: { authorization: `Bearer ${token}` },
-      })
-      .then((res) => {
-        console.log('post res is ', res.status)
-        if (res.status === 200) {
-          subtractQuantity()
-        } else {
-          return alert('Something went wrong!')
-        }
-      })
-      .catch((error) => console.log(error))
+    // useAxios
+    //   .post('/receivables/new', modifiedData, {
+    //     headers: { authorization: `Bearer ${token}` },
+    //   })
+    //   .then((res) => {
+    //     console.log('post res is ', res.status)
+    //     if (res.status === 200) {
+    //       subtractQuantity()
+    //     } else {
+    //       return alert('Something went wrong!')
+    //     }
+    //   })
+    //   .catch((error) => console.log(error))
   }
 
   // Subtract order quantity from book-keeping
   const subtractQuantity = () => {
-    if (inputs.quantity === null || inputs.quantity === '') {
-      inputs.quantity = 1
-    }
-    if (product.qtySold === null) {
-      product.qtySold = 0
-    }
-    product.qtySold -= Number(inputs.qtySold)
-    product.quantity -= Number(inputs.quantity)
-    product.total = product.quantity * product.price
-    product.cost += inputs.cost
-    console.log('subtractQty function is ', product)
-    useAxios
-      .put(`book-keeping/${product._id}`, product, {
-        headers: { authorization: `Bearer ${token}` },
-      })
-      .then(() => {
-        // console.log('reached subtractquantity()')
-        handleAddInventoryOrderModal(false)
-        // alert('Inside subtractqty. post successful!')
-        navigation.navigate('Orders')
-        // Flash('success', 'Successful', '', 3000, window.location.reload())
-      })
-      .catch((err) => {
-        // Flash('error', 'Something went wrong', 'Error', 3000)
-        console.error(err)
-      })
+    navigation.navigate('Orders')
+    // if (inputs.quantity === null || inputs.quantity === '') {
+    //   inputs.quantity = 1
+    // }
+    // product.quantity -= inputs.quantity
+    // product.total = product.quantity * product.price
+    // product.cost += inputs.cost
+    // console.log('reached subtr middle')
+    // useAxios
+    //   .put(`book-keeping/${product._id}`, product, {
+    //     headers: { authorization: `Bearer ${token}` },
+    //   })
+    //   .then(() => {
+    //     console.log('reached subtractquantity()')
+    //     handleAddInventoryOrderModal(false)
+    //     // alert('Inside subtractqty. post successful!')
+    //     navigation.navigate('Receivables')
+    //     // Flash('success', 'Successful', '', 3000, window.location.reload())
+    //   })
+    //   .catch((err) => {
+    //     // Flash('error', 'Something went wrong', 'Error', 3000)
+    //     console.error(err)
+    //   })
   }
 
   return (
@@ -109,7 +98,7 @@ const AddInventoryOrder = ({
       onRequestClose={() => handleAddInventoryOrderModal(false)}
     >
       <ScrollView>
-        <View style={styles.addInventoryContainer}>
+        <View style={styles.addCustomerContainer}>
           <View style={styles.title}>
             <Entypo name="circle-with-plus" size={20} color="white" />
             <Text
@@ -127,8 +116,8 @@ const AddInventoryOrder = ({
             <Text
               style={{ color: 'gray', alignSelf: 'center', marginBottom: 20 }}
             >
-              An Order Invoice for this product will be sent to buyer when you
-              press 'Submit'
+              Any Order Invoice for this product will be sent to buyer when you
+              click 'Submit'
             </Text>
             <TextInput
               style={styles.inputBox}
@@ -253,7 +242,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.exciteGreen,
     width: '100%',
   },
-  addInventoryContainer: {
+  addCustomerContainer: {
     paddingBottom: 50,
     backgroundColor: 'white',
   },

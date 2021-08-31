@@ -1,5 +1,3 @@
-// kazeem.again@gmail.com
-
 import React, { useState, useCallback } from 'react'
 import {
   SafeAreaView,
@@ -61,11 +59,11 @@ const Bookkeeping = ({ navigation }) => {
           >
             <Pressable onPress={handleModal}>
               <List.Item
-                title="Income Statements"
-                onPress={() => navigation.navigate('Finance')}
+                title="Income Statement"
+                onPress={() => navigation.navigate('IncomeStatement')}
               />
             </Pressable>
-            <Pressable onPress={handleModal}>
+            {/* <Pressable onPress={handleModal}>
               <List.Item
                 title="Receivables Ledger"
                 onPress={() => console.log('Receivables button pressed!')}
@@ -82,7 +80,7 @@ const Bookkeeping = ({ navigation }) => {
                 title="Liabilitiies"
                 onPress={() => console.log('Liabilitiies button pressed!')}
               />
-            </Pressable>
+            </Pressable> */}
           </List.Accordion>
 
           <TouchableOpacity>
@@ -92,6 +90,7 @@ const Bookkeeping = ({ navigation }) => {
               left={(props) => (
                 <List.Icon {...props} icon="credit-card-check" />
               )}
+              onPress={() => navigation.navigate('Transaction')}
             />
           </TouchableOpacity>
 
@@ -106,7 +105,7 @@ const Bookkeeping = ({ navigation }) => {
         </ScrollView>
       </ScrollView>
 
-      <Pressable style={styles.createNewWrapper} onPress={handleModal}>
+      {/* <Pressable style={styles.createNewWrapper} onPress={handleModal}>
         <Image source={images.create} style={styles.createNew} />
       </Pressable>
 
@@ -129,7 +128,7 @@ const Bookkeeping = ({ navigation }) => {
             <Text> Customer </Text>
           </TouchableOpacity>
         </View>
-      </Modal>
+      </Modal> */}
     </SafeAreaView>
   )
 }

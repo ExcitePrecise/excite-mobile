@@ -26,7 +26,7 @@ import { connect } from 'react-redux'
 import { FontAwesome5, MaterialIcons } from '@expo/vector-icons'
 import useAxios from '../../../../utils/axios/init'
 
-const Sales = ({ token, navigation }) => {
+const SalesPlan = ({ token, navigation }) => {
   const [refreshing, setRefreshing] = useState(false)
   const [loading, setLoading] = useState(false)
   const [modalVisible, setModalVisible] = useState(false)
@@ -47,24 +47,18 @@ const Sales = ({ token, navigation }) => {
     setModalVisible(!modalVisible)
   }
 
-  // Get sales list
-  const getSales = () => {
+  // Get Book record for sales plan
+  const getInventoryData = () => {
     setLoading(true)
     useAxios
-      .get('/sales/all', {
+      .get('/book-keeping/all', {
         headers: { authorization: `Bearer ${token}` },
       })
       .then((res) => {
         if (res.status == 200) {
           const data = res.data.records
-          setSalesData(
-            data.sort((a, b) => {
-              return (
-                new Date(b.createdAt.split('T')[0]) -
-                new Date(a.createdAt.split('T')[0])
-              )
-            }),
-          )
+          console.log('inventory res status ', data)
+          setSalesData(data)
           setLoading(false)
         } else {
           return <p>Oops! Could not fetch data.</p>
@@ -74,7 +68,7 @@ const Sales = ({ token, navigation }) => {
   }
 
   useEffect(() => {
-    getSales()
+    getInventoryData()
   }, [])
 
   const calculateGrandTotal = () => {
@@ -96,21 +90,47 @@ const Sales = ({ token, navigation }) => {
       <Text style={styles.itemText}>{item.productName}</Text>
       <View style={styles.itemDetail}>
         <View style={styles.row}>
-          <Text style={styles.detailTitle}>Sale Price: </Text>
-          <Text>{currencyFormat(item.price)}</Text>
+          <Text style={styles.detailTitle}>Sold: </Text>
+          <Text> {item.qtySold}</Text>
         </View>
         <View style={styles.row}>
-          <Text style={styles.detailTitle}> Quantity: </Text>
-          <Text>{item.quantity}</Text>
+          <Text style={styles.detailTitle}> Sales Target: </Text>
+          <Text> {item.salesTarget}</Text>
         </View>
         <View style={styles.row}>
-          <Text style={styles.detailTitle}> Total: </Text>
-          <Text>{currencyFormat(item.total)}</Text>
+          <Text style={styles.detailTitle}> Variance: </Text>
+          <Text>
+            {item.qtySold - item.salesTarget > 0 ? (
+              <View style={styles.row}>
+                <Text style={styles.success}>
+                  {' '}
+                  {item.qtySold - item.salesTarget}
+                </Text>
+                <FontAwesome5
+                  style={{ paddingHorizontal: 10 }}
+                  name="arrow-up"
+                  size={12}
+                  color={colors.exciteGreen}
+                />
+              </View>
+            ) : item.qtySold - item.salesTarget < 0 ? (
+              <View style={styles.row}>
+                <Text style={styles.danger}>
+                  {item.qtySold - item.salesTarget}
+                </Text>
+
+                <FontAwesome5
+                  style={{ paddingHorizontal: 10 }}
+                  name="arrow-down"
+                  size={12}
+                  color="red"
+                />
+              </View>
+            ) : (
+              <Text> - </Text>
+            )}
+          </Text>
         </View>
-      </View>
-      <View style={styles.row}>
-        <Text style={{ color: 'gray' }}>Date: </Text>
-        <Text style={{ color: 'gray' }}>{item.createdAt.split('T')[0]}</Text>
       </View>
     </View>
   )
@@ -127,7 +147,7 @@ const Sales = ({ token, navigation }) => {
         <View>
           <View style={styles.summary}>
             <View style={styles.summaryDetailLeft}>
-              <Text style={styles.titleLeft}>Sales </Text>
+              <Text style={styles.titleLeft}>Items </Text>
               <Text style={styles.detailLeft}> {salesData.length} </Text>
             </View>
             <View style={styles.summaryDetailRight}>
@@ -159,10 +179,7 @@ const Sales = ({ token, navigation }) => {
                 View Pending Orders
               </Button>
             </View>
-            <Text style={styles.title}> All Sales </Text>
-            {/* <Paragraph style={{ marginLeft: 5 }}>
-            Press and hold for more options.
-          </Paragraph> */}
+            <Text style={styles.title}> All Sales Plan </Text>
           </View>
 
           <FlatList
@@ -181,7 +198,7 @@ const mapStateToProps = (state) => ({
   token: state?.app?.token,
 })
 
-export default connect(mapStateToProps)(Sales)
+export default connect(mapStateToProps)(SalesPlan)
 
 const styles = StyleSheet.create({
   container: {

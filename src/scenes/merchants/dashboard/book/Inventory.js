@@ -6,22 +6,25 @@ import {
   View,
   FlatList,
   TouchableOpacity,
+  RefreshControl,
+  ActivityIndicator,
+  ScrollView,
 } from 'react-native'
-import { Paragraph, Modal } from 'react-native-paper'
+import { Paragraph, Modal, Button } from 'react-native-paper'
 import { colors, images } from 'theme'
 import { connect } from 'react-redux'
-import { FontAwesome5, MaterialIcons } from '@expo/vector-icons'
 import useAxios from '../../../../utils/axios/init'
 import InventoryOptions from './InventoryOptions'
 import AddInventoryOrder from './AddInventoryOrder'
 
 const Inventory = ({ token, navigation }) => {
-  // const [refreshing, setRefreshing] = useState(false)
+  const [refreshing, setRefreshing] = useState(false)
   const [inventoryOptionsModal, setInventoryOptionsModal] = useState(false)
   const [inventoryModal, setInventoryModal] = useState(false)
   const [product, setProduct] = useState({})
   const [expanded, setExpanded] = useState(true)
   const [tableData, setTableData] = useState([])
+  const [loading, setLoading] = useState(false)
 
   const handlePress = () => setExpanded(!expanded)
 
@@ -46,7 +49,8 @@ const Inventory = ({ token, navigation }) => {
   }
 
   // Get products in store list
-  const getData = () => {
+  const getInventory = () => {
+    setLoading(true)
     useAxios
       .get('/book-keeping/all', {
         headers: { authorization: `Bearer ${token}` },
@@ -54,8 +58,9 @@ const Inventory = ({ token, navigation }) => {
       .then((res) => {
         if (res.status == 200) {
           const data = res.data.records
-          // console.log('books data is ', res.data.records)
+          console.log('books data is ', res.data.records)
           setTableData(data)
+          setLoading(false)
         } else {
           return <p>Oops! Could not fetch data.</p>
         }
@@ -64,7 +69,7 @@ const Inventory = ({ token, navigation }) => {
   }
 
   useEffect(() => {
-    getData()
+    getInventory()
   }, [])
 
   const calculateGrandTotal = () => {
@@ -99,62 +104,103 @@ const Inventory = ({ token, navigation }) => {
             <Text>{item.quantity}</Text>
           </View>
           <View style={styles.row}>
-            <Text style={styles.detailTitle}> Sold: </Text>
-            <Text>{item.qtySold}</Text>
+            <Text style={styles.detailTitle}> Total: </Text>
+            <Text>{currencyFormat(item.total)}</Text>
           </View>
         </View>
       </View>
     </TouchableOpacity>
   )
 
-  const currencyFormat = (num) =>
-    `N${num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
+  const currencyFormat = (num) => {
+    if (num === null || num === undefined) {
+      num = 0
+    }
+    return `N${num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
+  }
 
   const SeparatorComponent = () => {
     return <View style={styles.separatorLine} />
   }
 
+  const wait = (timeout) =>
+    new Promise((resolve) => setTimeout(resolve, timeout))
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true)
+    wait(2000).then(() => setRefreshing(false))
+  }, [])
+
   return (
     <SafeAreaView style={styles.container}>
-      {/* <View> */}
-      <View style={styles.summary}>
-        <View style={styles.summaryDetailLeft}>
-          <Text style={styles.titleLeft}>Products Count </Text>
-          <Text style={styles.detailLeft}> {tableData.length} </Text>
+      {loading ? (
+        <ActivityIndicator color={colors.exciteGreen} size="large" />
+      ) : (
+        <View>
+          <View style={styles.summary}>
+            <View style={styles.summaryDetailLeft}>
+              <Text style={styles.titleLeft}>Products </Text>
+              <Text style={styles.detailLeft}> {tableData.length} </Text>
+            </View>
+            <View style={styles.summaryDetailRight}>
+              <Text style={styles.titleRight}>Value </Text>
+              <Text style={styles.detailRight}>
+                {currencyFormat(calculateGrandTotal())}
+              </Text>
+            </View>
+          </View>
+
+          <>
+            <View style={styles.itemList}>
+              <View style={styles.linkSect}>
+                <Button
+                  icon="cart"
+                  mode="outlined"
+                  color="black"
+                  style={{ borderColor: 'black' }}
+                  onPress={() => navigation.navigate('Orders')}
+                >
+                  View Pending Orders
+                </Button>
+                <Button
+                  icon="credit-card"
+                  mode="outlined"
+                  color="black"
+                  style={{ borderColor: 'black' }}
+                  onPress={() => navigation.navigate('Sales')}
+                >
+                  View Sales
+                </Button>
+              </View>
+
+              <Text style={styles.title}> Products in Store </Text>
+              <Paragraph style={{ marginLeft: 5 }}>
+                Press and hold a product for more options.
+              </Paragraph>
+            </View>
+          </>
+
+          <FlatList
+            data={tableData}
+            renderItem={renderItem}
+            keyExtractor={(item) => item._id}
+            ItemSeparatorComponent={SeparatorComponent}
+          />
+          <InventoryOptions
+            isOpen={inventoryOptionsModal}
+            handleInventoryOptionsModal={handleInventoryOptionsModal}
+            item={product}
+            handleAddInventoryOrderModal={handleAddInventoryOrderModal}
+          />
+
+          <AddInventoryOrder
+            isOpen={inventoryModal}
+            handleAddInventoryOrderModal={handleAddInventoryOrderModal}
+            navigation={navigation}
+            product={product}
+          />
         </View>
-        <View style={styles.summaryDetailRight}>
-          <Text style={styles.titleRight}>Value </Text>
-          <Text style={styles.detailRight}>
-            {currencyFormat(calculateGrandTotal())}
-          </Text>
-        </View>
-      </View>
-
-      <View style={styles.itemList}>
-        <Text style={styles.title}> Products in Store </Text>
-        <Paragraph style={{ marginLeft: 5 }}>
-          Press and hold a product for more options.
-        </Paragraph>
-      </View>
-
-      <FlatList
-        data={tableData}
-        renderItem={renderItem}
-        keyExtractor={(item) => item._id}
-        ItemSeparatorComponent={SeparatorComponent}
-      />
-      <InventoryOptions
-        isOpen={inventoryOptionsModal}
-        handleInventoryOptionsModal={handleInventoryOptionsModal}
-        item={product}
-        handleAddInventoryOrderModal={handleAddInventoryOrderModal}
-      />
-
-      <AddInventoryOrder
-        isOpen={inventoryModal}
-        handleAddInventoryOrderModal={handleAddInventoryOrderModal}
-        product={product}
-      />
+      )}
     </SafeAreaView>
   )
 }
@@ -215,9 +261,15 @@ const styles = StyleSheet.create({
     backgroundColor: '#EEEEEE',
   },
   itemList: {
-    marginHorizontal: 10,
-    marginVertical: 30,
     justifyContent: 'space-between',
+    backgroundColor: '#F7FAE9',
+    paddingVertical: 10,
+    paddingHorizontal: 5,
+  },
+  linkSect: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 15,
   },
   item: {
     paddingHorizontal: 20,
@@ -238,47 +290,3 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
 })
-
-// success: {
-//   color: 'green',
-//   paddingHorizontal: 5,
-// },
-// danger: {
-//   color: 'red',
-//   paddingHorizontal: 5,
-// },
-// hr: {
-//   borderBottomColor: '#EEEEEE',
-//   borderBottomWidth: 1,
-//   marginHorizontal: 40,
-//   marginVertical: 15,
-// },
-
-// {item.qtySold - item.salesTarget > 0 ? (
-//   <View style={styles.row}>
-//     <Text style={styles.success}>
-//       {item.qtySold - item.salesTarget}
-//     </Text>
-//     <FontAwesome5
-//       style={{ paddingHorizontal: 10 }}
-//       name="arrow-up"
-//       size={12}
-//       color={colors.exciteGreen}
-//     />
-//   </View>
-// ) : item.qtySold - item.salesTarget < 0 ? (
-//   <View style={styles.row}>
-//     {/* <Text style={styles.danger}>
-//      {item.qtySold - item.salesTarget}
-//    </Text> */}
-
-//     <FontAwesome5
-//       style={{ paddingHorizontal: 10 }}
-//       name="arrow-down"
-//       size={12}
-//       color="red"
-//     />
-//   </View>
-// ) : (
-//   <Text> - </Text>
-// )}

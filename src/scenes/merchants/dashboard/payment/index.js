@@ -35,7 +35,7 @@ function Pay({ navigation, route, checked, payment,tokenize }) {
   return (
     <View style={{ flex: 1 }}>
       <Paystack
-        paystackKey="pk_test_7e846027dc74db0ebcb7df2366974ae072b34b1d"
+        paystackKey="pk_live_c053ad4ddddf11c95515540f2c032974bdcd04c1"
         amount={`${amount / 100}.00`}
         billingEmail={email}
         activityIndicatorColor="green"

@@ -28,6 +28,7 @@ import ManageListing from '../../../../scenes/merchants/dashboard/manage'
 import MyAccount from '../../../../scenes/merchants/dashboard/profile'
 import EmailVerification from '../../../../scenes/profile/EmailVerification'
 import ChangePassword from '../../../../scenes/profile/ChangePassword'
+import decodeJWT from 'jwt-decode'
 
 // Modal screens
 import ManageListingModal from '../../../../scenes/merchants/dashboard/modals/managelisting'
@@ -321,9 +322,25 @@ function Account({ auth, loggedIn, navigation, ...props }) {
   return <SignRoute {...props} />
 }
 
-const mapStateToProps = (state) => ({
-  auth: state.app.token,
+const mapStateToProps = (state) => {
+  const auth= state.app.token
+  if(auth){
+    const decode = decodeJWT(auth)
+    // console.log(decode)
+     // validating token
+     const now = Date.now() / 1000
+     // check if token has expired
+     if (now > decode.exp) {
+      return({
+        auth: null,
+        loggedIn: state.app.loggedIn,
+      })
+     }
+  }
+  return({
+  auth: auth,
   loggedIn: state.app.loggedIn,
 })
+}
 
 export default connect(mapStateToProps)(Account)

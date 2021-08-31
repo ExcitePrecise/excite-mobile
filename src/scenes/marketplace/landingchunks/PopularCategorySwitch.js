@@ -111,7 +111,7 @@ export default function PopularCategorySwitch({ navigation }) {
             height={40}
             resizeMode="contain"
           />
-          <Text style={styles.tabText}>{item.name}</Text>
+          <Text style={styles.tabText} numberOfLines={1} ellipsizeMode='clip'>{item.name}</Text>
         </TouchableOpacity>
       ))}
     

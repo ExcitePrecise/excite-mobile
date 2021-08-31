@@ -2,6 +2,7 @@ import useAxios from "../utils/axios/init";
 import jwtDecode from "jwt-decode";
 
 const InitialzePayment= async (code,tokenize)=>{
+  console.log(code)
     try {
         const response = await useAxios.get(`/paystack/generate-payment?item=${code}`, {
             headers: {

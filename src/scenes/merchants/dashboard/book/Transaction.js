@@ -4,26 +4,14 @@ import {
   StyleSheet,
   Text,
   View,
-  TouchableOpacity,
-  Image,
   RefreshControl,
-  ScrollView,
-  Pressable,
   FlatList,
   ActivityIndicator,
 } from 'react-native'
-import {
-  List,
-  Modal,
-  Card,
-  Paragraph,
-  Title,
-  Avatar,
-  Button,
-} from 'react-native-paper'
-import { colors, images } from 'theme'
+import { Button } from 'react-native-paper'
+import { colors } from 'theme'
 import { connect } from 'react-redux'
-import { FontAwesome5, MaterialIcons } from '@expo/vector-icons'
+// import { FontAwesome5, MaterialIcons } from '@expo/vector-icons'
 import useAxios from '../../../../utils/axios/init'
 import CreateTransaction from './CreateTransaction'
 import PostTransaction from './PostTransaction'
@@ -45,14 +33,6 @@ const Transaction = ({ token, navigation }) => {
     setPostTransactionmodal(!postTransactionModal)
     getTransactions()
   }
-
-  const wait = (timeout) =>
-    new Promise((resolve) => setTimeout(resolve, timeout))
-
-  const onRefresh = useCallback(() => {
-    setRefreshing(true)
-    wait(2000).then(() => setRefreshing(false))
-  }, [])
 
   const handleModal = () => {
     setModalVisible(!modalVisible)
@@ -83,6 +63,15 @@ const Transaction = ({ token, navigation }) => {
       })
       .catch((err) => console.log(err))
   }
+
+  const wait = (timeout) =>
+    new Promise((resolve) => setTimeout(resolve, timeout))
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true)
+    getTransactions()
+    wait(2000).then(() => setRefreshing(false))
+  }, [])
 
   useEffect(() => {
     getTransactions()
@@ -153,25 +142,35 @@ const Transaction = ({ token, navigation }) => {
 
           <View style={styles.itemList}>
             <View style={styles.linkSect}>
-              <Button
-                icon="plus-circle-outline"
-                mode="outlined"
-                color="black"
-                style={{ borderColor: 'black' }}
-                onPress={() => setCreateTransactionmodal(true)}
-              >
-                Create
-              </Button>
-              <Button
-                icon="plus-circle"
-                mode="outlined"
-                color="black"
-                style={{ borderColor: 'black' }}
-                onPress={() => setPostTransactionmodal(true)}
-              >
-                Post
-              </Button>
+              <View style={{ width: '50%' }}>
+                <Button
+                  icon="plus-circle-outline"
+                  mode="text"
+                  color="green"
+                  style={{ borderColor: 'green' }}
+                  onPress={() => setCreateTransactionmodal(true)}
+                >
+                  Create
+                </Button>
+              </View>
+
+              <View style={{ borderRightWidth: 1 }} />
+
+              <View style={{ width: '50%' }}>
+                <Button
+                  icon="plus-circle"
+                  mode="text"
+                  color="green"
+                  style={{ borderColor: 'green' }}
+                  onPress={() => setPostTransactionmodal(true)}
+                >
+                  Post
+                </Button>
+              </View>
             </View>
+          </View>
+
+          <View style={{ marginHorizontal: 5 }}>
             <Text style={styles.title}> All Transactions </Text>
           </View>
 
@@ -180,6 +179,9 @@ const Transaction = ({ token, navigation }) => {
             renderItem={renderItem}
             keyExtractor={(item) => item._id}
             ItemSeparatorComponent={SeparatorComponent}
+            refreshControl={
+              <RefreshControl reefreshing={refreshing} onRefresh={onRefresh} />
+            }
           />
         </View>
       )}
@@ -262,11 +264,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#F7FAE9',
     paddingVertical: 10,
     paddingHorizontal: 5,
+    marginBottom: 10,
   },
   linkSect: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 15,
   },
   header: {
     // marginHorizontal: 10,

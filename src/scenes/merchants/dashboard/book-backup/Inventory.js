@@ -26,6 +26,20 @@ const Inventory = ({ token, navigation }) => {
   const [tableData, setTableData] = useState([])
   const [loading, setLoading] = useState(false)
 
+  const handlePress = () => setExpanded(!expanded)
+
+  // const handleLongPress = () => {
+  //   console.log('pressed long!')
+  // }
+
+  // const wait = (timeout) =>
+  //   new Promise((resolve) => setTimeout(resolve, timeout))
+  //
+  // const onRefresh = useCallback(() => {
+  //   setRefreshing(true)
+  //   wait(2000).then(() => setRefreshing(false))
+  // }, [])
+
   const handleInventoryOptionsModal = () => {
     setInventoryOptionsModal(!inventoryOptionsModal)
   }
@@ -114,7 +128,6 @@ const Inventory = ({ token, navigation }) => {
 
   const onRefresh = useCallback(() => {
     setRefreshing(true)
-    getInventory()
     wait(2000).then(() => setRefreshing(false))
   }, [])
 
@@ -123,7 +136,7 @@ const Inventory = ({ token, navigation }) => {
       {loading ? (
         <ActivityIndicator color={colors.exciteGreen} size="large" />
       ) : (
-        <View style={{ marginBottom: 170 }}>
+        <View>
           <View style={styles.summary}>
             <View style={styles.summaryDetailLeft}>
               <Text style={styles.titleLeft}>Products </Text>
@@ -136,53 +149,42 @@ const Inventory = ({ token, navigation }) => {
               </Text>
             </View>
           </View>
+
           <>
             <View style={styles.itemList}>
               <View style={styles.linkSect}>
-                <View style={{ width: '50%' }}>
-                  <Button
-                    icon="cart"
-                    mode="text"
-                    color="green"
-                    style={{ borderColor: 'green' }}
-                    onPress={() => navigation.navigate('Orders')}
-                  >
-                    Pending Orders
-                  </Button>
-                </View>
-
-                <View style={{ borderLeftWidth: 1 }}></View>
-
-                <View style={{ width: '50%' }}>
-                  <Button
-                    icon="credit-card"
-                    mode="text"
-                    color="green"
-                    style={{ borderColor: 'green' }}
-                    onPress={() => navigation.navigate('Sales')}
-                  >
-                    Sales
-                  </Button>
-                </View>
+                <Button
+                  icon="cart"
+                  mode="outlined"
+                  color="black"
+                  style={{ borderColor: 'black' }}
+                  onPress={() => navigation.navigate('Orders')}
+                >
+                  View Pending Orders
+                </Button>
+                <Button
+                  icon="credit-card"
+                  mode="outlined"
+                  color="black"
+                  style={{ borderColor: 'black' }}
+                  onPress={() => navigation.navigate('Sales')}
+                >
+                  View Sales
+                </Button>
               </View>
+
+              <Text style={styles.title}> Products in Store </Text>
+              <Paragraph style={{ marginLeft: 5 }}>
+                Press and hold a product for more options.
+              </Paragraph>
             </View>
           </>
-
-          <View style={{ marginHorizontal: 5 }}>
-            <Text style={styles.title}> Products in Store </Text>
-            <Paragraph style={{ marginLeft: 5, color: 'gray' }}>
-              Press and hold a product for more options.
-            </Paragraph>
-          </View>
 
           <FlatList
             data={tableData}
             renderItem={renderItem}
             keyExtractor={(item) => item._id}
             ItemSeparatorComponent={SeparatorComponent}
-            refreshControl={
-              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-            }
           />
           <InventoryOptions
             isOpen={inventoryOptionsModal}
@@ -190,6 +192,7 @@ const Inventory = ({ token, navigation }) => {
             item={product}
             handleAddInventoryOrderModal={handleAddInventoryOrderModal}
           />
+
           <AddInventoryOrder
             isOpen={inventoryModal}
             handleAddInventoryOrderModal={handleAddInventoryOrderModal}
@@ -262,11 +265,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#F7FAE9',
     paddingVertical: 10,
     paddingHorizontal: 5,
-    marginBottom: 10,
   },
   linkSect: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    marginBottom: 15,
   },
   item: {
     paddingHorizontal: 20,

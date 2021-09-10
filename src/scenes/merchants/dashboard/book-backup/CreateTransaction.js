@@ -13,14 +13,7 @@ import {
   Linking,
 } from 'react-native'
 import { Picker } from '@react-native-picker/picker'
-import {
-  List,
-  Modal,
-  Paragraph,
-  Button,
-  TextInput,
-  Snackbar,
-} from 'react-native-paper'
+import { List, Modal, Paragraph, Button, TextInput } from 'react-native-paper'
 import { colors, images } from 'theme'
 import { connect } from 'react-redux'
 import { FontAwesome, MaterialIcons, Entypo } from '@expo/vector-icons'
@@ -32,15 +25,12 @@ const CreateTransaction = ({
   isOpen,
   handleCreateTransactionModal,
 }) => {
-  const [visible, setVisible] = useState(false)
-  const [message, setMessage] = useState('')
+  const [option, setOption] = useState('')
   const [selector, setSelector] = useState('income')
   const [inputs, setInputs] = useState({
     description: '',
     accountType: '',
   })
-
-  const handleSnackbar = () => setVisible(false)
 
   // Post new transaction list
   const handleSubmit = () => {
@@ -51,23 +41,12 @@ const CreateTransaction = ({
       })
       .then((res) => {
         if (res.status === 201) {
-          setVisible(true)
-          setMessage('Transaction created!')
-
-          setTimeout(() => {
-            handleCreateTransactionModal(false)
-          }, 3000)
+          handleCreateTransactionModal(false)
         } else {
-          // return alert('Something went wrong!')
-          setVisible(true)
-          setMessage('Something went wrong!')
+          return alert('Something went wrong!')
         }
       })
-      .catch((error) => {
-        setVisible(true)
-        setMessage('An error occurred!')
-        console.log(error)
-      })
+      .catch((error) => console.log(error))
   }
 
   return (
@@ -142,14 +121,6 @@ const CreateTransaction = ({
           </View>
         </View>
       </ScrollView>
-
-      {visible ? (
-        <Snackbar visible={visible} onDismiss={handleSnackbar}>
-          {message}
-        </Snackbar>
-      ) : (
-        <Text />
-      )}
     </Modal>
   )
 }

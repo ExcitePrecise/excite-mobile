@@ -8,8 +8,11 @@ import {
   Image,
   RefreshControl,
   ScrollView,
+  Pressable,
+  Platform,
+  Linking,
 } from 'react-native'
-import { Modal, Snackbar, Button, TextInput } from 'react-native-paper'
+import { List, Modal, Paragraph, Button, TextInput } from 'react-native-paper'
 import { colors, images } from 'theme'
 import { connect } from 'react-redux'
 import { FontAwesome, MaterialIcons, Entypo } from '@expo/vector-icons'
@@ -23,8 +26,6 @@ const PostTransaction = ({
   handlePostTrannsactionModal,
   transaction,
 }) => {
-  const [visible, setVisible] = useState(false)
-  const [message, setMessage] = useState('')
   const [selected, setSelectedd] = useState({})
   const [selectTransaction, setSelectTransaction] = useState(false)
   const [inputs, setInputs] = useState({
@@ -35,7 +36,11 @@ const PostTransaction = ({
     postTransactionDescription: '',
   })
 
-  const handleSnackbar = () => setVisible(false)
+  // React.useEffect(() => {
+  //   if (transaction) {
+  //     setInputs({ ...transaction })
+  //   }
+  // }, [])
 
   const getSelectedTransaction = (data) => {
     setSelectedd(data)
@@ -56,29 +61,39 @@ const PostTransaction = ({
       inputs.account = 'debit'
     }
 
-    // console.log('post trans input is ', inputs)
+    console.log('post trans input is ', inputs)
     useAxios
       .post('/post-transaction/new', inputs, {
         headers: { authorization: `Bearer ${token}` },
       })
       .then((res) => {
+        console.log('post res is ', res.status)
         if (res.status === 201) {
-          setVisible(true)
-          setMessage('Transaction posted!')
-
-          setTimeout(() => {
-            handlePostTrannsactionModal()
-          }, 2000)
+          handlePostTrannsactionModal()
         } else {
-          setVisible(true)
-          setMessage('Somethinng went wrong!')
+          return alert('Something went wrong!')
         }
       })
-      .catch((error) => {
-        setVisible(true)
-        setMessage('An error occurred!')
-        console.log(error)
-      })
+      .catch((error) => console.log(error))
+  }
+
+  // Subtract order quantity from book-keeping
+  const subtractQuantity = () => {
+    // useAxios
+    //   .put(`book-keeping/${transaction._id}`, transaction, {
+    //     headers: { authorization: `Bearer ${token}` },
+    //   })
+    //   .then(() => {
+    //     // console.log('reached subtractquantity()')
+    //     handlePostTrannsactionModal(false)
+    //     // alert('Inside subtractqty. post successful!')
+    //     navigation.navigate('Orders')
+    //     // Flash('success', 'Successful', '', 3000, window.location.reload())
+    //   })
+    //   .catch((err) => {
+    //     // Flash('error', 'Something went wrong', 'Error', 3000)
+    //     console.error(err)
+    //   })
   }
 
   return (
@@ -106,7 +121,8 @@ const PostTransaction = ({
             <Text
               style={{ color: 'gray', alignSelf: 'center', marginBottom: 20 }}
             >
-              Select a transaction below to get started.
+              An Order Invoice for this transaction will be sent to buyer when
+              you press 'Submit'
             </Text>
 
             <Button
@@ -135,7 +151,7 @@ const PostTransaction = ({
               style={styles.inputBox}
               mode="outlined"
               label="Amount"
-              placeholder="Order amount"
+              placeholder="Quantity ordered"
               right={<TextInput.Icon name="currency-ngn" />}
               onChangeText={(input) => setInputs({ ...inputs, amount: input })}
               value={inputs.amount}
@@ -193,14 +209,6 @@ const PostTransaction = ({
         getSelectedTransaction={getSelectedTransaction}
         handleSelectTransaction={handleSelectTransaction}
       />
-
-      {visible ? (
-        <Snackbar visible={visible} onDismiss={handleSnackbar}>
-          {message}
-        </Snackbar>
-      ) : (
-        <Text />
-      )}
     </Modal>
   )
 }

@@ -8,15 +8,11 @@ import {
   Image,
   RefreshControl,
   ScrollView,
+  Pressable,
+  Platform,
+  Linking,
 } from 'react-native'
-import {
-  List,
-  Modal,
-  Paragraph,
-  Button,
-  TextInput,
-  Snackbar,
-} from 'react-native-paper'
+import { List, Modal, Paragraph, Button, TextInput } from 'react-native-paper'
 import { colors, images } from 'theme'
 import { connect } from 'react-redux'
 import { FontAwesome, MaterialIcons, Entypo } from '@expo/vector-icons'
@@ -29,8 +25,7 @@ const AddInventoryOrder = ({
   handleAddInventoryOrderModal,
   product,
 }) => {
-  const [message, setMessage] = useState('')
-  const [visible, setVisible] = useState(false)
+  const [option, setOption] = useState('')
   const [inputs, setInputs] = useState({
     productName: '',
     quantity: String(product.quantity),
@@ -45,8 +40,6 @@ const AddInventoryOrder = ({
       setInputs({ ...product })
     }
   }, [])
-
-  const handleSnackbar = () => setVisible(false)
 
   // Post to Orders list
   const handleSubmit = () => {
@@ -69,19 +62,14 @@ const AddInventoryOrder = ({
         headers: { authorization: `Bearer ${token}` },
       })
       .then((res) => {
+        console.log('post res is ', res.status)
         if (res.status === 200) {
           subtractQuantity()
         } else {
-          // return alert('Something went wrong!')
-          setVisible(true)
-          setMessage('Something went wrong!')
+          return alert('Something went wrong!')
         }
       })
-      .catch((error) => {
-        setVisible(true)
-        setMessage('An error occurred!')
-        console.log(error)
-      })
+      .catch((error) => console.log(error))
   }
 
   // Subtract order quantity from book-keeping
@@ -96,25 +84,20 @@ const AddInventoryOrder = ({
     product.quantity -= Number(inputs.quantity)
     product.total = product.quantity * product.price
     product.cost += inputs.cost
-
+    console.log('subtractQty function is ', product)
     useAxios
       .put(`book-keeping/${product._id}`, product, {
         headers: { authorization: `Bearer ${token}` },
       })
       .then(() => {
-        setVisible(true)
-        setMessage('New Order created!')
-
-        setTimeout(() => {
-          // alert('Inside subtractqty. post successful!')
-          handleAddInventoryOrderModal(false)
-          navigation.navigate('Orders')
-        }, 3000)
+        // console.log('reached subtractquantity()')
+        handleAddInventoryOrderModal(false)
+        // alert('Inside subtractqty. post successful!')
+        navigation.navigate('Orders')
         // Flash('success', 'Successful', '', 3000, window.location.reload())
       })
       .catch((err) => {
-        setVisible(true)
-        setMessage('Something went wrong!')
+        // Flash('error', 'Something went wrong', 'Error', 3000)
         console.error(err)
       })
   }
@@ -241,18 +224,6 @@ const AddInventoryOrder = ({
             </View>
           </View>
         </View>
-
-        {visible ? (
-          <Snackbar
-            visible={visible}
-            onDismiss={handleSnackbar}
-            style={{ marginBottom: 10 }}
-          >
-            {message}
-          </Snackbar>
-        ) : (
-          <Text />
-        )}
       </ScrollView>
     </Modal>
   )
@@ -275,21 +246,40 @@ const styles = StyleSheet.create({
   },
   title: {
     flexDirection: 'row',
-    marginBottom: 2,
-    padding: 5,
+    marginBottom: 20,
+    padding: 10,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: colors.exciteGreen,
-    // width: '100%',
+    width: '100%',
   },
   addInventoryContainer: {
+    paddingBottom: 50,
+    backgroundColor: 'white',
+  },
+  modalCustomer: {
+    alignItems: 'center',
+    color: 'gray',
+    paddingBottom: 20,
     backgroundColor: 'white',
   },
   inputSection: {
-    paddingHorizontal: 30,
+    paddingHorizontal: 50,
   },
   inputBox: {
-    marginVertical: 1,
+    marginVertical: 2,
     backgroundColor: 'white',
+  },
+  modalTxt: { fontSize: 30, marginBottom: 10 },
+  modalBtns: {
+    flexDirection: 'row',
+  },
+  closeBtn: {
+    alignSelf: 'flex-end',
+    marginBottom: 0,
+    margin: 0,
+  },
+  closeBtnLabel: {
+    fontSize: 30,
   },
 })

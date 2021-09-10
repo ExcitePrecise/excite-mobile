@@ -35,6 +35,14 @@ const SalesPlan = ({ token, navigation }) => {
 
   const handlePress = () => setExpanded(!expanded)
 
+  const wait = (timeout) =>
+    new Promise((resolve) => setTimeout(resolve, timeout))
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true)
+    wait(2000).then(() => setRefreshing(false))
+  }, [])
+
   const handleModal = () => {
     setModalVisible(!modalVisible)
   }
@@ -58,15 +66,6 @@ const SalesPlan = ({ token, navigation }) => {
       })
       .catch((err) => console.log(err))
   }
-
-  const wait = (timeout) =>
-    new Promise((resolve) => setTimeout(resolve, timeout))
-
-  const onRefresh = useCallback(() => {
-    setRefreshing(true)
-    getInventoryData()
-    wait(2000).then(() => setRefreshing(false))
-  }, [])
 
   useEffect(() => {
     getInventoryData()
@@ -145,7 +144,7 @@ const SalesPlan = ({ token, navigation }) => {
       {loading ? (
         <ActivityIndicator color={colors.exciteGreen} size="large" />
       ) : (
-        <View style={{ marginBottom: 150 }}>
+        <View>
           <View style={styles.summary}>
             <View style={styles.summaryDetailLeft}>
               <Text style={styles.titleLeft}>Items </Text>
@@ -161,35 +160,25 @@ const SalesPlan = ({ token, navigation }) => {
 
           <View style={styles.itemList}>
             <View style={styles.linkSect}>
-              <View style={{ width: '50%' }}>
-                <Button
-                  icon="storefront-outline"
-                  mode="text"
-                  color="green"
-                  style={{ borderColor: 'green' }}
-                  onPress={() => navigation.navigate('Inventory')}
-                >
-                  Inventory
-                </Button>
-              </View>
-
-              <View style={{ borderLeftWidth: 1 }}></View>
-
-              <View style={{ width: '50%' }}>
-                <Button
-                  icon="cart"
-                  mode="text"
-                  color="green"
-                  style={{ borderColor: 'green' }}
-                  onPress={() => navigation.navigate('Orders')}
-                >
-                  Pending Orders
-                </Button>
-              </View>
+              <Button
+                icon="storefront-outline"
+                mode="outlined"
+                color="black"
+                style={{ borderColor: 'black' }}
+                onPress={() => navigation.navigate('Inventory')}
+              >
+                View Inventory
+              </Button>
+              <Button
+                icon="cart"
+                mode="outlined"
+                color="black"
+                style={{ borderColor: 'black' }}
+                onPress={() => navigation.navigate('Orders')}
+              >
+                View Pending Orders
+              </Button>
             </View>
-          </View>
-
-          <View style={{ marginHorizontal: 5 }}>
             <Text style={styles.title}> All Sales Plan </Text>
           </View>
 
@@ -271,13 +260,14 @@ const styles = StyleSheet.create({
     backgroundColor: '#F7FAE9',
     paddingVertical: 10,
     paddingHorizontal: 5,
-    marginBottom: 15,
   },
   linkSect: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'space-evenly',
+    marginBottom: 15,
   },
   header: {
+    // marginHorizontal: 10,
     marginTop: 5,
     marginBottom: 40,
     justifyContent: 'space-between',

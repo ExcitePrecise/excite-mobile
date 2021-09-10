@@ -26,7 +26,7 @@ import { connect } from 'react-redux'
 import { FontAwesome5, MaterialIcons } from '@expo/vector-icons'
 import useAxios from '../../../../utils/axios/init'
 
-const SalesPlan = ({ token, navigation }) => {
+const Sales = ({ token, navigation }) => {
   const [refreshing, setRefreshing] = useState(false)
   const [loading, setLoading] = useState(false)
   const [modalVisible, setModalVisible] = useState(false)
@@ -35,22 +35,36 @@ const SalesPlan = ({ token, navigation }) => {
 
   const handlePress = () => setExpanded(!expanded)
 
+  const wait = (timeout) =>
+    new Promise((resolve) => setTimeout(resolve, timeout))
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true)
+    wait(2000).then(() => setRefreshing(false))
+  }, [])
+
   const handleModal = () => {
     setModalVisible(!modalVisible)
   }
 
-  // Get Book record for sales plan
-  const getInventoryData = () => {
+  // Get sales list
+  const getSales = () => {
     setLoading(true)
     useAxios
-      .get('/book-keeping/all', {
+      .get('/sales/all', {
         headers: { authorization: `Bearer ${token}` },
       })
       .then((res) => {
         if (res.status == 200) {
           const data = res.data.records
-          console.log('inventory res status ', data)
-          setSalesData(data)
+          setSalesData(
+            data.sort((a, b) => {
+              return (
+                new Date(b.createdAt.split('T')[0]) -
+                new Date(a.createdAt.split('T')[0])
+              )
+            }),
+          )
           setLoading(false)
         } else {
           return <p>Oops! Could not fetch data.</p>
@@ -59,17 +73,8 @@ const SalesPlan = ({ token, navigation }) => {
       .catch((err) => console.log(err))
   }
 
-  const wait = (timeout) =>
-    new Promise((resolve) => setTimeout(resolve, timeout))
-
-  const onRefresh = useCallback(() => {
-    setRefreshing(true)
-    getInventoryData()
-    wait(2000).then(() => setRefreshing(false))
-  }, [])
-
   useEffect(() => {
-    getInventoryData()
+    getSales()
   }, [])
 
   const calculateGrandTotal = () => {
@@ -91,47 +96,21 @@ const SalesPlan = ({ token, navigation }) => {
       <Text style={styles.itemText}>{item.productName}</Text>
       <View style={styles.itemDetail}>
         <View style={styles.row}>
-          <Text style={styles.detailTitle}>Sold: </Text>
-          <Text> {item.qtySold}</Text>
+          <Text style={styles.detailTitle}>Sale Price: </Text>
+          <Text>{currencyFormat(item.price)}</Text>
         </View>
         <View style={styles.row}>
-          <Text style={styles.detailTitle}> Sales Target: </Text>
-          <Text> {item.salesTarget}</Text>
+          <Text style={styles.detailTitle}> Quantity: </Text>
+          <Text>{item.quantity}</Text>
         </View>
         <View style={styles.row}>
-          <Text style={styles.detailTitle}> Variance: </Text>
-          <Text>
-            {item.qtySold - item.salesTarget > 0 ? (
-              <View style={styles.row}>
-                <Text style={styles.success}>
-                  {' '}
-                  {item.qtySold - item.salesTarget}
-                </Text>
-                <FontAwesome5
-                  style={{ paddingHorizontal: 10 }}
-                  name="arrow-up"
-                  size={12}
-                  color={colors.exciteGreen}
-                />
-              </View>
-            ) : item.qtySold - item.salesTarget < 0 ? (
-              <View style={styles.row}>
-                <Text style={styles.danger}>
-                  {item.qtySold - item.salesTarget}
-                </Text>
-
-                <FontAwesome5
-                  style={{ paddingHorizontal: 10 }}
-                  name="arrow-down"
-                  size={12}
-                  color="red"
-                />
-              </View>
-            ) : (
-              <Text> - </Text>
-            )}
-          </Text>
+          <Text style={styles.detailTitle}> Total: </Text>
+          <Text>{currencyFormat(item.total)}</Text>
         </View>
+      </View>
+      <View style={styles.row}>
+        <Text style={{ color: 'gray' }}>Date: </Text>
+        <Text style={{ color: 'gray' }}>{item.createdAt.split('T')[0]}</Text>
       </View>
     </View>
   )
@@ -145,10 +124,10 @@ const SalesPlan = ({ token, navigation }) => {
       {loading ? (
         <ActivityIndicator color={colors.exciteGreen} size="large" />
       ) : (
-        <View style={{ marginBottom: 150 }}>
+        <View>
           <View style={styles.summary}>
             <View style={styles.summaryDetailLeft}>
-              <Text style={styles.titleLeft}>Items </Text>
+              <Text style={styles.titleLeft}>Sales </Text>
               <Text style={styles.detailLeft}> {salesData.length} </Text>
             </View>
             <View style={styles.summaryDetailRight}>
@@ -161,36 +140,29 @@ const SalesPlan = ({ token, navigation }) => {
 
           <View style={styles.itemList}>
             <View style={styles.linkSect}>
-              <View style={{ width: '50%' }}>
-                <Button
-                  icon="storefront-outline"
-                  mode="text"
-                  color="green"
-                  style={{ borderColor: 'green' }}
-                  onPress={() => navigation.navigate('Inventory')}
-                >
-                  Inventory
-                </Button>
-              </View>
-
-              <View style={{ borderLeftWidth: 1 }}></View>
-
-              <View style={{ width: '50%' }}>
-                <Button
-                  icon="cart"
-                  mode="text"
-                  color="green"
-                  style={{ borderColor: 'green' }}
-                  onPress={() => navigation.navigate('Orders')}
-                >
-                  Pending Orders
-                </Button>
-              </View>
+              <Button
+                icon="storefront-outline"
+                mode="outlined"
+                color="black"
+                style={{ borderColor: 'black' }}
+                onPress={() => navigation.navigate('Inventory')}
+              >
+                View Inventory
+              </Button>
+              <Button
+                icon="cart"
+                mode="outlined"
+                color="black"
+                style={{ borderColor: 'black' }}
+                onPress={() => navigation.navigate('Orders')}
+              >
+                View Pending Orders
+              </Button>
             </View>
-          </View>
-
-          <View style={{ marginHorizontal: 5 }}>
-            <Text style={styles.title}> All Sales Plan </Text>
+            <Text style={styles.title}> All Sales </Text>
+            {/* <Paragraph style={{ marginLeft: 5 }}>
+            Press and hold for more options.
+          </Paragraph> */}
           </View>
 
           <FlatList
@@ -209,7 +181,7 @@ const mapStateToProps = (state) => ({
   token: state?.app?.token,
 })
 
-export default connect(mapStateToProps)(SalesPlan)
+export default connect(mapStateToProps)(Sales)
 
 const styles = StyleSheet.create({
   container: {
@@ -271,13 +243,14 @@ const styles = StyleSheet.create({
     backgroundColor: '#F7FAE9',
     paddingVertical: 10,
     paddingHorizontal: 5,
-    marginBottom: 15,
   },
   linkSect: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'space-evenly',
+    marginBottom: 15,
   },
   header: {
+    // marginHorizontal: 10,
     marginTop: 5,
     marginBottom: 40,
     justifyContent: 'space-between',

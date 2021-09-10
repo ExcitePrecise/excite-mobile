@@ -11,15 +11,30 @@ import {
   Pressable,
   ActivityIndicator,
 } from 'react-native'
-import { Button, Badge } from 'react-native-paper'
-import { LineChart } from 'react-native-chart-kit'
+import { Button } from 'react-native-paper'
+import {
+  LineChart,
+  BarChart,
+  PieChart,
+  ProgressChart,
+  ContributionGraph,
+  StackedBarChart,
+} from 'react-native-chart-kit'
 import { connect } from 'react-redux'
-import { colors } from 'theme'
+import { colors, images } from 'theme'
 import useAxios from '../../../../utils/axios/init'
 
-const Performance = ({ token, navigation, route }) => {
+const Performance = ({ token, navigation }) => {
+  //   const getTransactions = () => {
+  //     useAxios('/transaction', { headers: { authorization: `Bearer ${token}` } })
+  //       .then((res) => {
+  //         setSummary(res.data.result)
+  //       })
+  //       .catch((error) => console.log(error))
+  //   }
+
   const [loading, setLoading] = useState(true)
-  // const [summaryData, setSummaryData] = useState([])
+  const [summaryData, setSummaryData] = useState([])
   // const [tableData, setTableData] = useState([])
   const [salesTableData, setSalesTableData] = useState([])
   const [customersTableData, setCustomersTableData] = useState([])
@@ -42,9 +57,6 @@ const Performance = ({ token, navigation, route }) => {
   const [yearlyTableData, setYearlyTableData] = useState(false)
   const [yearlyDisplayData, setYearlyDisplayData] = useState(null)
   const [refreshing, setRefreshing] = useState(false)
-
-  const { orderLength } = route.params
-  // console.log('Pendeing order length is ', orderLength)
 
   const handleModal = (state) => {
     setModal(state)
@@ -74,9 +86,9 @@ const Performance = ({ token, navigation, route }) => {
   //   setMDBModal(!MDBModal);
   // };
 
-  // const getSummary = (someData) => {
-  //   setSummaryData(someData)
-  // }
+  const getSummary = (summaryData) => {
+    setSummaryData(summaryData)
+  }
 
   // Get sales list
   const getSales = () => {
@@ -482,6 +494,8 @@ const Performance = ({ token, navigation, route }) => {
         data: [0, jan, feb, mar, apr, may, jun, jul, aug, sept, oct, nov, dec],
         backgroundColor: [
           '#A7CC48',
+          // '#FF6384',
+          // '#4BC0C0',
           '#FF6384',
           'orange',
           '#36A2EB',
@@ -595,19 +609,6 @@ const Performance = ({ token, navigation, route }) => {
               onPress={() => navigation.navigate('Inventory')}
             >
               Items in Store
-            </Button>
-          </View>
-          <View style={styles.menu}>
-            <Button
-              icon="cart"
-              mode="contained"
-              dark={false}
-              color="white"
-              accessibilityLabel="Pending Orders"
-              onPress={() => navigation.navigate('Orders')}
-            >
-              Pending Orders &nbsp;
-              {orderLength > 0 && <Badge>{orderLength}</Badge>}
             </Button>
           </View>
           <View style={styles.menu}>

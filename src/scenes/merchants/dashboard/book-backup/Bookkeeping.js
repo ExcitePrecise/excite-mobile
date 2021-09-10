@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useCallback } from 'react'
 import {
   SafeAreaView,
   StyleSheet,
@@ -11,40 +11,16 @@ import {
   ScrollView,
   Pressable,
 } from 'react-native'
-import { List, Modal, Badge } from 'react-native-paper'
-import { connect } from 'react-redux'
-import useAxios from '../../../../utils/axios/init'
+import { List, Modal } from 'react-native-paper'
 import { images } from 'theme'
 import Summary from './Summary'
 
-const Bookkeeping = ({ token, navigation }) => {
-  const [loading, setLoading] = useState(false)
-  const [orderLength, setOrderLength] = useState('')
+const Bookkeeping = ({ navigation }) => {
   const [refreshing, setRefreshing] = useState(false)
   const [modalVisible, setModalVisible] = useState(false)
-  // const [expanded, setExpanded] = useState(true)
-  // const [orderCount, setOrderCount] = useState(null)
+  const [expanded, setExpanded] = useState(true)
 
-  // const handlePress = () => setExpanded(!expanded)
-
-  // Get orders list
-  const getOrders = () => {
-    setLoading(true)
-    useAxios
-      .get('/receivables/all', {
-        headers: { authorization: `Bearer ${token}` },
-      })
-      .then((res) => {
-        if (res.status == 200) {
-          const data = res.data.records
-          setOrderLength(data.length)
-          setLoading(false)
-        } else {
-          return <p>Oops! Could not fetch data.</p>
-        }
-      })
-      .catch((err) => console.log(err))
-  }
+  const handlePress = () => setExpanded(!expanded)
 
   const wait = (timeout) =>
     new Promise((resolve) => setTimeout(resolve, timeout))
@@ -58,15 +34,6 @@ const Bookkeeping = ({ token, navigation }) => {
     setModalVisible(!modalVisible)
   }
 
-  useEffect(() => {
-    getOrders()
-  }, [])
-
-  // const handleOrderCount = (countData) => {
-  //   setOrderCount(countData)
-  //   console.log('Pending Order count is ', orderCount)
-  // }
-
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView
@@ -78,19 +45,10 @@ const Bookkeeping = ({ token, navigation }) => {
         <ScrollView>
           <TouchableOpacity>
             <List.Item
-              onPress={() =>
-                navigation.navigate('Performance', { orderLength })
-              }
+              onPress={() => navigation.navigate('Performance')}
               style={styles.item}
               title="Sales Performannce"
               left={(props) => <List.Icon {...props} icon="chart-bar" />}
-              right={() => {
-                orderLength > 0 && (
-                  <Badge style={{ marginRight: 120, marginBottom: 15 }}>
-                    {orderLength}
-                  </Badge>
-                )
-              }}
             />
           </TouchableOpacity>
 
@@ -175,11 +133,7 @@ const Bookkeeping = ({ token, navigation }) => {
   )
 }
 
-const mapStateToProps = (state) => ({
-  token: state?.app?.token,
-})
-
-export default connect(mapStateToProps)(Bookkeeping)
+export default Bookkeeping
 
 const styles = StyleSheet.create({
   container: {

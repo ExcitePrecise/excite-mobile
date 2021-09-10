@@ -4,41 +4,21 @@ import {
   StyleSheet,
   Text,
   View,
-  TouchableOpacity,
-  Image,
   RefreshControl,
-  ScrollView,
-  Pressable,
   FlatList,
   ActivityIndicator,
 } from 'react-native'
-import {
-  List,
-  Modal,
-  Card,
-  Paragraph,
-  Title,
-  Avatar,
-  Button,
-} from 'react-native-paper'
-import { colors, images } from 'theme'
+import { Button } from 'react-native-paper'
+import { colors } from 'theme'
 import { connect } from 'react-redux'
-import { FontAwesome5, MaterialIcons } from '@expo/vector-icons'
+// import { FontAwesome5, MaterialIcons } from '@expo/vector-icons'
 import useAxios from '../../../../utils/axios/init'
-import Summary from './Summary'
+// import Summary from './Summary'
 
 const Expense = ({ token, navigation }) => {
   const [refreshing, setRefreshing] = useState(false)
   const [loading, setLoading] = useState(false)
   const [transactionsData, setTransactionsData] = useState([])
-
-  const wait = (timeout) =>
-    new Promise((resolve) => setTimeout(resolve, timeout))
-
-  const onRefresh = useCallback(() => {
-    setRefreshing(true)
-    wait(2000).then(() => setRefreshing(false))
-  }, [])
 
   // Get transactions list
   const getTransactions = () => {
@@ -68,6 +48,15 @@ const Expense = ({ token, navigation }) => {
       })
       .catch((err) => console.log(err))
   }
+
+  const wait = (timeout) =>
+    new Promise((resolve) => setTimeout(resolve, timeout))
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true)
+    getTransactions()
+    wait(2000).then(() => setRefreshing(false))
+  }, [])
 
   useEffect(() => {
     getTransactions()
@@ -115,7 +104,7 @@ const Expense = ({ token, navigation }) => {
       {loading ? (
         <ActivityIndicator color={colors.exciteGreen} size="large" />
       ) : (
-        <View>
+        <View style={{ marginBottom: 5 }}>
           <View style={styles.summary}>
             <View style={styles.summaryDetailLeft}>
               <Text style={styles.titleLeft}>Expense </Text>
@@ -131,29 +120,36 @@ const Expense = ({ token, navigation }) => {
 
           <View style={styles.itemList}>
             <View style={styles.linkSect}>
-              <Button
-                icon="cash-marker"
-                mode="outlined"
-                color="black"
-                style={{ borderColor: 'black' }}
-                onPress={() => navigation.navigate('Revenue')}
-              >
-                View Revenue
-              </Button>
-              <Button
-                icon="cash"
-                mode="outlined"
-                color="black"
-                style={{ borderColor: 'black' }}
-                onPress={() => navigation.navigate('Cost')}
-              >
-                View Cost of Sale
-              </Button>
+              <View style={{ width: '50%' }}>
+                <Button
+                  icon="cash-marker"
+                  mode="text"
+                  color="green"
+                  style={{ borderColor: 'green' }}
+                  onPress={() => navigation.navigate('Revenue')}
+                >
+                  Revenue
+                </Button>
+              </View>
+
+              <View style={{ borderRightWidth: 1 }} />
+
+              <View style={{ width: '50%' }}>
+                <Button
+                  icon="cash"
+                  mode="text"
+                  color="green"
+                  style={{ borderColor: 'green' }}
+                  onPress={() => navigation.navigate('Cost')}
+                >
+                  Cost of Sale
+                </Button>
+              </View>
             </View>
+          </View>
+
+          <View style={{ marginHorizontal: 5 }}>
             <Text style={styles.title}> All Expenses </Text>
-            {/* <Paragraph style={{ marginLeft: 5 }}>
-            Press and hold for more options.
-          </Paragraph> */}
           </View>
 
           <FlatList
@@ -161,6 +157,9 @@ const Expense = ({ token, navigation }) => {
             renderItem={renderItem}
             keyExtractor={(item) => item._id}
             ItemSeparatorComponent={SeparatorComponent}
+            refreshControl={
+              <RefreshControl reefreshing={refreshing} onRefresh={onRefresh} />
+            }
           />
         </View>
       )}
@@ -233,11 +232,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#F7FAE9',
     paddingVertical: 10,
     paddingHorizontal: 5,
+    marginBottom: 10,
   },
   linkSect: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 15,
   },
   header: {
     // marginHorizontal: 10,

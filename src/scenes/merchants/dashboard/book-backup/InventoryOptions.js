@@ -47,7 +47,7 @@ const InventoryOptions = ({
         <View
           style={{
             flexDirection: 'column',
-            marginTop: 5,
+            marginTop: 20,
             paddingHorizontal: 20,
           }}
         >
@@ -113,7 +113,6 @@ const styles = StyleSheet.create({
   },
   optionsContainer: {
     backgroundColor: 'white',
-    marginVertical: '5%',
   },
 })
 

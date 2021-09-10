@@ -6,46 +6,66 @@ import {
   View,
   FlatList,
   TouchableOpacity,
-  RefreshControl,
   ActivityIndicator,
-  ScrollView,
 } from 'react-native'
-import { Paragraph, Modal, Button } from 'react-native-paper'
+import { Paragraph, Modal, Banner, Button } from 'react-native-paper'
 import { colors, images } from 'theme'
 import { connect } from 'react-redux'
+import { FontAwesome5, MaterialIcons } from '@expo/vector-icons'
 import useAxios from '../../../../utils/axios/init'
-import InventoryOptions from './InventoryOptions'
+import OrderOptions from './OrderOptions'
 import AddInventoryOrder from './AddInventoryOrder'
 
-const Inventory = ({ token, navigation }) => {
-  const [refreshing, setRefreshing] = useState(false)
-  const [inventoryOptionsModal, setInventoryOptionsModal] = useState(false)
+const Orders = ({ token, navigation }) => {
+  // const [refreshing, setRefreshing] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [OrderOptionsModal, setOrderOptionsModal] = useState(false)
   const [inventoryModal, setInventoryModal] = useState(false)
   const [product, setProduct] = useState({})
   const [expanded, setExpanded] = useState(true)
-  const [tableData, setTableData] = useState([])
-  const [loading, setLoading] = useState(false)
+  const [orderData, setOrderData] = useState([])
 
-  const handleInventoryOptionsModal = () => {
-    setInventoryOptionsModal(!inventoryOptionsModal)
+  const handlePress = () => setExpanded(!expanded)
+
+  // const handleLongPress = () => {
+  //   console.log('pressed long!')
+  // }
+
+  // const wait = (timeout) =>
+  //   new Promise((resolve) => setTimeout(resolve, timeout))
+  //
+  // const onRefresh = useCallback(() => {
+  //   setRefreshing(true)
+  //   wait(2000).then(() => setRefreshing(false))
+  // }, [])
+
+  const handleOrderOptionsModal = () => {
+    setOrderOptionsModal(!OrderOptionsModal)
   }
 
   const handleAddInventoryOrderModal = () => {
     setInventoryModal(!inventoryModal)
   }
 
-  // Get products in store list
-  const getInventory = () => {
+  // Get orders list
+  const getOrders = () => {
     setLoading(true)
     useAxios
-      .get('/book-keeping/all', {
+      .get('/receivables/all', {
         headers: { authorization: `Bearer ${token}` },
       })
       .then((res) => {
         if (res.status == 200) {
           const data = res.data.records
-          console.log('books data is ', res.data.records)
-          setTableData(data)
+          // console.log('orders data is ', res.data.records)
+          setOrderData(
+            data.sort((a, b) => {
+              return (
+                new Date(b.createdAt.split('T')[0]) -
+                new Date(a.createdAt.split('T')[0])
+              )
+            }),
+          )
           setLoading(false)
         } else {
           return <p>Oops! Could not fetch data.</p>
@@ -55,11 +75,11 @@ const Inventory = ({ token, navigation }) => {
   }
 
   useEffect(() => {
-    getInventory()
+    getOrders()
   }, [])
 
   const calculateGrandTotal = () => {
-    const itemArray = [...tableData]
+    const itemArray = [...orderData]
     // console.log('itemArray ', itemArray);
     let total = 0
     // eslint-disable-next-line no-plusplus
@@ -72,7 +92,7 @@ const Inventory = ({ token, navigation }) => {
   const renderItem = ({ item }) => (
     <TouchableOpacity
       onLongPress={() => {
-        setInventoryOptionsModal(true)
+        setOrderOptionsModal(true)
         setProduct(item)
       }}
     >
@@ -94,40 +114,31 @@ const Inventory = ({ token, navigation }) => {
             <Text>{currencyFormat(item.total)}</Text>
           </View>
         </View>
+        <View style={styles.row}>
+          <Text style={{ color: 'gray' }}>Date: </Text>
+          <Text style={{ color: 'gray' }}>{item.createdAt.split('T')[0]}</Text>
+        </View>
       </View>
     </TouchableOpacity>
   )
 
-  const currencyFormat = (num) => {
-    if (num === null || num === undefined) {
-      num = 0
-    }
-    return `N${num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
-  }
+  const currencyFormat = (num) =>
+    `N${num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
 
   const SeparatorComponent = () => {
     return <View style={styles.separatorLine} />
   }
-
-  const wait = (timeout) =>
-    new Promise((resolve) => setTimeout(resolve, timeout))
-
-  const onRefresh = useCallback(() => {
-    setRefreshing(true)
-    getInventory()
-    wait(2000).then(() => setRefreshing(false))
-  }, [])
 
   return (
     <SafeAreaView style={styles.container}>
       {loading ? (
         <ActivityIndicator color={colors.exciteGreen} size="large" />
       ) : (
-        <View style={{ marginBottom: 170 }}>
+        <View>
           <View style={styles.summary}>
             <View style={styles.summaryDetailLeft}>
-              <Text style={styles.titleLeft}>Products </Text>
-              <Text style={styles.detailLeft}> {tableData.length} </Text>
+              <Text style={styles.titleLeft}>Pending Orders </Text>
+              <Text style={styles.detailLeft}> {orderData.length} </Text>
             </View>
             <View style={styles.summaryDetailRight}>
               <Text style={styles.titleRight}>Value </Text>
@@ -136,64 +147,50 @@ const Inventory = ({ token, navigation }) => {
               </Text>
             </View>
           </View>
-          <>
-            <View style={styles.itemList}>
-              <View style={styles.linkSect}>
-                <View style={{ width: '50%' }}>
-                  <Button
-                    icon="cart"
-                    mode="text"
-                    color="green"
-                    style={{ borderColor: 'green' }}
-                    onPress={() => navigation.navigate('Orders')}
-                  >
-                    Pending Orders
-                  </Button>
-                </View>
 
-                <View style={{ borderLeftWidth: 1 }}></View>
-
-                <View style={{ width: '50%' }}>
-                  <Button
-                    icon="credit-card"
-                    mode="text"
-                    color="green"
-                    style={{ borderColor: 'green' }}
-                    onPress={() => navigation.navigate('Sales')}
-                  >
-                    Sales
-                  </Button>
-                </View>
-              </View>
+          <View style={styles.itemList}>
+            <View style={styles.linkSect}>
+              <Button
+                icon="storefront-outline"
+                mode="outlined"
+                color="black"
+                style={{ borderColor: 'black' }}
+                onPress={() => navigation.navigate('Inventory')}
+              >
+                View Inventory
+              </Button>
+              <Button
+                icon="credit-card"
+                mode="outlined"
+                color="black"
+                style={{ borderColor: 'black' }}
+                onPress={() => navigation.navigate('Sales')}
+              >
+                View Sales
+              </Button>
             </View>
-          </>
-
-          <View style={{ marginHorizontal: 5 }}>
-            <Text style={styles.title}> Products in Store </Text>
-            <Paragraph style={{ marginLeft: 5, color: 'gray' }}>
-              Press and hold a product for more options.
+            <Text style={styles.title}> Pending Orders </Text>
+            <Paragraph style={{ marginLeft: 5 }}>
+              Press and hold for more options.
             </Paragraph>
           </View>
 
           <FlatList
-            data={tableData}
+            data={orderData}
             renderItem={renderItem}
             keyExtractor={(item) => item._id}
             ItemSeparatorComponent={SeparatorComponent}
-            refreshControl={
-              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-            }
           />
-          <InventoryOptions
-            isOpen={inventoryOptionsModal}
-            handleInventoryOptionsModal={handleInventoryOptionsModal}
+          <OrderOptions
+            isOpen={OrderOptionsModal}
+            handleOrderOptionsModal={handleOrderOptionsModal}
             item={product}
             handleAddInventoryOrderModal={handleAddInventoryOrderModal}
           />
+
           <AddInventoryOrder
             isOpen={inventoryModal}
             handleAddInventoryOrderModal={handleAddInventoryOrderModal}
-            navigation={navigation}
             product={product}
           />
         </View>
@@ -206,12 +203,13 @@ const mapStateToProps = (state) => ({
   token: state?.app?.token,
 })
 
-export default connect(mapStateToProps)(Inventory)
+export default connect(mapStateToProps)(Orders)
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#ffffff',
+    paddingBottom: 40,
   },
   summary: {
     flexDirection: 'row',
@@ -262,11 +260,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#F7FAE9',
     paddingVertical: 10,
     paddingHorizontal: 5,
-    marginBottom: 10,
   },
   linkSect: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    marginBottom: 15,
   },
   item: {
     paddingHorizontal: 20,
@@ -287,3 +285,47 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
 })
+
+// success: {
+//   color: 'green',
+//   paddingHorizontal: 5,
+// },
+// danger: {
+//   color: 'red',
+//   paddingHorizontal: 5,
+// },
+// hr: {
+//   borderBottomColor: '#EEEEEE',
+//   borderBottomWidth: 1,
+//   marginHorizontal: 40,
+//   marginVertical: 15,
+// },
+
+// {item.qtySold - item.salesTarget > 0 ? (
+//   <View style={styles.row}>
+//     <Text style={styles.success}>
+//       {item.qtySold - item.salesTarget}
+//     </Text>
+//     <FontAwesome5
+//       style={{ paddingHorizontal: 10 }}
+//       name="arrow-up"
+//       size={12}
+//       color={colors.exciteGreen}
+//     />
+//   </View>
+// ) : item.qtySold - item.salesTarget < 0 ? (
+//   <View style={styles.row}>
+//     {/* <Text style={styles.danger}>
+//      {item.qtySold - item.salesTarget}
+//    </Text> */}
+
+//     <FontAwesome5
+//       style={{ paddingHorizontal: 10 }}
+//       name="arrow-down"
+//       size={12}
+//       color="red"
+//     />
+//   </View>
+// ) : (
+//   <Text> - </Text>
+// )}

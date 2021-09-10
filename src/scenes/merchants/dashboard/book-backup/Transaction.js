@@ -25,32 +25,57 @@ import { colors, images } from 'theme'
 import { connect } from 'react-redux'
 import { FontAwesome5, MaterialIcons } from '@expo/vector-icons'
 import useAxios from '../../../../utils/axios/init'
+import CreateTransaction from './CreateTransaction'
+import PostTransaction from './PostTransaction'
 
-const SalesPlan = ({ token, navigation }) => {
+const Transaction = ({ token, navigation }) => {
   const [refreshing, setRefreshing] = useState(false)
   const [loading, setLoading] = useState(false)
   const [modalVisible, setModalVisible] = useState(false)
-  const [expanded, setExpanded] = useState(true)
-  const [salesData, setSalesData] = useState([])
+  const [createTransactionModal, setCreateTransactionmodal] = useState(false)
+  const [postTransactionModal, setPostTransactionmodal] = useState(false)
+  const [transactionsData, setTransactionsData] = useState([])
 
-  const handlePress = () => setExpanded(!expanded)
+  const handleCreateTransactionModal = () => {
+    setCreateTransactionmodal(!createTransactionModal)
+    getTransactions()
+  }
+
+  const handlePostTrannsactionModal = () => {
+    setPostTransactionmodal(!postTransactionModal)
+    getTransactions()
+  }
+
+  const wait = (timeout) =>
+    new Promise((resolve) => setTimeout(resolve, timeout))
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true)
+    wait(2000).then(() => setRefreshing(false))
+  }, [])
 
   const handleModal = () => {
     setModalVisible(!modalVisible)
   }
 
-  // Get Book record for sales plan
-  const getInventoryData = () => {
+  // Get transactions list
+  const getTransactions = () => {
     setLoading(true)
     useAxios
-      .get('/book-keeping/all', {
+      .get('/transaction', {
         headers: { authorization: `Bearer ${token}` },
       })
       .then((res) => {
         if (res.status == 200) {
-          const data = res.data.records
-          console.log('inventory res status ', data)
-          setSalesData(data)
+          const data = res.data.result
+          setTransactionsData(
+            data.sort((a, b) => {
+              return (
+                new Date(b.updatedAt.split('T')[0]) -
+                new Date(a.updatedAt.split('T')[0])
+              )
+            }),
+          )
           setLoading(false)
         } else {
           return <p>Oops! Could not fetch data.</p>
@@ -59,21 +84,12 @@ const SalesPlan = ({ token, navigation }) => {
       .catch((err) => console.log(err))
   }
 
-  const wait = (timeout) =>
-    new Promise((resolve) => setTimeout(resolve, timeout))
-
-  const onRefresh = useCallback(() => {
-    setRefreshing(true)
-    getInventoryData()
-    wait(2000).then(() => setRefreshing(false))
-  }, [])
-
   useEffect(() => {
-    getInventoryData()
+    getTransactions()
   }, [])
 
   const calculateGrandTotal = () => {
-    const itemArray = [...salesData]
+    const itemArray = [...transactionsData]
     // console.log('itemArray ', itemArray);
     let total = 0
     // eslint-disable-next-line no-plusplus
@@ -83,55 +99,31 @@ const SalesPlan = ({ token, navigation }) => {
     return total
   }
 
-  const currencyFormat = (num) =>
-    `N${num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
+  const currencyFormat = (num) => {
+    if (num === null || num === undefined) {
+      num = 0
+    }
+    return `N${num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
+  }
 
   const renderItem = ({ item }) => (
     <View style={styles.item}>
-      <Text style={styles.itemText}>{item.productName}</Text>
+      <Text style={styles.itemText}>{item.description}</Text>
       <View style={styles.itemDetail}>
         <View style={styles.row}>
-          <Text style={styles.detailTitle}>Sold: </Text>
-          <Text> {item.qtySold}</Text>
-        </View>
-        <View style={styles.row}>
-          <Text style={styles.detailTitle}> Sales Target: </Text>
-          <Text> {item.salesTarget}</Text>
-        </View>
-        <View style={styles.row}>
-          <Text style={styles.detailTitle}> Variance: </Text>
-          <Text>
-            {item.qtySold - item.salesTarget > 0 ? (
-              <View style={styles.row}>
-                <Text style={styles.success}>
-                  {' '}
-                  {item.qtySold - item.salesTarget}
-                </Text>
-                <FontAwesome5
-                  style={{ paddingHorizontal: 10 }}
-                  name="arrow-up"
-                  size={12}
-                  color={colors.exciteGreen}
-                />
-              </View>
-            ) : item.qtySold - item.salesTarget < 0 ? (
-              <View style={styles.row}>
-                <Text style={styles.danger}>
-                  {item.qtySold - item.salesTarget}
-                </Text>
-
-                <FontAwesome5
-                  style={{ paddingHorizontal: 10 }}
-                  name="arrow-down"
-                  size={12}
-                  color="red"
-                />
-              </View>
-            ) : (
-              <Text> - </Text>
-            )}
+          <Text style={styles.detailTitle}>Type: </Text>
+          <Text style={{ textTransform: 'capitalize' }}>
+            {item.accountType}
           </Text>
         </View>
+        <View style={styles.row}>
+          <Text style={styles.detailTitle}> Total: </Text>
+          <Text>{currencyFormat(item.total)}</Text>
+        </View>
+      </View>
+      <View style={styles.row}>
+        <Text style={{ color: 'gray' }}>Last updated: </Text>
+        <Text style={{ color: 'gray' }}>{item.updatedAt.split('T')[0]}</Text>
       </View>
     </View>
   )
@@ -145,11 +137,11 @@ const SalesPlan = ({ token, navigation }) => {
       {loading ? (
         <ActivityIndicator color={colors.exciteGreen} size="large" />
       ) : (
-        <View style={{ marginBottom: 150 }}>
+        <View style={styles.itemSection}>
           <View style={styles.summary}>
             <View style={styles.summaryDetailLeft}>
-              <Text style={styles.titleLeft}>Items </Text>
-              <Text style={styles.detailLeft}> {salesData.length} </Text>
+              <Text style={styles.titleLeft}>Transactions </Text>
+              <Text style={styles.detailLeft}> {transactionsData.length} </Text>
             </View>
             <View style={styles.summaryDetailRight}>
               <Text style={styles.titleRight}>Value </Text>
@@ -161,46 +153,45 @@ const SalesPlan = ({ token, navigation }) => {
 
           <View style={styles.itemList}>
             <View style={styles.linkSect}>
-              <View style={{ width: '50%' }}>
-                <Button
-                  icon="storefront-outline"
-                  mode="text"
-                  color="green"
-                  style={{ borderColor: 'green' }}
-                  onPress={() => navigation.navigate('Inventory')}
-                >
-                  Inventory
-                </Button>
-              </View>
-
-              <View style={{ borderLeftWidth: 1 }}></View>
-
-              <View style={{ width: '50%' }}>
-                <Button
-                  icon="cart"
-                  mode="text"
-                  color="green"
-                  style={{ borderColor: 'green' }}
-                  onPress={() => navigation.navigate('Orders')}
-                >
-                  Pending Orders
-                </Button>
-              </View>
+              <Button
+                icon="plus-circle-outline"
+                mode="outlined"
+                color="black"
+                style={{ borderColor: 'black' }}
+                onPress={() => setCreateTransactionmodal(true)}
+              >
+                Create
+              </Button>
+              <Button
+                icon="plus-circle"
+                mode="outlined"
+                color="black"
+                style={{ borderColor: 'black' }}
+                onPress={() => setPostTransactionmodal(true)}
+              >
+                Post
+              </Button>
             </View>
-          </View>
-
-          <View style={{ marginHorizontal: 5 }}>
-            <Text style={styles.title}> All Sales Plan </Text>
+            <Text style={styles.title}> All Transactions </Text>
           </View>
 
           <FlatList
-            data={salesData}
+            data={transactionsData}
             renderItem={renderItem}
             keyExtractor={(item) => item._id}
             ItemSeparatorComponent={SeparatorComponent}
           />
         </View>
       )}
+      <CreateTransaction
+        isOpen={createTransactionModal}
+        handleCreateTransactionModal={handleCreateTransactionModal}
+      />
+
+      <PostTransaction
+        isOpen={postTransactionModal}
+        handlePostTrannsactionModal={handlePostTrannsactionModal}
+      />
     </SafeAreaView>
   )
 }
@@ -209,7 +200,7 @@ const mapStateToProps = (state) => ({
   token: state?.app?.token,
 })
 
-export default connect(mapStateToProps)(SalesPlan)
+export default connect(mapStateToProps)(Transaction)
 
 const styles = StyleSheet.create({
   container: {
@@ -271,16 +262,20 @@ const styles = StyleSheet.create({
     backgroundColor: '#F7FAE9',
     paddingVertical: 10,
     paddingHorizontal: 5,
-    marginBottom: 15,
   },
   linkSect: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    marginBottom: 15,
   },
   header: {
+    // marginHorizontal: 10,
     marginTop: 5,
     marginBottom: 40,
     justifyContent: 'space-between',
+  },
+  itemSection: {
+    marginBottom: 150,
   },
   item: {
     paddingVertical: 10,

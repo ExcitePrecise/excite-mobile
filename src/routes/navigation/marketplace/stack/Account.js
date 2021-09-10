@@ -167,11 +167,8 @@ const AuthRequiredMain = () => {
       <AccountStack.Screen
         name="BookKeeping"
         component={BookKeeping}
-        options={({ navigation }) => ({
-          title: 'Book Keeping',
-          headerLeft: () => <HeaderLeft navigation={navigation} />,
-          headerTitle: () => <HeaderTitle />,
-          headerRight: () => <HeaderRight />,
+        options={() => ({
+          title: 'Bizbook',
         })}
       />
       <AccountStack.Screen

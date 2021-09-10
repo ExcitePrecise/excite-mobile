@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { StyleSheet, Text, View, ScrollView, Image } from 'react-native'
 import { Picker } from '@react-native-picker/picker'
-import { Modal, Paragraph, Button, Snackbar } from 'react-native-paper'
+import { Modal, Paragraph, Button, TextInput, Banner } from 'react-native-paper'
 import { colors, images } from 'theme'
 import { connect } from 'react-redux'
 import { Entypo } from '@expo/vector-icons'
@@ -16,8 +16,6 @@ const OrderOptions = ({
   handleAddInventoryOrderModal,
   item,
 }) => {
-  const [snackVisible, setSnackVisible] = useState(false)
-  const [message, setMessage] = useState('')
   const [data, setData] = useState(null)
   const [product, setProduct] = useState({})
   const [salesData, setSalesData] = useState([])
@@ -35,8 +33,7 @@ const OrderOptions = ({
   })
 
   const [selector, setSelector] = useState('Select payment method')
-
-  const handleSnackbar = () => setSnackVisible(false)
+  const [bannerVisible, setBannerVisible] = useState(false)
 
   // Get sales list
   const getSales = async () => {
@@ -69,8 +66,6 @@ const OrderOptions = ({
         deleteReceivable()
       })
       .catch((err) => {
-        setSnackVisible(true)
-        setMessage('An error occurred!')
         console.error(err)
       })
   }
@@ -111,11 +106,12 @@ const OrderOptions = ({
         headers: { authorization: `Bearer ${token}` },
       })
       .then((res) => {
+        console.log('handleTransactionSubmit done')
         handlePostTransactionSubmit()
+        // toggleModal(false)
       })
       .catch((e) => {
-        setSnackVisible(true)
-        setMessage('An error occurred!')
+        // Flash('error', 'Something went wrong', 'Error', 3000)
         console.error(e)
       })
   }
@@ -141,11 +137,11 @@ const OrderOptions = ({
         headers: { authorization: `Bearer ${token}` },
       })
       .then((res) => {
+        console.log('handlePostTransactionSubmit done')
         updateStoreRecord()
       })
       .catch((e) => {
-        setSnackVisible(true)
-        setMessage('An error occurred!')
+        // Flash('error', 'Something went wrong', 'Error', 3000)
         console.error(e)
       })
   }
@@ -164,11 +160,11 @@ const OrderOptions = ({
         headers: { authorization: `Bearer ${token}` },
       })
       .then(() => {
+        console.log('handleSubmit done')
         handleTransactionSubmit()
       })
       .catch((error) => {
-        setSnackVisible(true)
-        setMessage('An error occurred!')
+        // Flash('error', 'Something went wrong', 'Error', 3000)
         console.error(error)
       })
   }
@@ -182,19 +178,19 @@ const OrderOptions = ({
 
     const _id = modifiedData.salesRef
     // console.log('update mod data is ', modifiedData);
-    // useAxios.put(`book-keeping/${_id}`, modifiedData, {
-    //   headers: { authorization: `Bearer ${token}` },
-    // })
+    useAxios.put(`book-keeping/${_id}`, modifiedData, {
+      headers: { authorization: `Bearer ${token}` },
+    })
     useAxios
       .put(`book-keeping/update/${_id}`, modifiedData, {
         headers: { authorization: `Bearer ${token}` },
       })
       .then(() => {
+        console.log('updateStoreRecord done')
         deleteReceivable()
       })
       .catch((err) => {
-        setSnackVisible(true)
-        setMessage('An error occurred!')
+        // Flash('error', 'Something went wrong', 'Error', 3000)
         console.error(err)
       })
   }
@@ -206,20 +202,23 @@ const OrderOptions = ({
         headers: { authorization: `Bearer ${token}` },
       })
       .then(() => {
-        setSnackVisible(true)
-        setMessage('Done!')
+        // Flash('success', 'Successful', '', 3000, window.location.reload())
         console.log('order removed')
-
-        setTimeout(() => {
-          getSales()
-          handleOrderOptionsModal(false)
-        }, 2000)
+        setBannerVisible(true)
       })
       .catch((err) => {
-        setSnackVisible(true)
-        setMessage('Sorry, an error ocurred!')
+        // Flash('error', 'Something went wrong', 'Error', 3000)
         console.error(err)
       })
+  }
+
+  const calculateGrandTotal = () => {
+    const itemArray = [...data]
+    let total = 0
+    for (let i = 0; i < itemArray.length; i++) {
+      total += itemArray[i].total
+    }
+    return total
   }
 
   const currencyFormat = (num) => {
@@ -232,7 +231,12 @@ const OrderOptions = ({
   useEffect(() => {
     handlePrice()
     handleQuantity()
+    // setInputs({ price: item.price, quantity: item.quantity })
   }, [])
+
+  // const handleAddInventoryOrderModal = () => {
+  //   setOrderModal(!orderModal)
+  // }
 
   return (
     <Modal
@@ -241,125 +245,143 @@ const OrderOptions = ({
       onRequestClose={() => handleOrderOptionsModal(false)}
     >
       <ScrollView>
-        <View style={styles.optionsContainer}>
-          <View style={styles.title}>
-            <Entypo name="circle-with-plus" size={20} color="white" />
-            <Text
-              style={{
-                fontSize: 25,
-                color: 'white',
-                paddingLeft: 5,
-              }}
-            >
-              Options
-            </Text>
-          </View>
-          <View style={{ alignItems: 'center' }}>
-            <Paragraph>Select an Order option.</Paragraph>
-          </View>
-
-          <View style={styles.details}>
-            <Text style={styles.detailTitle}>{item.productName}</Text>
-            <View style={styles.rowSpaced}>
-              <View style={styles.row}>
-                <Text style={styles.detailText}>Price: </Text>
-                <Text>{currencyFormat(item.price)}</Text>
-              </View>
-              <View style={styles.spaceHor}>
-                <Text style={styles.detailText}>Quantity: </Text>
-                <Text>{item.quantity}</Text>
-              </View>
-              <View style={styles.row}>
-                <Text style={styles.detailText}>Total: </Text>
-                <Text>{currencyFormat(item.total)}</Text>
-              </View>
-            </View>
-          </View>
-
-          <Text style={{ color: 'gray', textAlign: 'center', marginBottom: 5 }}>
-            Select payment mode below
-          </Text>
-          <View style={styles.inputSection}>
-            <Picker
-              selectedValue={selector}
-              onValueChange={(itemValue, itemIndex) => setSelector(itemValue)}
-            >
-              <Picker.Item label="Cash" value="cash" />
-              <Picker.Item label="Bank" value="bank" />
-              <Picker.Item label="Credit" value="credit" />
-            </Picker>
-          </View>
-
+        {bannerVisible ? (
           <View
             style={{
-              flexDirection: 'row',
-              marginTop: 40,
-              paddingHorizontal: 20,
-              justifyContent: 'space-between',
+              alignItems: 'center',
+              justifyContent: 'center',
             }}
           >
-            <Button
-              icon="cart-plus"
-              mode="outlined"
-              color="green"
+            <Text
+              onPress={() => {
+                handleOrderOptionsModal(false)
+                setBannerVisible(false)
+              }}
+            >
+              <Banner
+                visible={bannerVisible}
+                actions={[
+                  {
+                    label: 'Records updated!',
+                    onPress: () => {
+                      handleOrderOptionsModal(false)
+                      setBannerVisible(false)
+                    },
+                  },
+                ]}
+                icon="bell"
+              >
+                Request conpleted!.
+              </Banner>
+            </Text>
+          </View>
+        ) : (
+          <View style={styles.optionsContainer}>
+            <View style={styles.title}>
+              <Entypo name="circle-with-plus" size={20} color="white" />
+              <Text
+                style={{
+                  fontSize: 25,
+                  color: 'white',
+                  paddingLeft: 5,
+                }}
+              >
+                Options
+              </Text>
+            </View>
+            <View style={{ alignItems: 'center' }}>
+              <Paragraph>Select an Order option.</Paragraph>
+            </View>
+
+            <View style={styles.details}>
+              <Text style={styles.detailTitle}>{item.productName}</Text>
+              <View style={styles.rowSpaced}>
+                <View style={styles.row}>
+                  <Text style={styles.detailText}>Price: </Text>
+                  <Text>{currencyFormat(item.price)}</Text>
+                </View>
+                <View style={styles.spaceHor}>
+                  <Text style={styles.detailText}>Quantity: </Text>
+                  <Text>{item.quantity}</Text>
+                </View>
+                <View style={styles.row}>
+                  <Text style={styles.detailText}>Total: </Text>
+                  <Text>{currencyFormat(item.total)}</Text>
+                </View>
+              </View>
+            </View>
+
+            <Text
+              style={{ color: 'gray', textAlign: 'center', marginBottom: 5 }}
+            >
+              Select payment mode below
+            </Text>
+            <View style={styles.inputSection}>
+              <Picker
+                selectedValue={selector}
+                onValueChange={(itemValue, itemIndex) => setSelector(itemValue)}
+              >
+                <Picker.Item label="Cash" value="cash" />
+                <Picker.Item label="Bank" value="bank" />
+                <Picker.Item label="Credit" value="credit" />
+              </Picker>
+            </View>
+
+            <View
               style={{
-                borderColor: 'green',
-                marginBottom: 15,
-                marginRight: 5,
-              }}
-              onPress={() => {
-                // // setOrderModal(true)
-                // handleOrderOptionsModal(false)
-                // handleAddInventoryOrderModal(true)
-                // setProduct(item)
-                handleSubmit()
+                flexDirection: 'row',
+                marginTop: 40,
+                paddingHorizontal: 20,
+                justifyContent: 'space-between',
               }}
             >
-              Fulfill Order
-            </Button>
-            <Button
-              icon="minus-circle"
-              mode="outlined"
-              color="red"
-              style={{ borderColor: 'red', marginBottom: 15 }}
-              onPress={() => {
-                // handleOrderOptionsModal(false)
-                revertOrder()
-              }}
-            >
-              Cancel Order
-            </Button>
+              <Button
+                icon="cart-plus"
+                mode="outlined"
+                color="green"
+                style={{ borderColor: 'green', marginBottom: 15 }}
+                onPress={() => {
+                  // // setOrderModal(true)
+                  // handleOrderOptionsModal(false)
+                  // handleAddInventoryOrderModal(true)
+                  // setProduct(item)
+                  handleSubmit()
+                }}
+              >
+                Fulfill Order
+              </Button>
+              <Button
+                icon="minus-circle"
+                mode="outlined"
+                color="red"
+                style={{ borderColor: 'red', marginBottom: 15 }}
+                onPress={() => {
+                  // handleOrderOptionsModal(false)
+                  revertOrder()
+                }}
+              >
+                Cancel Order
+              </Button>
+            </View>
+            <View>
+              <Button
+                icon="close-circle"
+                mode="outlined"
+                color="black"
+                style={{ borderColor: 'black', margin: 20 }}
+                onPress={() => handleOrderOptionsModal(false)}
+              >
+                Close
+              </Button>
+            </View>
           </View>
-          <View>
-            <Button
-              icon="close-circle"
-              mode="outlined"
-              color="black"
-              style={{ borderColor: 'black', margin: 20 }}
-              onPress={() => handleOrderOptionsModal(false)}
-            >
-              Close
-            </Button>
-          </View>
-        </View>
+        )}
       </ScrollView>
       <AddInventoryOrder
         isOpen={orderModal}
         handleAddInventoryOrderModal={handleAddInventoryOrderModal}
         product={product}
       />
-
-      {snackVisible ? (
-        <Snackbar
-          visible={snackVisible}
-          onDismiss={handleSnackbar}
-          // style={{ marginBottom: 10 }}
-        >
-          {message}
-        </Snackbar>
-      ) : (
-        <Text />
-      )}
     </Modal>
   )
 }
@@ -407,7 +429,9 @@ const styles = StyleSheet.create({
     color: 'green',
   },
   inputSection: {
-    marginHorizontal: 100,
+    // width: 150,
+
+    marginHorizontal: 130,
     paddingHorizontal: 10,
     borderWidth: 1,
   },

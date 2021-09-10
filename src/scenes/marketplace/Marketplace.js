@@ -29,6 +29,8 @@ export default function Marketplace({ navigation }) {
       )
       const data = response.data
       // console.log(response)
+      // products
+      // const products = data.products;
       dispatch(isLoading(false))
       dispatch(landingProduct(data))
       setRefreshing(false)

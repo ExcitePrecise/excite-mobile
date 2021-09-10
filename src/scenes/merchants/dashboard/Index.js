@@ -36,7 +36,7 @@ const navItem = [
     navigate: 'PostBanner',
   },
   {
-    name: 'Book Keeping',
+    name: 'Biz Book',
     icon: images.book,
     navigate: 'BookKeeping',
   },

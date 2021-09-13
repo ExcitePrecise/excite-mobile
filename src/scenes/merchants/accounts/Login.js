@@ -41,7 +41,8 @@ const Login = ({ navigation, popBanner }) => {
   // const [visible, setVisible] = React.useState(false)
 
   return (
-    <SafeAreaView style={styles.root}>
+    <SafeAreaView style={{flex:1}}>
+      <View style={styles.root}>
       <ScrollView
         style={{ flex: 1 }}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -192,6 +193,7 @@ const Login = ({ navigation, popBanner }) => {
           )}
         </Formik>
       </ScrollView>
+      </View>
     </SafeAreaView>
   )
 }

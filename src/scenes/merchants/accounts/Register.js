@@ -35,9 +35,9 @@ const Register = ({ navigation, popBanner }) => {
   const [isSubmit, setIsSubmit] = useState(false)
 
   return (
-    <SafeAreaView style={styles.root}>
+    <SafeAreaView style={{flex:1}}>
+     <View style={styles.root}>
       <BannerNotification />
-
       <ScrollView
         style={{ flex: 1, paddingTop: 40 }}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -198,7 +198,7 @@ const Register = ({ navigation, popBanner }) => {
                     style={{
                       borderWidth: 1,
                       borderRadius: 6,
-                      height: 60,
+                      // height: 60,
                       justifyContent: 'center',
                       borderColor: '#191919',
                     }}
@@ -209,12 +209,12 @@ const Register = ({ navigation, popBanner }) => {
                         // if (itemIndex === 0) return null
                         return setFieldValue('storeState', itemValue)
                       }}
-                      mode="dropdown"
+                      mode="dialog"
                       dropdownIconColor={COLORS.exciteGreen}
                     >
                       <Picker.Item
                         color={COLORS.lightGrayDark}
-                        label="Select Purpose"
+                        label="Select State"
                         value={''}
                       />
                       {NigerianStates.map((item, index) => (
@@ -244,8 +244,7 @@ const Register = ({ navigation, popBanner }) => {
                     style={{
                       borderWidth: 1,
                       borderRadius: 6,
-
-                      height: 60,
+                      // height: 60,
                       justifyContent: 'center',
                       borderColor: '#191919',
                     }}
@@ -256,16 +255,16 @@ const Register = ({ navigation, popBanner }) => {
                         if (itemIndex === 0) return null
                         return setFieldValue('storeLga', itemValue)
                       }}
-                      mode="dropdown"
+                      mode="dialog"
                       dropdownIconColor={COLORS.exciteGreen}
                       // style={{backgroundColor:'red'}}
                       itemStyle={{
-                        backgroundColor: 'red',
+                        // backgroundColor: 'red',
                       }}
                     >
                       <Picker.Item
                         color={COLORS.lightGrayDark}
-                        label="Select Purpose"
+                        label=""
                         value={null}
                       />
                       {StateLgaArea(values.storeState)
@@ -378,6 +377,7 @@ const Register = ({ navigation, popBanner }) => {
                     <TextInput.Icon
                       name="qrcode-scan"
                       color={COLORS.exciteGreen}
+                      onPress={()=>console.log('qr code')}
                     />
                   }
                   style={{
@@ -416,6 +416,8 @@ const Register = ({ navigation, popBanner }) => {
           <Button onPress={() => navigation.navigate('Login')}>Login</Button>
         </View>
       </ScrollView>
+     </View>
+
     </SafeAreaView>
   )
 }

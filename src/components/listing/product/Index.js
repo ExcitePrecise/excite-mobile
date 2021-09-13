@@ -227,11 +227,11 @@ const Index = ({ productListing, productImg, navigation }) => {
               selectProductListingCategory({ category: itemValue }),
             )
           }}
-          mode="dropdown"
+          mode="dialog"
         >
           <Picker.Item
             color={COLORS.lightGray}
-            label="Select Category"
+            label="Select category"
             value={null}
           />
           {CategoryMajor?.map((item, index) => (
@@ -258,11 +258,11 @@ const Index = ({ productListing, productImg, navigation }) => {
             )
           }}
           style={{ display: productListing?.category ? 'flex' : 'none' }}
-          mode="dropdown"
+          mode="dialog"
         >
           <Picker.Item
             color={COLORS.lightGrayDark}
-            label="Select Type"
+            label="Select type"
             value={null}
           />
           {selectedSubCategory?.map((item, index) => (

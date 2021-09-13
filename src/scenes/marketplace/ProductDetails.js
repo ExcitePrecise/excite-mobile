@@ -31,7 +31,7 @@ const makeCall = (num) => {
     if (Platform.OS === 'android') {
       phoneNumber = `tel:${num}`
     } else {
-      phoneNumber = `telprompt:${num}`
+      phoneNumber = `tel:${num}`
     }
   
     Linking.openURL(phoneNumber)

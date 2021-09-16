@@ -17,7 +17,7 @@ import useAxios from '../../../../utils/axios/init'
 import InventoryOptions from './InventoryOptions'
 import AddInventoryOrder from './AddInventoryOrder'
 
-const Inventory = ({ token, navigation }) => {
+const Inventory = ({ token, navigation, userSub }) => {
   const [refreshing, setRefreshing] = useState(false)
   const [inventoryOptionsModal, setInventoryOptionsModal] = useState(false)
   const [inventoryModal, setInventoryModal] = useState(false)
@@ -105,9 +105,7 @@ const Inventory = ({ token, navigation }) => {
     return `N${num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
   }
 
-  const SeparatorComponent = () => {
-    return <View style={styles.separatorLine} />
-  }
+  const SeparatorComponent = () => <View style={styles.separatorLine} />
 
   const wait = (timeout) =>
     new Promise((resolve) => setTimeout(resolve, timeout))
@@ -145,13 +143,20 @@ const Inventory = ({ token, navigation }) => {
                     mode="text"
                     color="green"
                     style={{ borderColor: 'green' }}
-                    onPress={() => navigation.navigate('Orders')}
+                    onPress={() => {
+                      if (userSub < 2) {
+                        return alert(
+                          "You don't have the right permissions. You need to upgrade first.",
+                        )
+                      }
+                      navigation.navigate('Orders')
+                    }}
                   >
                     Pending Orders
                   </Button>
                 </View>
 
-                <View style={{ borderLeftWidth: 1 }}></View>
+                <View style={{ borderLeftWidth: 1 }} />
 
                 <View style={{ width: '50%' }}>
                   <Button
@@ -159,7 +164,14 @@ const Inventory = ({ token, navigation }) => {
                     mode="text"
                     color="green"
                     style={{ borderColor: 'green' }}
-                    onPress={() => navigation.navigate('Sales')}
+                    onPress={() => {
+                      if (userSub < 2) {
+                        return alert(
+                          "You don't have the right permissions. You need to upgrade first.",
+                        )
+                      }
+                      navigation.navigate('Sales')
+                    }}
                   >
                     Sales
                   </Button>
@@ -167,7 +179,6 @@ const Inventory = ({ token, navigation }) => {
               </View>
             </View>
           </>
-
           <View style={{ marginHorizontal: 5 }}>
             <Text style={styles.title}> Products in Store </Text>
             <Paragraph style={{ marginLeft: 5, color: 'gray' }}>
@@ -204,6 +215,7 @@ const Inventory = ({ token, navigation }) => {
 
 const mapStateToProps = (state) => ({
   token: state?.app?.token,
+  userSub: state.app?.me?.subscriptionLevel,
 })
 
 export default connect(mapStateToProps)(Inventory)

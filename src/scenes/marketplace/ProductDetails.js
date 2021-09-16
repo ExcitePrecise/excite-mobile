@@ -12,7 +12,7 @@ import {
   Linking,
   Image,
 } from 'react-native'
-import { useScrollToTop } from '@react-navigation/native';
+import { useScrollToTop } from '@react-navigation/native'
 import { connect, useDispatch } from 'react-redux'
 import { COLORS, FONTS } from '../../theme/theme'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
@@ -21,25 +21,24 @@ import MiniSearch from 'minisearch'
 import useAxios from '../../utils/axios/init'
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5'
 import { FontAwesome } from '@expo/vector-icons'
-import { setTitle } from '../../slices/app.slice';
+import { setTitle } from '../../slices/app.slice'
 
-
-// 
+//
 const makeCall = (num) => {
-    let phoneNumber = ''
-  
-    if (Platform.OS === 'android') {
-      phoneNumber = `tel:${num}`
-    } else {
-      phoneNumber = `tel:${num}`
-    }
-  
-    Linking.openURL(phoneNumber)
+  let phoneNumber = ''
+
+  if (Platform.OS === 'android') {
+    phoneNumber = `tel:${num}`
+  } else {
+    phoneNumber = `tel:${num}`
   }
-  const makeWhatsapp = (num) => {
-    let phoneNumber = `https://wa.me/+234${num}`
-    Linking.openURL(phoneNumber)
-  }
+
+  Linking.openURL(phoneNumber)
+}
+const makeWhatsapp = (num) => {
+  let phoneNumber = `https://wa.me/+234${num}`
+  Linking.openURL(phoneNumber)
+}
 
 const Item = ({ item, navigation, route }) => {
   return (
@@ -111,7 +110,7 @@ const Item = ({ item, navigation, route }) => {
               textAlign: 'center',
             }}
             color={COLORS.exciteGreen}
-              onPress={()=>makeCall(item?.storeInfo?.storePhone)}
+            onPress={() => makeCall(item?.storeInfo?.storePhone)}
             size={20}
             brand
           />
@@ -124,7 +123,7 @@ const Item = ({ item, navigation, route }) => {
               textAlign: 'center',
             }}
             color={COLORS.exciteGreen}
-              onPress={()=>makeWhatsapp(item?.storeInfo?.storePhone)}
+            onPress={() => makeWhatsapp(item?.storeInfo?.storePhone)}
             size={20}
           />
         </View>
@@ -144,12 +143,14 @@ const ProductDetails = ({ route, products, navigation }) => {
   const getSimilarProducts = async () => {
     // Search with default options
     if (item) {
-    setSimilar(item?.merchant?.product.filter(data=>data._id !== item._id))
+      setSimilar(
+        item?.merchant?.product.filter((data) => data._id !== item._id),
+      )
     }
   }
 
-  const ref = React.useRef(null);
-  useScrollToTop(ref);
+  const ref = React.useRef(null)
+  useScrollToTop(ref)
 
   useEffect(() => {
     getSimilarProducts()
@@ -159,23 +160,23 @@ const ProductDetails = ({ route, products, navigation }) => {
     const product = products?.filter((item) => item._id === productID)
     setItem(product[0])
     // getSimilarProducts()
-  }, [products,productID])
+  }, [products, productID])
 
-  // 
+  //
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       // if(item){
       //   dispatch(setTitle({title:`${item?.title}`}))
       // }
       // TODO
-    });
-    return unsubscribe;
-  }, [navigation]);
+    })
+    return unsubscribe
+  }, [navigation])
   //
 
   return (
     <SafeAreaView>
-      <ScrollView ref={ref} >
+      <ScrollView ref={ref}>
         <View
           style={{
             marginHorizontal: 10,
@@ -214,10 +215,13 @@ const ProductDetails = ({ route, products, navigation }) => {
               </View>
             </View>
             <View style={{ width: '45%' }}>
-              {item?.category !== 'services' ?
-             <Text style={{ ...FONTS.h2, color: COLORS.exciteGreen }}>
-             &#8358; {Number(item?.price).toLocaleString()}
-           </Text> : <Text></Text>}
+              {item?.category !== 'services' ? (
+                <Text style={{ ...FONTS.h2, color: COLORS.exciteGreen }}>
+                  &#8358; {Number(item?.price).toLocaleString()}
+                </Text>
+              ) : (
+                <Text></Text>
+              )}
             </View>
           </View>
           {/* CTA */}
@@ -228,8 +232,9 @@ const ProductDetails = ({ route, products, navigation }) => {
               justifyContent: 'space-between',
             }}
           >
-            <TouchableOpacity style={{ width: '45%' }}
-              onPress={()=>makeCall(item?.storeInfo?.storePhone)}
+            <TouchableOpacity
+              style={{ width: '45%' }}
+              onPress={() => makeCall(item?.storeInfo?.storePhone)}
             >
               <View
                 style={{
@@ -241,8 +246,9 @@ const ProductDetails = ({ route, products, navigation }) => {
                 <Button icon="phone">Call Seller</Button>
               </View>
             </TouchableOpacity>
-            <TouchableOpacity style={{ width: '45%' }}
-              onPress={()=>makeWhatsapp(item?.storeInfo?.storePhone)}
+            <TouchableOpacity
+              style={{ width: '45%' }}
+              onPress={() => makeWhatsapp(item?.storeInfo?.storePhone)}
             >
               <View
                 style={{
@@ -267,8 +273,14 @@ const ProductDetails = ({ route, products, navigation }) => {
           </View>
           {/* Products by Vendor */}
           <View>
-            <View style={{ marginTop: 20,paddingTop:30 }}>
-              <Text style={{...FONTS.body4, color:COLORS.black,  textAlign: 'center' }}>
+            <View style={{ marginTop: 20, paddingTop: 30 }}>
+              <Text
+                style={{
+                  ...FONTS.body4,
+                  color: COLORS.black,
+                  textAlign: 'center',
+                }}
+              >
                 Other products by same vendor
               </Text>
             </View>

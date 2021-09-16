@@ -15,9 +15,10 @@ import { Button, Badge } from 'react-native-paper'
 import { LineChart } from 'react-native-chart-kit'
 import { connect } from 'react-redux'
 import { colors } from 'theme'
+import { showMessage } from 'react-native-flash-message'
 import useAxios from '../../../../utils/axios/init'
 
-const Performance = ({ token, navigation, route }) => {
+const Performance = ({ token, navigation, route, userSub }) => {
   const [loading, setLoading] = useState(true)
   // const [summaryData, setSummaryData] = useState([])
   // const [tableData, setTableData] = useState([])
@@ -89,7 +90,12 @@ const Performance = ({ token, navigation, route }) => {
           setSalesTableData(data)
           setSaleChartData(data)
         } else {
-          return <p>Oops! Could not fetch data.</p>
+          return showMessage({
+            message: 'Operation failed!',
+            description: 'Something went wrong!.',
+            type: 'danger',
+            icon: 'auto',
+          })
         }
       })
       .catch((err) => console.log(err))
@@ -103,10 +109,23 @@ const Performance = ({ token, navigation, route }) => {
           const data = response.data.result
           setCustomersTableData(data)
         } else {
-          console.error(error)
+          return showMessage({
+            message: 'Operation failed!',
+            description: 'Something went wrong!.',
+            type: 'danger',
+            icon: 'auto',
+          })
         }
       })
-      .catch((err) => console.log(err))
+      .catch((err) => {
+        console.log(err)
+        return showMessage({
+          message: 'Operation failed!',
+          description: 'Something went wrong!.',
+          type: 'danger',
+          icon: 'auto',
+        })
+      })
   }
 
   const getIncome = () => {
@@ -604,7 +623,17 @@ const Performance = ({ token, navigation, route }) => {
               dark={false}
               color="white"
               accessibilityLabel="Pending Orders"
-              onPress={() => navigation.navigate('Orders')}
+              onPress={() => {
+                if (userSub < 2) {
+                  return showMessage({
+                    message: 'Permission Denied!',
+                    description: 'You need to upgrade first.',
+                    type: 'danger',
+                    icon: 'auto',
+                  })
+                }
+                navigation.navigate('Orders')
+              }}
             >
               Pending Orders &nbsp;
               {orderLength > 0 && <Badge>{orderLength}</Badge>}
@@ -617,7 +646,17 @@ const Performance = ({ token, navigation, route }) => {
               dark={false}
               color="white"
               accessibilityLabel="Sales"
-              onPress={() => navigation.navigate('Sales')}
+              onPress={() => {
+                if (userSub < 2) {
+                  return showMessage({
+                    message: 'Permission Denied!',
+                    description: 'You need to upgrade first.',
+                    type: 'danger',
+                    icon: 'auto',
+                  })
+                }
+                navigation.navigate('Sales')
+              }}
             >
               Sales
             </Button>
@@ -627,7 +666,17 @@ const Performance = ({ token, navigation, route }) => {
               icon="chart-bar"
               mode="contained"
               color="white"
-              onPress={() => navigation.navigate('SalesPlan')}
+              onPress={() => {
+                if (userSub < 2) {
+                  return showMessage({
+                    message: 'Permission Denied!',
+                    description: 'You need to upgrade first.',
+                    type: 'danger',
+                    icon: 'auto',
+                  })
+                }
+                navigation.navigate('SalesPlan')
+              }}
             >
               Sales Plan
             </Button>
@@ -640,6 +689,7 @@ const Performance = ({ token, navigation, route }) => {
 
 const mapStateToProps = (state) => ({
   token: state?.app?.token,
+  userSub: state.app?.me?.subscriptionLevel,
 })
 
 export default connect(mapStateToProps)(Performance)

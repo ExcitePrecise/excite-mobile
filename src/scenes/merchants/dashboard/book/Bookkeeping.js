@@ -16,8 +16,9 @@ import { connect } from 'react-redux'
 import useAxios from '../../../../utils/axios/init'
 import { images } from 'theme'
 import Summary from './Summary'
+import { showMessage } from 'react-native-flash-message'
 
-const Bookkeeping = ({ token, navigation }) => {
+const Bookkeeping = ({ token, navigation, userSub }) => {
   const [loading, setLoading] = useState(false)
   const [orderLength, setOrderLength] = useState('')
   const [refreshing, setRefreshing] = useState(false)
@@ -40,10 +41,23 @@ const Bookkeeping = ({ token, navigation }) => {
           setOrderLength(data.length)
           setLoading(false)
         } else {
-          return <p>Oops! Could not fetch data.</p>
+          return showMessage({
+            message: 'Operation failed!',
+            description: 'Something went wrong!.',
+            type: 'danger',
+            icon: 'auto',
+          })
         }
       })
-      .catch((err) => console.log(err))
+      .catch((err) => {
+        console.log(err)
+        return showMessage({
+          message: 'Operation failed!',
+          description: 'Something went wrong!.',
+          type: 'danger',
+          icon: 'auto',
+        })
+      })
   }
 
   const wait = (timeout) =>
@@ -102,7 +116,17 @@ const Bookkeeping = ({ token, navigation }) => {
             <Pressable onPress={handleModal}>
               <List.Item
                 title="Income Statement"
-                onPress={() => navigation.navigate('IncomeStatement')}
+                onPress={() => {
+                  if (userSub < 2) {
+                    return showMessage({
+                      message: 'Permission Denied!',
+                      description: 'You need to upgrade first.',
+                      type: 'danger',
+                      icon: 'auto',
+                    })
+                  }
+                  navigation.navigate('IncomeStatement')
+                }}
               />
             </Pressable>
             {/* <Pressable onPress={handleModal}>
@@ -132,13 +156,33 @@ const Bookkeeping = ({ token, navigation }) => {
               left={(props) => (
                 <List.Icon {...props} icon="credit-card-check" />
               )}
-              onPress={() => navigation.navigate('Transaction')}
+              onPress={() => {
+                if (userSub < 2) {
+                  return showMessage({
+                    message: 'Permission Denied!',
+                    description: 'You need to upgrade first.',
+                    type: 'danger',
+                    icon: 'auto',
+                  })
+                }
+                navigation.navigate('Transaction')
+              }}
             />
           </TouchableOpacity>
 
           <TouchableOpacity>
             <List.Item
-              onPress={() => navigation.navigate('Customer')}
+              onPress={() => {
+                if (userSub < 2) {
+                  return showMessage({
+                    message: 'Permission Denied!',
+                    description: 'You need to upgrade first.',
+                    type: 'danger',
+                    icon: 'auto',
+                  })
+                }
+                navigation.navigate('Customer')
+              }}
               style={styles.item}
               title="Customers"
               left={(props) => <List.Icon {...props} icon="account" />}
@@ -146,37 +190,13 @@ const Bookkeeping = ({ token, navigation }) => {
           </TouchableOpacity>
         </ScrollView>
       </ScrollView>
-
-      {/* <Pressable style={styles.createNewWrapper} onPress={handleModal}>
-        <Image source={images.create} style={styles.createNew} />
-      </Pressable>
-
-      <Modal
-        transparent
-        animationType="slide"
-        visible={modalVisible}
-        onRequestClose={handleModal}
-      >
-        <View style={styles.modalContainer}>
-          <Text> Create New </Text>
-
-          <TouchableOpacity style={styles.modalItem} onPress={handleModal}>
-            <Image source={images.transaction} style={styles.categories_img} />
-            <Text> Transaction</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.modalItem}>
-            <Image source={images.customer} style={styles.categories_img} />
-            <Text> Customer </Text>
-          </TouchableOpacity>
-        </View>
-      </Modal> */}
     </SafeAreaView>
   )
 }
 
 const mapStateToProps = (state) => ({
   token: state?.app?.token,
+  userSub: state.app?.me?.subscriptionLevel,
 })
 
 export default connect(mapStateToProps)(Bookkeeping)

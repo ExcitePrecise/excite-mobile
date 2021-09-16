@@ -8,11 +8,11 @@ import {
   TouchableOpacity,
   RefreshControl,
   ActivityIndicator,
-  ScrollView,
 } from 'react-native'
-import { Paragraph, Modal, Button } from 'react-native-paper'
-import { colors, images } from 'theme'
+import { Paragraph, Button } from 'react-native-paper'
+import { colors } from 'theme'
 import { connect } from 'react-redux'
+import { showMessage } from 'react-native-flash-message'
 import useAxios from '../../../../utils/axios/init'
 import InventoryOptions from './InventoryOptions'
 import AddInventoryOrder from './AddInventoryOrder'
@@ -48,7 +48,12 @@ const Inventory = ({ token, navigation, userSub }) => {
           setTableData(data)
           setLoading(false)
         } else {
-          return <p>Oops! Could not fetch data.</p>
+          return showMessage({
+            message: 'Operation failed!',
+            description: 'Something went wrong!.',
+            type: 'danger',
+            icon: 'auto',
+          })
         }
       })
       .catch((err) => console.log(err))
@@ -145,9 +150,12 @@ const Inventory = ({ token, navigation, userSub }) => {
                     style={{ borderColor: 'green' }}
                     onPress={() => {
                       if (userSub < 2) {
-                        return alert(
-                          "You don't have the right permissions. You need to upgrade first.",
-                        )
+                        return showMessage({
+                          message: 'Permission Denied!',
+                          description: 'You need to upgrade first.',
+                          type: 'danger',
+                          icon: 'auto',
+                        })
                       }
                       navigation.navigate('Orders')
                     }}
@@ -166,9 +174,12 @@ const Inventory = ({ token, navigation, userSub }) => {
                     style={{ borderColor: 'green' }}
                     onPress={() => {
                       if (userSub < 2) {
-                        return alert(
-                          "You don't have the right permissions. You need to upgrade first.",
-                        )
+                        return showMessage({
+                          message: 'Permission Denied!',
+                          description: 'You need to upgrade first.',
+                          type: 'danger',
+                          icon: 'auto',
+                        })
                       }
                       navigation.navigate('Sales')
                     }}

@@ -5,6 +5,7 @@ import { colors, images } from 'theme'
 import { connect } from 'react-redux'
 import { Entypo } from '@expo/vector-icons'
 import AddInventoryOrder from './AddInventoryOrder'
+import { showMessage } from 'react-native-flash-message'
 
 const InventoryOptions = ({
   navigation,
@@ -13,6 +14,7 @@ const InventoryOptions = ({
   handleInventoryOptionsModal,
   handleAddInventoryOrderModal,
   item,
+  userSub,
 }) => {
   const [product, setProduct] = useState({})
   const [inventoryModal, setInventoryModal] = useState(false)
@@ -57,6 +59,14 @@ const InventoryOptions = ({
             color="black"
             style={{ borderColor: 'black', marginBottom: 15 }}
             onPress={() => {
+              if (userSub < 2) {
+                return showMessage({
+                  message: 'Permission Denied!',
+                  description: 'You need to upgrade first.',
+                  type: 'danger',
+                  icon: 'auto',
+                })
+              }
               // setInventoryModal(true)
               handleInventoryOptionsModal(false)
               handleAddInventoryOrderModal(true)
@@ -89,6 +99,7 @@ const InventoryOptions = ({
 
 const mapStateToProps = (state) => ({
   token: state?.app?.token,
+  userSub: state.app?.me?.subscriptionLevel,
 })
 
 export default connect(mapStateToProps)(InventoryOptions)

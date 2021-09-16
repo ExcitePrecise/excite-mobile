@@ -8,28 +8,29 @@ import Account from '../navigation/marketplace/stack/Account'
 import { View } from 'react-native'
 import { Text } from 'react-native'
 import { Button } from 'react-native-paper'
-//
+
 const WelcomeStack = createStackNavigator()
 const MarketStack = createStackNavigator()
 //
-import FlashMessage from "react-native-flash-message";
-import { showMessage, hideMessage } from "react-native-flash-message";
+import FlashMessage from 'react-native-flash-message'
+// import { showMessage, hideMessage } from "react-native-flash-message";
 
-function BusinessHome({navigation}) {
+function BusinessHome({ navigation }) {
   return (
-    <View style={{ justifyContent:'center',alignItems:'center', flex:1 }}>
-      <Text style={{fontStyle:'italic'}}>coming soon...</Text>
-      <Button 
-      onPress={()=>navigation.goBack()}
-      // onPress={() => {
-      //   return showMessage({
-      //     message: "Simple message",
-      //     type: "success",
-      //     icon:"auto"
-      //   })}}
-        style={{marginTop:20}}
-      
-      >Home</Button>
+    <View style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}>
+      <Text style={{ fontStyle: 'italic' }}>coming soon...</Text>
+      <Button
+        onPress={() => navigation.goBack()}
+        // onPress={() => {
+        //   return showMessage({
+        //     message: "Simple message",
+        //     type: "success",
+        //     icon:"auto"
+        //   })}}
+        style={{ marginTop: 20 }}
+      >
+        Home
+      </Button>
     </View>
   )
 }

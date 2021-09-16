@@ -12,6 +12,7 @@ import { Button } from 'react-native-paper'
 import { colors } from 'theme'
 import { connect } from 'react-redux'
 // import { FontAwesome5, MaterialIcons } from '@expo/vector-icons'
+import { showMessage } from 'react-native-flash-message'
 import useAxios from '../../../../utils/axios/init'
 
 const Sales = ({ token, navigation }) => {
@@ -38,19 +39,31 @@ const Sales = ({ token, navigation }) => {
         if (res.status == 200) {
           const data = res.data.records
           setSalesData(
-            data.sort((a, b) => {
-              return (
+            data.sort(
+              (a, b) =>
                 new Date(b.createdAt.split('T')[0]) -
-                new Date(a.createdAt.split('T')[0])
-              )
-            }),
+                new Date(a.createdAt.split('T')[0]),
+            ),
           )
           setLoading(false)
         } else {
-          return <p>Oops! Could not fetch data.</p>
+          return showMessage({
+            message: 'Operation failed!',
+            description: 'Something went wrong!.',
+            type: 'danger',
+            icon: 'auto',
+          })
         }
       })
-      .catch((err) => console.log(err))
+      .catch((err) => {
+        console.log(err)
+        return showMessage({
+          message: 'Operation failed!',
+          description: 'Something went wrong!.',
+          type: 'danger',
+          icon: 'auto',
+        })
+      })
   }
 
   const wait = (timeout) =>
@@ -104,9 +117,7 @@ const Sales = ({ token, navigation }) => {
     </View>
   )
 
-  const SeparatorComponent = () => {
-    return <View style={styles.separatorLine} />
-  }
+  const SeparatorComponent = () => <View style={styles.separatorLine} />
 
   return (
     <SafeAreaView style={styles.container}>
@@ -141,7 +152,7 @@ const Sales = ({ token, navigation }) => {
                 </Button>
               </View>
 
-              <View style={{ borderLeftWidth: 1 }}></View>
+              <View style={{ borderLeftWidth: 1 }} />
 
               <View style={{ width: '50%' }}>
                 <Button
